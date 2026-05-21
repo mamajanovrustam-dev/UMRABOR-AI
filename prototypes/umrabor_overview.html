@@ -1,0 +1,566 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>UMRABOR — обзор проекта</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#0B0C0E; --card:#1A1C20; --card-2:#22252A; --line:rgba(255,255,255,.06);
+  --text:#F4F6F8; --text-2:#C7CDD6; --muted:#8B95A7;
+  --green:#1FAF6A; --green-soft:rgba(31,175,106,.12); --green-line:rgba(31,175,106,.3);
+  --gold:#F2B342; --gold-soft:rgba(242,179,66,.12);
+  --blue:#4C8DFF; --red:#FF6464;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{background:var(--bg);color:var(--text);font-family:'Inter',sans-serif;font-size:15px;line-height:1.6;-webkit-font-smoothing:antialiased}
+.shell{display:grid;grid-template-columns:280px 1fr;min-height:100vh}
+@media(max-width:900px){.shell{grid-template-columns:1fr}}
+
+/* ── Sidebar ── */
+aside.sidebar{background:#0F1114;border-right:1px solid var(--line);padding:28px 22px;position:sticky;top:0;height:100vh;overflow-y:auto}
+@media(max-width:900px){aside.sidebar{position:static;height:auto}}
+.brand{display:flex;align-items:center;gap:11px;margin-bottom:26px;padding-bottom:22px;border-bottom:1px solid var(--line)}
+.brand-mark{width:38px;height:38px;background:var(--green);color:#fff;border-radius:10px;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:18px}
+.brand-name{font-size:18px;font-weight:800;letter-spacing:.5px}
+.brand-sub{font-size:11px;color:var(--muted);font-weight:600;text-transform:uppercase;letter-spacing:.5px;margin-top:1px}
+.nav-list{display:flex;flex-direction:column;gap:2px}
+.nav-list a{display:flex;align-items:center;gap:12px;padding:10px 12px;border-radius:9px;color:var(--text-2);text-decoration:none;font-size:14px;font-weight:600;transition:background .15s,color .15s}
+.nav-list a:hover{background:var(--card);color:#fff}
+.nav-list a.active{background:var(--green-soft);color:var(--green)}
+.nav-list a .nu{display:inline-block;width:22px;font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--muted);text-align:center}
+.nav-list a.active .nu{color:var(--green)}
+.sidebar-foot{margin-top:24px;padding-top:18px;border-top:1px solid var(--line);font-size:11px;color:var(--muted);line-height:1.7}
+
+/* ── Main ── */
+main{padding:48px 56px 80px;max-width:1100px}
+@media(max-width:1000px){main{padding:32px 28px}}
+
+section.block{margin-bottom:88px;scroll-margin-top:20px}
+.eyebrow{font-size:11px;font-weight:700;color:var(--green);text-transform:uppercase;letter-spacing:1px;margin-bottom:10px;display:inline-flex;align-items:center;gap:8px}
+.eyebrow .nu{font-family:'JetBrains Mono',monospace;color:var(--muted)}
+h1.title{font-size:38px;font-weight:800;letter-spacing:-.4px;margin-bottom:14px;line-height:1.15}
+h2.section-h{font-size:30px;font-weight:800;letter-spacing:-.3px;margin-bottom:18px;line-height:1.2}
+h3{font-size:18px;font-weight:700;color:#fff;margin:32px 0 14px}
+h4{font-size:15px;font-weight:700;color:#fff;margin:18px 0 8px}
+p{color:var(--text-2);margin-bottom:14px;font-size:15px}
+p.lead{font-size:17px;color:var(--text);line-height:1.6;margin-bottom:24px;max-width:780px}
+strong{color:#fff;font-weight:700}
+ul{margin:0 0 16px 18px;color:var(--text-2)}
+ul li{margin-bottom:6px}
+code,.mono{font-family:'JetBrains Mono',monospace;font-size:13px;background:var(--card);padding:2px 6px;border-radius:5px;color:var(--gold)}
+a.link{color:var(--green);text-decoration:none;border-bottom:1px dashed var(--green-line)}
+a.link:hover{color:#fff;border-color:#fff}
+
+/* ── Hero ── */
+.hero{padding:36px 38px;background:linear-gradient(135deg,var(--green-soft) 0%,rgba(0,0,0,0) 70%);border:1px solid var(--green-line);border-radius:16px;margin-bottom:56px}
+.hero h1{font-size:42px;font-weight:800;margin-bottom:12px;letter-spacing:-.5px}
+.hero h1 .gold{color:var(--gold)}
+.hero p{font-size:16px;color:var(--text-2);max-width:680px;margin-bottom:20px}
+.hero-meta{display:flex;flex-wrap:wrap;gap:18px;padding-top:18px;border-top:1px solid var(--line);font-size:13px}
+.hero-meta div{color:var(--muted)}
+.hero-meta b{color:#fff;font-weight:700}
+
+/* ── Cards 4 interfaces ── */
+.if-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:16px;margin-top:22px}
+@media(max-width:760px){.if-grid{grid-template-columns:1fr}}
+.if-card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:22px 24px;transition:border-color .15s,transform .15s;display:block;text-decoration:none;color:inherit}
+.if-card:hover{border-color:var(--green-line);transform:translateY(-2px)}
+.if-card .ic{width:42px;height:42px;border-radius:11px;background:var(--green-soft);color:var(--green);display:flex;align-items:center;justify-content:center;margin-bottom:14px}
+.if-card .ic svg{width:22px;height:22px}
+.if-card h3{font-size:16px;margin:0 0 6px;color:#fff}
+.if-card .meta{font-size:12px;color:var(--muted);margin-bottom:10px;font-weight:600;text-transform:uppercase;letter-spacing:.3px}
+.if-card .dsc{font-size:13.5px;color:var(--text-2);line-height:1.55;margin-bottom:14px}
+.if-card .file{font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--gold);display:inline-flex;align-items:center;gap:6px;padding:6px 10px;background:rgba(242,179,66,.08);border:1px solid rgba(242,179,66,.18);border-radius:7px}
+.if-card .file::after{content:"→";font-family:'Inter',sans-serif;font-weight:700}
+
+/* ── Entity diagram ── */
+.ent-tree{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:24px 28px;font-family:'JetBrains Mono',monospace;font-size:13.5px;color:var(--text-2);line-height:2;overflow-x:auto;margin:18px 0}
+.ent-tree .lvl-1{color:var(--green);font-weight:700}
+.ent-tree .lvl-2{color:var(--gold);font-weight:700}
+.ent-tree .lvl-3{color:var(--blue);font-weight:700}
+.ent-tree .lvl-4{color:#fff;font-weight:700}
+
+.ent-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:14px;margin-top:14px}
+@media(max-width:760px){.ent-grid{grid-template-columns:1fr}}
+.ent-card{background:var(--card);border:1px solid var(--line);border-radius:11px;padding:18px 20px}
+.ent-card h4{font-size:14px;margin:0 0 8px;color:#fff;display:flex;align-items:center;gap:8px}
+.ent-card h4 .dot{width:8px;height:8px;border-radius:50%;background:var(--green)}
+.ent-card .dsc{font-size:13px;color:var(--text-2);line-height:1.55}
+.ent-card .fields{margin-top:10px;font-size:12px;color:var(--muted);font-family:'JetBrains Mono',monospace}
+
+/* ── Flow timeline ── */
+.flow{position:relative;margin:24px 0 8px;padding-left:36px}
+.flow::before{content:"";position:absolute;left:14px;top:8px;bottom:8px;width:2px;background:linear-gradient(180deg,var(--green) 0%,var(--gold) 50%,var(--blue) 100%)}
+.step{position:relative;padding:20px 24px;background:var(--card);border:1px solid var(--line);border-radius:13px;margin-bottom:18px}
+.step::before{content:attr(data-n);position:absolute;left:-36px;top:18px;width:30px;height:30px;border-radius:50%;background:var(--green);color:#fff;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:13px;font-family:'JetBrains Mono',monospace;border:3px solid var(--bg)}
+.step.partner::before{background:var(--gold);color:#000}
+.step.platform::before{background:var(--blue)}
+.step.client::before{background:var(--green)}
+.step .actor{display:inline-flex;align-items:center;gap:6px;font-size:10.5px;font-weight:700;text-transform:uppercase;letter-spacing:.5px;padding:3px 9px;border-radius:99px;margin-bottom:8px}
+.step.partner .actor{background:var(--gold-soft);color:var(--gold);border:1px solid rgba(242,179,66,.3)}
+.step.platform .actor{background:rgba(76,141,255,.12);color:var(--blue);border:1px solid rgba(76,141,255,.3)}
+.step.client .actor{background:var(--green-soft);color:var(--green);border:1px solid var(--green-line)}
+.step h4{font-size:16px;margin:0 0 6px;color:#fff}
+.step .where{font-size:11px;color:var(--muted);font-family:'JetBrains Mono',monospace;margin-bottom:10px;text-transform:uppercase;letter-spacing:.4px}
+.step p{margin-bottom:8px;font-size:14px;color:var(--text-2)}
+.step ul{font-size:13.5px;margin-bottom:0}
+
+/* ── Roles grid ── */
+.role-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:14px;margin-top:16px}
+@media(max-width:800px){.role-grid{grid-template-columns:1fr}}
+.role{background:var(--card);border:1px solid var(--line);border-radius:13px;padding:22px 24px;border-left:4px solid var(--green)}
+.role.partner{border-left-color:var(--gold)}
+.role.platform{border-left-color:var(--blue)}
+.role.client{border-left-color:var(--green)}
+.role.operator{border-left-color:#A480FF}
+.role h4{font-size:16px;margin:0 0 4px;color:#fff;display:flex;align-items:center;justify-content:space-between}
+.role .who{font-size:11px;color:var(--muted);font-weight:700;text-transform:uppercase;letter-spacing:.3px;margin-bottom:14px}
+.role .can{font-size:12.5px;color:var(--muted);font-weight:600;text-transform:uppercase;letter-spacing:.3px;margin:14px 0 6px}
+.role ul{font-size:13.5px;color:var(--text-2);margin-bottom:0}
+.role ul li{margin-bottom:4px}
+.role .iface{display:inline-block;margin-top:12px;padding:4px 10px;background:var(--card-2);border:1px solid var(--line);border-radius:6px;font-family:'JetBrains Mono',monospace;font-size:11.5px;color:var(--text-2)}
+
+/* ── Table ── */
+table.t{width:100%;border-collapse:collapse;margin:16px 0;background:var(--card);border:1px solid var(--line);border-radius:11px;overflow:hidden}
+table.t th{text-align:left;padding:12px 14px;font-size:11px;color:var(--muted);font-weight:700;text-transform:uppercase;letter-spacing:.5px;background:var(--card-2);border-bottom:1px solid var(--line)}
+table.t td{padding:12px 14px;border-bottom:1px solid var(--line);font-size:13.5px;color:var(--text-2);vertical-align:top}
+table.t tr:last-child td{border-bottom:none}
+table.t td b{color:#fff}
+
+/* ── Footer note ── */
+.note{padding:16px 20px;background:var(--gold-soft);border:1px solid rgba(242,179,66,.25);border-radius:11px;font-size:13.5px;color:var(--text-2);margin:16px 0}
+.note b{color:var(--gold)}
+</style>
+</head>
+<body>
+
+<div class="shell">
+
+<aside class="sidebar">
+  <div class="brand">
+    <div class="brand-mark">U</div>
+    <div>
+      <div class="brand-name">UMRABOR</div>
+      <div class="brand-sub">Обзор проекта</div>
+    </div>
+  </div>
+
+  <nav class="nav-list">
+    <a href="#s1" class="active"><span class="nu">01</span>Что такое UMRABOR</a>
+    <a href="#s2"><span class="nu">02</span>Архитектура</a>
+    <a href="#s3"><span class="nu">03</span>Ключевые сущности</a>
+    <a href="#s4"><span class="nu">04</span>End-to-end флоу</a>
+    <a href="#s5"><span class="nu">05</span>Роли</a>
+  </nav>
+
+  <div class="sidebar-foot">
+    Дата: 21 мая 2026<br>
+    Версия: v0.8<br>
+    Прототипы: 4 интерфейса
+  </div>
+</aside>
+
+<main>
+
+<div class="hero">
+  <div class="eyebrow">UMRABOR PROJECT OVERVIEW</div>
+  <h1>Платформа бронирования <span class="gold">умра-туров</span></h1>
+  <p>Многотенантный маркетплейс для тур-операторов Узбекистана, доступный клиентам через Click Mini App и публичный веб-сайт. Поддерживает полный цикл от публикации пакета до выдачи ваучера.</p>
+  <div class="hero-meta">
+    <div><b>4 интерфейса</b> · Платформа / Партнёр / Клиент / Веб</div>
+    <div><b>5 ролей</b> · Команда UMRABOR / Админ / Оператор / Клиент / Аноним</div>
+    <div><b>39 решений</b> · Decision Log v0.8</div>
+  </div>
+</div>
+
+<!-- ═══════════ 1. Что такое UMRABOR ═══════════ -->
+<section class="block" id="s1">
+  <div class="eyebrow"><span class="nu">01</span> Раздел</div>
+  <h2 class="section-h">Что такое UMRABOR</h2>
+
+  <p class="lead">UMRABOR — платформа, через которую зиёратчилар Узбекистана бронируют умра-туры у лицензированных тур-операторов. Точка входа — Click Mini App (~10 млн пользователей) и публичный веб-сайт. Платформа берёт на себя витрину, бронирование, оплату и инфраструктуру; тур-операторы — собственно туры (отели, авиа, виза, ваучеры).</p>
+
+  <h3>Проблема</h3>
+  <ul>
+    <li>Тур-операторы продают туры через Telegram-чаты и Instagram — нет единой витрины</li>
+    <li>Клиент не понимает что именно входит в пакет, какие даты доступны, сколько стоит размещение разных типов</li>
+    <li>Размещение в номерах (с махрам / без, по полу, по семьям) — сложные правила, операторы делают руками в Google Sheets</li>
+    <li>Оплата идёт переводами, нет атомарности «оплата ↔ бронь»</li>
+    <li>Партнёр-агент / B2B не видит остатки в реальном времени</li>
+  </ul>
+
+  <h3>Решение</h3>
+  <ul>
+    <li><b>Единый каталог</b> умра-пакетов с прозрачными ценами в UZS</li>
+    <li><b>Алгоритмическое размещение</b> в номерах — клиент выбирает только тип (DBL/TRPL/QUAD), система назначает номер по правилам махрам и пола</li>
+    <li><b>Atomic payment-or-nothing</b> через Click — окно оплаты 15 минут, без оплаты заказа не существует</li>
+    <li><b>Партнёрский кабинет</b> с мастером публикации, остатками, заявками, чатом с клиентом</li>
+    <li><b>Команда UMRABOR</b> модерирует пакеты и партнёров, видит финансы платформы</li>
+  </ul>
+
+  <h3>Аудитория</h3>
+  <table class="t">
+    <tr><th style="width:30%">Сегмент</th><th>Описание</th></tr>
+    <tr><td><b>Зиёратчилар</b></td><td>Узбекистанцы 25–65 лет, планирующие умра. Заходят через Click, говорят на узбекском (кириллица/латиница) или русском.</td></tr>
+    <tr><td><b>Тур-операторы</b></td><td>Лицензированные турфирмы. Хотят продавать через массовый канал без своей разработки.</td></tr>
+    <tr><td><b>B2B-агенты</b></td><td>Перепродают туры. Видят витрину как black box: типы с пометкой «доступно/недоступно».</td></tr>
+    <tr><td><b>Команда UMRABOR</b></td><td>Модерирует контент, управляет партнёрами, видит финансы.</td></tr>
+  </table>
+</section>
+
+<!-- ═══════════ 2. Архитектура ═══════════ -->
+<section class="block" id="s2">
+  <div class="eyebrow"><span class="nu">02</span> Раздел</div>
+  <h2 class="section-h">Архитектура — 4 интерфейса</h2>
+
+  <p class="lead">Система разбита на 4 независимых интерфейса под разные роли. Все говорят с одной базой данных и общими сущностями, но имеют свои сценарии и навигацию.</p>
+
+  <div class="if-grid">
+    <a class="if-card" href="umrabor_platform_v1.html" target="_blank">
+      <div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18"/><path d="M9 21V9"/></svg></div>
+      <h3>Платформа UMRABOR</h3>
+      <div class="meta">Команда UMRABOR · Веб-приложение</div>
+      <div class="dsc">Дашборд платформы, модерация пакетов/гостиниц/партнёров, заявки всех партнёров, платежи (комиссии), пользователи команды, история действий.</div>
+      <span class="file">umrabor_platform_v1.html</span>
+    </a>
+
+    <a class="if-card" href="umrabor_admin_v5.html" target="_blank">
+      <div class="ic" style="background:var(--gold-soft);color:var(--gold)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><path d="M9 22V12h6v10"/></svg></div>
+      <h3>АРМ Партнёра</h3>
+      <div class="meta">Тур-оператор · Веб-приложение</div>
+      <div class="dsc">Дашборд оператора, 4-шаговый мастер публикации пакета, заявки клиентов, размещения, зиёратчилар, справочники (отели/авиа/услуги/подарки), профиль партнёра, команда, настройки.</div>
+      <span class="file">umrabor_admin_v5.html</span>
+    </a>
+
+    <a class="if-card" href="umrabor_client_v6.html" target="_blank">
+      <div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="2" width="14" height="20" rx="2"/><line x1="12" y1="18" x2="12.01" y2="18"/></svg></div>
+      <h3>Клиент Mini App</h3>
+      <div class="meta">Зиёратчи · Click Mini App (mobile)</div>
+      <div class="dsc">Главная с поиском, каталог, страница пакета, бронирование (зиёратчилар → вылет → жойлашув → тўлов), мои буюртмалар, профиль. Узбекский кириллица. Тёмная тема.</div>
+      <span class="file">umrabor_client_v6.html</span>
+    </a>
+
+    <a class="if-card" href="umrabor_web_v1.html" target="_blank">
+      <div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15 15 0 0 1 4 10 15 15 0 0 1-4 10 15 15 0 0 1-4-10 15 15 0 0 1 4-10z"/></svg></div>
+      <h3>Веб-сайт UMRABOR</h3>
+      <div class="meta">Публичный · Responsive web</div>
+      <div class="dsc">Дублирует функционал мини-аппа на десктопе. Главная с hero и галереей, каталог, страница пакета, бронирование, личный кабинет (буюртмалар, профиль с табами). Плюс лендинг для тур-операторов.</div>
+      <span class="file">umrabor_web_v1.html</span>
+    </a>
+  </div>
+
+  <div class="note">
+    <b>Принцип:</b> Платформа и Партнёр — десктоп-only (рабочие места). Клиент Mini App — mobile-only (внутри Click). Веб-сайт — адаптивный (mobile + desktop).
+  </div>
+</section>
+
+<!-- ═══════════ 3. Ключевые сущности ═══════════ -->
+<section class="block" id="s3">
+  <div class="eyebrow"><span class="nu">03</span> Раздел</div>
+  <h2 class="section-h">Ключевые сущности</h2>
+
+  <p class="lead">Все 4 интерфейса работают с одним и тем же набором сущностей. Изменение в одном — отражается во всех остальных.</p>
+
+  <h3>Иерархия данных</h3>
+  <div class="ent-tree">
+<span class="lvl-1">Пакет (Package)</span>
+└── <span class="lvl-2">Вылет (Departure)</span> — конкретная дата
+    └── <span class="lvl-3">Группа (Group)</span> — до 4 групп на вылет, по 45–50 чел.
+        └── <span class="lvl-4">Номер (Room)</span> — пул QUAD / TRPL / DBL
+            └── Слот (Slot) — конкретное место с занятостью
+  </div>
+
+  <h3>Карточки сущностей</h3>
+  <div class="ent-grid">
+    <div class="ent-card">
+      <h4><span class="dot"></span>Пакет</h4>
+      <div class="dsc">Тур, который продаёт партнёр. Состав: фото, описание, маршрут (Тошкент → Маккаи Мукаррама → Мадинаи Мунаввара), услуги, подарки, питание, трансфер. Один пакет — много вылетов.</div>
+      <div class="fields">name · type · route · services · gifts · meals · photos</div>
+    </div>
+    <div class="ent-card">
+      <h4><span class="dot"></span>Вылет</h4>
+      <div class="dsc">Конкретная дата с конкретной авиакомпанией, рейсом, общей ёмкостью, ценой по типам размещения, остатком инвентаря. Партнёр задаёт ёмкость по группам.</div>
+      <div class="fields">date · airline · capacity · prices · groups[]</div>
+    </div>
+    <div class="ent-card">
+      <h4><span class="dot"></span>Инвентарь</h4>
+      <div class="dsc">Пул номеров на вылет: QUAD ×N, TRPL ×N, DBL ×N. Состояние номера: EMPTY / MALE_ONLY / FEMALE_ONLY / FAMILY_LOCKED. Партнёр ведёт вручную, обновляет в начале дня.</div>
+      <div class="fields">type · capacity · occupied · gender_state · source</div>
+    </div>
+    <div class="ent-card">
+      <h4><span class="dot"></span>Зиёратчи</h4>
+      <div class="dsc">Паломник. Поля: ФИО, телефон, паспорт (фото), даты, пол, виза. Махрам — опциональная связь с другим зиёратчи в этой же заявке. Срок паспорта &lt; 6 мес. до вылета — блок.</div>
+      <div class="fields">name · passport · gender · mahram_link · visa</div>
+    </div>
+    <div class="ent-card">
+      <h4><span class="dot"></span>Заявка (Буюртма)</h4>
+      <div class="dsc">Бронь. Создаётся клиентом в мини-аппе/вебе. Lifecycle: paid_pending_op → processing → completed (или cancelled_op / cancelled_user). Lock инвентаря на 15 мин для оплаты.</div>
+      <div class="fields">id · package · departure · pilgrims · room · status</div>
+    </div>
+    <div class="ent-card">
+      <h4><span class="dot"></span>Тўлов</h4>
+      <div class="dsc">Платёж через Click Mini App (Visa/Mastercard/Uzcard/Humo через Click). Atomic payment-or-nothing (D-34). Окно 15 минут (D-35). Idempotency через Click <code>transaction_id</code>.</div>
+      <div class="fields">click_tx · amount · status · created_at</div>
+    </div>
+    <div class="ent-card">
+      <h4><span class="dot"></span>Ваучер</h4>
+      <div class="dsc">PDF на каждого зиёратчи. Генерируется после подтверждения заявки оператором. Содержит пакет, дату вылета, тип размещения, ФИО, соседей по номеру (свои — открыто, чужие — XXXXX).</div>
+      <div class="fields">order_id · pilgrim · type · pdf_url</div>
+    </div>
+    <div class="ent-card">
+      <h4><span class="dot"></span>Партнёр</h4>
+      <div class="dsc">Тур-оператор. Имеет логотип, фото офиса, лицензию, описание, реквизиты. Команда: Админ + Операторы. Все пакеты и заявки привязаны к партнёру.</div>
+      <div class="fields">name · license · contacts · team[] · packages[]</div>
+    </div>
+  </div>
+
+  <div class="note">
+    <b>Правило размещения:</b> клиент выбирает тариф (DBL/TRPL/QUAD) и вариант (вместе/раздельно для махрам), а конкретный номер назначает алгоритм по водопадной логике: уплотнение → новый номер → следующая группа.
+  </div>
+</section>
+
+<!-- ═══════════ 4. End-to-end флоу ═══════════ -->
+<section class="block" id="s4">
+  <div class="eyebrow"><span class="nu">04</span> Раздел</div>
+  <h2 class="section-h">End-to-end флоу — от публикации до ваучера</h2>
+
+  <p class="lead">Сценарий запуска одного пакета и одной брони, проходящий через все 4 интерфейса и 3 действующих лица: партнёра, команду UMRABOR и клиента.</p>
+
+  <div class="flow">
+
+    <div class="step partner" data-n="1">
+      <div class="actor">● Партнёр (Админ)</div>
+      <div class="where">АРМ Партнёра · Пакетлар → +Янги пакет</div>
+      <h4>Партнёр публикует пакет</h4>
+      <p>Запускает 4-шаговый мастер публикации:</p>
+      <ul>
+        <li><b>Шаг 1 — Маълумотлар:</b> название, тип (Эконом/Стандарт/Премиум/Люкс), фото, маршрут (остановки + ночи + гостиница), услуги, подарки, питание, тип трансфера</li>
+        <li><b>Шаг 2 — Вылеты:</b> создаёт даты с авиакомпанией, рейсом, ёмкостью групп (по умолчанию 45 чел./группа, 4 группы)</li>
+        <li><b>Шаг 3 — Инвентарь:</b> задаёт стандартный набор номеров (5×QUAD + 5×TRPL + 5×DBL = 45 мест) и тарифы (цена за QUAD / TRPL / DBL per person)</li>
+        <li><b>Шаг 4 — Подтверждение:</b> сводный экран всех данных, кнопка «Опубликовать»</li>
+      </ul>
+    </div>
+
+    <div class="step platform" data-n="2">
+      <div class="actor">● Команда UMRABOR</div>
+      <div class="where">Платформа UMRABOR · Модерация → Пакеты</div>
+      <h4>Платформа модерирует пакет</h4>
+      <p>Пакет приходит в очередь модерации со статусом <code>pending_moderation</code>. Модератор открывает drawer пакета с 3 вкладками: Информация / Инвентарь / История.</p>
+      <ul>
+        <li>Проверяет: фото качественные, маршрут логичный, цены не аномальные, услуги корректны, описание без ошибок</li>
+        <li><b>Одобряет</b> → пакет переходит в <code>active</code>, появляется в каталоге</li>
+        <li><b>Отклоняет</b> → выбирает причину из справочника, пишет комментарий партнёру</li>
+      </ul>
+    </div>
+
+    <div class="step client" data-n="3">
+      <div class="actor">● Клиент</div>
+      <div class="where">Click Mini App / Веб-сайт · Каталог</div>
+      <h4>Клиент находит пакет</h4>
+      <p>Заходит в UMRABOR через Click Mini App (или на веб) и видит каталог:</p>
+      <ul>
+        <li>Карточка пакета: фото, имя, города + ночи + дата ближайшего вылета, ценовые тайлы (1/2/3/4 кишилик хона) — цены справа</li>
+        <li>Открывает страницу пакета: галерея, описание, меҳмонхона блоки (Маккаи Мукаррама + Мадинаи Мунаввара с золотым и зелёным pill), сафар йўналиши (таймлайн), хизматлар + совғалар, нархлар (4 строки), ҳожиларимиз тажрибаси</li>
+      </ul>
+    </div>
+
+    <div class="step client" data-n="4">
+      <div class="actor">● Клиент</div>
+      <div class="where">Click Mini App / Веб-сайт · Бронирование</div>
+      <h4>Клиент бронирует — 4 шага</h4>
+      <ul>
+        <li><b>Шаг 1 — Зиёратчилар руйхати:</b> добавляет себя и членов семьи (имя, фамилия, дата рождения, пол, паспорт). Опционально — «Загранпасортим йўқ» → ID-паспорт + помощь с оформлением. Маҳрам блок появляется со 2-го зиёратчи.</li>
+        <li><b>Шаг 2 — Кунни танлаш (вылет):</b> выбирает дату из доступных вылетов. Каждый вылет — карточка с датой, авиакомпанией, ценами 1/2/3/4 кишилик.</li>
+        <li><b>Шаг 3 — Жойлашув:</b> система предлагает варианты размещения с учётом состава семьи (для семьи с махрамом — варианты «вместе» / «раздельно»). Радио-кнопки с ценой за номер + умумий сумма.</li>
+        <li><b>Шаг 4 — Тўлов:</b> Жами тўлов (золотой) + выбор способа оплаты (Click / Payme / Paynet / Uzcard в вебе; в мини-аппе только Click) + agreement checkbox. Кнопка «Тўлаш».</li>
+      </ul>
+    </div>
+
+    <div class="step client" data-n="5">
+      <div class="actor">● Клиент</div>
+      <div class="where">Click Mini App · WebView оплаты</div>
+      <h4>Оплата через Click — 15 минут окно</h4>
+      <ul>
+        <li>Открывается Click WebView с visual countdown timer (D-36). Push за 2 минуты, красный за 30 секунд</li>
+        <li>Инвентарь залочен на 15 минут (D-35). Без оплаты — заказа не существует (D-34)</li>
+        <li>Внутри окна разрешены неограниченные попытки оплаты (D-37)</li>
+        <li>При закрытии WebView — 60 сек grace period (D-38)</li>
+        <li>После успеха — статус <code>paid_pending_op</code>, экран успеха «Ассалому алайкум! Сафарингиз қабул қилинди»</li>
+      </ul>
+    </div>
+
+    <div class="step partner" data-n="6">
+      <div class="actor">● Партнёр (Оператор)</div>
+      <div class="where">АРМ Партнёра · Заявки → drawer заявки</div>
+      <h4>Оператор подтверждает заявку</h4>
+      <p>Заявка падает в Заявки со статусом <code>paid_pending_op</code>. SLA подтверждения 30 мин — 24 часа.</p>
+      <ul>
+        <li>Открывает карточку заявки: пакет, вылет, зиёратчилар, тариф, оплата, чат с клиентом</li>
+        <li>Проверяет паспорта (срок &gt; 6 мес. от даты вылета), визу, корректность данных</li>
+        <li><b>Тасдиқлаш</b> → статус <code>processing</code>, инвентарь списан окончательно</li>
+        <li><b>Отказ</b> → причина из справочника → автовозврат через Click в течение 24 ч</li>
+      </ul>
+    </div>
+
+    <div class="step partner" data-n="7">
+      <div class="actor">● Партнёр (Оператор)</div>
+      <div class="where">АРМ Партнёра · Заявка → Документы</div>
+      <h4>Партнёр генерирует и прикрепляет ваучеры</h4>
+      <p>После подтверждения партнёр готовит документы:</p>
+      <ul>
+        <li>Подаёт на саудийскую визу, получает</li>
+        <li>Генерирует PDF-ваучер на каждого зиёратчи: тип пакета, дата вылета, тип размещения, ФИО, соседи (свои открыто, чужие XXXXX), блок Махрам если есть</li>
+        <li>Прикрепляет ваучеры к заявке в кабинете</li>
+        <li>Клиент получает уведомление</li>
+      </ul>
+    </div>
+
+    <div class="step client" data-n="8">
+      <div class="actor">● Клиент</div>
+      <div class="where">Click Mini App / Веб · Менинг буюртмаларим</div>
+      <h4>Клиент скачивает ваучеры</h4>
+      <ul>
+        <li>В разделе «Менинг буюртмаларим» — детальная карточка заявки</li>
+        <li>3 блока: Буюртма ҳолати (таймлайн этапов с галочками), Ваучерлар (список PDF с кнопкой скачивания), Буюртма тавфсилоти (полные данные)</li>
+        <li>Если что-то непонятно — открывает Қўллаб-қувватлаш (чат с оператором UMRABOR)</li>
+      </ul>
+    </div>
+
+    <div class="step platform" data-n="9">
+      <div class="actor">● Команда UMRABOR</div>
+      <div class="where">Платформа UMRABOR · Платежи</div>
+      <h4>UMRABOR получает комиссию</h4>
+      <ul>
+        <li>В разделе Платежи отображается транзакция: партнёр, пакет, сумма, комиссия UMRABOR, Click-комиссия, чистая выплата партнёру</li>
+        <li>KPI: Жами тушум, Жами комиссия, Бугунги, Бекор қилинган</li>
+        <li>Выплата партнёру по графику расчётов</li>
+      </ul>
+    </div>
+
+  </div>
+</section>
+
+<!-- ═══════════ 5. Роли ═══════════ -->
+<section class="block" id="s5">
+  <div class="eyebrow"><span class="nu">05</span> Раздел</div>
+  <h2 class="section-h">Роли — кто что видит и может</h2>
+
+  <p class="lead">В системе 5 ролей. Каждая привязана к своему интерфейсу со своими правами.</p>
+
+  <div class="role-grid">
+
+    <div class="role client">
+      <h4>Клиент (Зиёратчи) <span style="font-size:11px;color:var(--green);background:var(--green-soft);padding:3px 8px;border-radius:5px;font-weight:700">ФИЗ</span></h4>
+      <div class="who">Узбекистанец, заходит через Click</div>
+      <p style="font-size:13px;color:var(--text-2);margin-bottom:0">Бронирует туры для себя и семьи. Авторизация — Click аккаунт (телефон), без отдельной регистрации.</p>
+      <div class="can">Может</div>
+      <ul>
+        <li>Просматривать каталог, страницы пакетов, галерею</li>
+        <li>Создавать заявку с указанием зиёратчилар (включая других людей)</li>
+        <li>Оплачивать через Click</li>
+        <li>Видеть статусы своих буюртма, скачивать ваучеры</li>
+        <li>Писать в Қўллаб-қувватлаш</li>
+        <li>Менять язык интерфейса</li>
+      </ul>
+      <span class="iface">umrabor_client_v6.html · umrabor_web_v1.html</span>
+    </div>
+
+    <div class="role partner">
+      <h4>Админ партнёра <span style="font-size:11px;color:var(--gold);background:var(--gold-soft);padding:3px 8px;border-radius:5px;font-weight:700">ЮР</span></h4>
+      <div class="who">Владелец турфирмы</div>
+      <p style="font-size:13px;color:var(--text-2);margin-bottom:0">Полный доступ к кабинету партнёра. Управляет всем что касается его турфирмы.</p>
+      <div class="can">Может</div>
+      <ul>
+        <li>Всё что может Оператор</li>
+        <li>Редактировать профиль партнёра (логотип, фото, лицензия, реквизиты)</li>
+        <li>Создавать и удалять пользователей в команде (Админ / Оператор)</li>
+        <li>Управлять справочниками (отели, авиа, услуги, подарки, тип пакета, инвентарь)</li>
+        <li>Настройки уведомлений (триггеры + каналы)</li>
+        <li>Видеть полную историю действий команды</li>
+      </ul>
+      <span class="iface">umrabor_admin_v5.html</span>
+    </div>
+
+    <div class="role operator">
+      <h4>Оператор партнёра <span style="font-size:11px;color:#A480FF;background:rgba(164,128,255,.12);padding:3px 8px;border-radius:5px;font-weight:700">ЮР</span></h4>
+      <div class="who">Сотрудник турфирмы</div>
+      <p style="font-size:13px;color:var(--text-2);margin-bottom:0">Операционная работа: пакеты, заявки, зиёратчилар. Без управления командой и настройками.</p>
+      <div class="can">Может</div>
+      <ul>
+        <li>Публиковать и редактировать пакеты (4-шаговый мастер)</li>
+        <li>Управлять вылетами, ценами, инвентарём</li>
+        <li>Обрабатывать заявки: подтверждать, отказывать, прикреплять ваучеры</li>
+        <li>Видеть и редактировать карточки зиёратчилар</li>
+        <li>Просматривать дашборд (продажи, конверсии, остатки)</li>
+        <li>Общаться с клиентами в чате</li>
+      </ul>
+      <span class="iface">umrabor_admin_v5.html (без Настроек и Команды)</span>
+    </div>
+
+    <div class="role platform">
+      <h4>Команда UMRABOR <span style="font-size:11px;color:var(--blue);background:rgba(76,141,255,.12);padding:3px 8px;border-radius:5px;font-weight:700">UMR</span></h4>
+      <div class="who">Сотрудник UMRABOR (модератор / админ)</div>
+      <p style="font-size:13px;color:var(--text-2);margin-bottom:0">Управляет всей платформой: модерирует контент партнёров, видит деньги, ведёт пользователей команды.</p>
+      <div class="can">Может</div>
+      <ul>
+        <li>Модерировать пакеты, гостиницы, новых партнёров</li>
+        <li>Видеть все заявки всех партнёров</li>
+        <li>Видеть финансы платформы: транзакции, комиссии UMRABOR</li>
+        <li>Управлять пользователями команды (роли: Админ UMRABOR / Модератор)</li>
+        <li>Просматривать историю действий команды UMRABOR (только своя команда)</li>
+        <li>Управлять дашбордом платформы (топ партнёров, топ пакетов, платежи)</li>
+      </ul>
+      <span class="iface">umrabor_platform_v1.html</span>
+    </div>
+
+    <div class="role">
+      <h4>Аноним (посетитель веб-сайта) <span style="font-size:11px;color:var(--muted);background:var(--card-2);padding:3px 8px;border-radius:5px;font-weight:700">ANON</span></h4>
+      <div class="who">Незалогиненный пользователь веба</div>
+      <p style="font-size:13px;color:var(--text-2);margin-bottom:0">Заходит на публичный сайт UMRABOR. Может смотреть, не может покупать.</p>
+      <div class="can">Может</div>
+      <ul>
+        <li>Просматривать главную страницу с hero, видео, галереей, отзывами</li>
+        <li>Просматривать каталог и страницы пакетов</li>
+        <li>Видеть лендинг для тур-операторов и оставлять заявку на партнёрство</li>
+        <li>Нажать «Сотиб олиш» → откроется модалка Кириш (вход по телефону + SMS) → станет Клиентом</li>
+      </ul>
+      <span class="iface">umrabor_web_v1.html</span>
+    </div>
+
+  </div>
+
+  <h3>Матрица доступа</h3>
+  <table class="t">
+    <tr><th>Действие</th><th>Клиент</th><th>Оператор</th><th>Админ парт.</th><th>UMRABOR</th></tr>
+    <tr><td>Смотреть каталог</td><td>✓</td><td>✓</td><td>✓</td><td>✓</td></tr>
+    <tr><td>Создать заявку</td><td>✓</td><td>—</td><td>—</td><td>—</td></tr>
+    <tr><td>Подтвердить заявку</td><td>—</td><td>✓</td><td>✓</td><td>—</td></tr>
+    <tr><td>Опубликовать пакет</td><td>—</td><td>✓</td><td>✓</td><td>—</td></tr>
+    <tr><td>Модерировать пакет</td><td>—</td><td>—</td><td>—</td><td>✓</td></tr>
+    <tr><td>Управлять командой</td><td>—</td><td>—</td><td>✓ (своя)</td><td>✓ (своя)</td></tr>
+    <tr><td>Видеть финансы платформы</td><td>—</td><td>—</td><td>—</td><td>✓</td></tr>
+    <tr><td>Видеть финансы своей фирмы</td><td>—</td><td>✓</td><td>✓</td><td>—</td></tr>
+  </table>
+</section>
+
+</main>
+
+</div>
+
+<script>
+// Sidebar active state on scroll
+const sections = document.querySelectorAll('section.block');
+const links = document.querySelectorAll('.nav-list a');
+function onScroll(){
+  let active = sections[0].id;
+  sections.forEach(s => { if(window.scrollY + 100 >= s.offsetTop) active = s.id; });
+  links.forEach(l => l.classList.toggle('active', l.getAttribute('href') === '#' + active));
+}
+window.addEventListener('scroll', onScroll);
+</script>
+
+</body>
+</html>

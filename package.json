@@ -1,0 +1,23 @@
+{
+  "name": "umrabor",
+  "version": "0.1.0",
+  "private": true,
+  "description": "UMRABOR — цифровая платформа для туров Умра и Хадж",
+  "packageManager": "pnpm@9.12.0",
+  "engines": {
+    "node": ">=20.0.0",
+    "pnpm": ">=9.0.0"
+  },
+  "scripts": {
+    "dev": "concurrently -n web,platform,partner,miniapp -c green,blue,magenta,yellow \"pnpm --filter @umrabor/web dev\" \"pnpm --filter @umrabor/platform dev\" \"pnpm --filter @umrabor/partner dev\" \"pnpm --filter @umrabor/miniapp dev\"",
+    "build": "pnpm -r build",
+    "lint": "pnpm -r lint",
+    "test": "pnpm -r test",
+    "clean": "pnpm -r exec rm -rf node_modules .next dist build .turbo"
+  },
+  "devDependencies": {
+    "concurrently": "^9.0.1",
+    "prettier": "^3.3.3",
+    "typescript": "^5.6.2"
+  }
+}

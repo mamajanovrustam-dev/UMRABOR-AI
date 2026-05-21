@@ -1,0 +1,2654 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<meta name="theme-color" content="#0B0C0E">
+<title>UMRABOR — Умра турлари бронлаш платформаси</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500;600;700&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+:root{
+  --bg:#0B0C0E;--bg-2:#15171B;--card:#1A1C20;--card-2:#22252A;--card-3:#2A2D33;
+  --line:rgba(255,255,255,.08);--line-2:rgba(255,255,255,.14);
+  --text:#FFFFFF;--text-2:#C9CCD2;--muted:#8A8E96;
+  --green:#1FAF6A;--green-2:#178A53;--green-soft:rgba(31,175,106,.16);--green-line:rgba(31,175,106,.4);
+  --gold:#F2B342;--gold-soft:rgba(242,179,66,.15);
+  --blue:#3D8DE0;--blue-soft:rgba(61,141,224,.16);
+  --red:#E0524A;--red-soft:rgba(224,82,74,.15);
+  --orange:#E89A3A;--orange-soft:rgba(232,154,58,.15);
+}
+html,body{font-family:'Inter',sans-serif;font-size:15px;color:var(--text);background:var(--bg);min-height:100vh;line-height:1.55;-webkit-font-smoothing:antialiased}
+body{background:radial-gradient(ellipse at top,rgba(31,175,106,.05) 0%,transparent 50%),var(--bg)}
+a{color:inherit;text-decoration:none}
+button{font-family:inherit;cursor:pointer}
+.container{max-width:1200px;margin:0 auto;padding:0 24px}
+
+/* ═══════════ TOPBAR ═══════════ */
+.topbar{padding:14px 0;position:sticky;top:0;background:rgba(11,12,14,.9);backdrop-filter:blur(14px);z-index:100;border-bottom:1px solid var(--line)}
+.topbar-row{display:flex;justify-content:space-between;align-items:center;gap:24px}
+.logo{display:flex;align-items:center;gap:10px;flex-shrink:0}
+.logo-mark{width:34px;height:34px;border-radius:8px;background:linear-gradient(135deg,var(--green),var(--green-2));display:flex;align-items:center;justify-content:center;font-weight:800;font-size:14px;color:#fff}
+.logo-text{font-size:17px;font-weight:800;letter-spacing:2px;color:#fff}
+.nav{display:flex;align-items:center;gap:8px;flex:1;justify-content:center}
+.nav a{padding:8px 14px;font-size:14px;font-weight:600;color:var(--text-2);border-radius:8px;transition:color .15s,background .15s}
+.nav a:hover{color:#fff;background:var(--card-2)}
+.nav a.active{color:var(--green)}
+.topbar-actions{display:flex;align-items:center;gap:10px;flex-shrink:0}
+.btn-ghost-sm{padding:8px 14px;font-size:13.5px;font-weight:600;color:var(--text-2);background:transparent;border:1px solid var(--line-2);border-radius:9px;cursor:pointer}
+.btn-ghost-sm:hover{color:#fff;border-color:var(--text-2)}
+.btn-green-sm{padding:9px 18px;font-size:13.5px;font-weight:700;color:#fff;background:var(--green);border:none;border-radius:9px;cursor:pointer}
+.btn-green-sm:hover{background:var(--green-2)}
+.burger{display:none;width:36px;height:36px;border:none;background:var(--card-2);border-radius:8px;color:#fff;font-size:20px;cursor:pointer;align-items:center;justify-content:center}
+
+/* ═══════════ PAGES ═══════════ */
+.page{display:none}
+.page.active{display:block}
+
+/* ═══════════ HOME HERO (full-bleed) ═══════════ */
+.hero{position:relative;min-height:88vh;display:flex;align-items:center;overflow:hidden;margin-top:-1px}
+
+.hero-bg{position:absolute;inset:0;background-image:url('https://images.pexels.com/photos/12777419/pexels-photo-12777419.jpeg?auto=compress&cs=tinysrgb&w=1600');background-size:cover;background-position:center;z-index:0}
+.hero-bg::after{content:'';position:absolute;inset:0;background:linear-gradient(180deg,rgba(11,12,14,.55) 0%,rgba(11,12,14,.35) 30%,rgba(11,12,14,.65) 75%,rgba(11,12,14,.95) 100%)}
+.hero-bg::before{content:'';position:absolute;inset:0;background:linear-gradient(90deg,rgba(11,12,14,.85) 0%,rgba(11,12,14,.4) 50%,transparent 100%);z-index:1}
+.hero-content{position:relative;z-index:2;max-width:760px;width:100%;padding:60px 0 100px;text-align:left;margin-left:0;margin-right:auto}
+.hero-trust{position:absolute;bottom:32px;left:0;right:0;z-index:2;display:flex;gap:32px;align-items:center;font-size:13.5px;color:rgba(255,255,255,.85);font-weight:500;flex-wrap:wrap;padding:18px 0;border-top:1px solid rgba(255,255,255,.15);text-shadow:0 1px 6px rgba(0,0,0,.3)}
+.hero-trust b{color:#fff;font-family:'Inter',sans-serif;font-weight:800;font-size:16px;margin-right:7px}
+.hero-trust-item{display:flex;align-items:center;gap:9px}
+.hero-trust-item .ico{width:30px;height:30px;border-radius:8px;background:var(--green-soft);color:var(--green);display:flex;align-items:center;justify-content:center;border:1px solid var(--green-line)}
+.hero-trust-item .ico svg{width:15px;height:15px}
+.hero-trust-sep{color:rgba(255,255,255,.3)}
+.hero-eyebrow{display:inline-flex;align-items:center;gap:7px;font-size:11.5px;font-weight:700;color:var(--green);letter-spacing:1.5px;text-transform:uppercase;margin-bottom:20px;padding:6px 13px;background:rgba(31,175,106,.18);border:1px solid var(--green-line);border-radius:14px;backdrop-filter:blur(8px)}
+.hero-eyebrow::before{content:'';width:6px;height:6px;border-radius:50%;background:var(--green);box-shadow:0 0 8px var(--green)}
+.hero h1{font-size:64px;font-weight:800;line-height:1.05;margin-bottom:22px;letter-spacing:-1.8px;color:#fff;text-shadow:0 2px 20px rgba(0,0,0,.4)}
+.hero h1 .green{color:var(--green)}
+.hero h1 .gold{color:var(--gold)}
+.hero p{font-size:18px;color:rgba(255,255,255,.88);line-height:1.6;margin-bottom:32px;max-width:560px;font-weight:400;text-shadow:0 1px 8px rgba(0,0,0,.3)}
+.hero-checks{display:flex;flex-direction:column;gap:10px;margin-bottom:36px}
+.hero-check{display:flex;align-items:center;gap:11px;font-size:15px;color:#fff;font-weight:500;text-shadow:0 1px 6px rgba(0,0,0,.3)}
+.hero-check::before{content:'✓';color:#fff;font-weight:800;font-size:14px;width:24px;height:24px;background:var(--green);border-radius:50%;display:inline-flex;align-items:center;justify-content:center;flex-shrink:0;box-shadow:0 4px 12px rgba(31,175,106,.4)}
+.hero-row{display:grid;grid-template-columns:1fr auto;gap:32px;align-items:center;margin-top:8px}
+.hero-cta-stack{display:flex;flex-direction:row;gap:12px;align-items:center}
+.hero-cta-stack .btn-primary,.hero-cta-stack .btn-ghost{justify-content:center;white-space:nowrap}
+.hero-cta-row{display:flex;gap:12px;align-items:center;flex-wrap:wrap}
+.btn-primary{display:inline-flex;align-items:center;gap:9px;padding:16px 32px;font-size:15.5px;font-weight:700;color:#fff;background:var(--green);border:none;border-radius:12px;cursor:pointer;letter-spacing:.2px;box-shadow:0 10px 30px rgba(31,175,106,.3)}
+.btn-primary:hover{background:var(--green-2);transform:translateY(-2px);box-shadow:0 14px 34px rgba(31,175,106,.45)}
+.btn-ghost{display:inline-flex;align-items:center;gap:9px;padding:16px 28px;font-size:15.5px;font-weight:600;color:#fff;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.25);border-radius:12px;cursor:pointer;backdrop-filter:blur(8px)}
+.btn-ghost:hover{background:rgba(255,255,255,.12);border-color:#fff}
+
+/* Floating badge on hero */
+.hero-badge-card{position:absolute;bottom:40px;right:40px;background:rgba(11,12,14,.78);backdrop-filter:blur(16px);border:1px solid rgba(255,255,255,.15);border-radius:18px;padding:18px 22px;z-index:3;display:flex;align-items:center;gap:14px;box-shadow:0 24px 48px rgba(0,0,0,.4);max-width:340px}
+.hero-badge-ico{width:46px;height:46px;border-radius:12px;background:var(--gold-soft);color:var(--gold);display:flex;align-items:center;justify-content:center;font-size:22px;flex-shrink:0;border:1px solid rgba(242,179,66,.3)}
+.hero-badge-nm{font-size:15px;font-weight:700;color:#fff;letter-spacing:-.1px}
+.hero-badge-sub{font-size:12.5px;color:rgba(255,255,255,.75);margin-top:3px;font-weight:500}
+
+/* ═══════════ SEARCH WIDGET ═══════════ */
+.search-widget{margin-top:-32px;position:relative;z-index:5}
+.search-card{background:var(--card);border:1px solid var(--line);border-radius:18px;padding:18px;display:grid;grid-template-columns:1.4fr 1.4fr 1fr 160px;gap:12px;align-items:center;box-shadow:0 20px 60px rgba(0,0,0,.4)}
+.search-field{background:var(--card-2);border:1px solid var(--line);border-radius:11px;padding:10px 14px}
+.search-field label{display:block;font-size:10.5px;color:var(--muted);font-weight:600;letter-spacing:.3px;text-transform:uppercase;margin-bottom:4px}
+.search-field input,.search-field select{width:100%;background:transparent;border:none;color:#fff;font-family:inherit;font-size:13.5px;font-weight:600;outline:none;color-scheme:dark}
+.search-field select{appearance:none;cursor:pointer}
+.search-btn{padding:15px 20px;background:var(--green);color:#fff;border:none;border-radius:11px;font-weight:700;font-size:14px;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:8px}
+.search-btn:hover{background:var(--green-2)}
+
+/* ═══════════ SECTIONS ═══════════ */
+.section{padding:80px 0}
+.section-h{display:flex;justify-content:space-between;align-items:flex-end;margin-bottom:36px;gap:20px;flex-wrap:wrap}
+.section-h-left h2{font-size:36px;font-weight:800;color:#fff;letter-spacing:-1px;line-height:1.1}
+.section-h-left .sub{font-size:15px;color:var(--muted);margin-top:8px;font-weight:500}
+.section-h-link{font-size:14px;color:var(--green);font-weight:700;display:inline-flex;align-items:center;gap:6px}
+.section-h-link:hover{color:#fff}
+
+/* ═══════════ FEATURED PACKAGES ═══════════ */
+.pkg-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:20px}
+.pkg-card{background:var(--card);border:1px solid var(--line);border-radius:18px;overflow:hidden;cursor:pointer;transition:transform .2s,border-color .2s,box-shadow .2s;display:flex;flex-direction:column}
+.pkg-card:hover{transform:translateY(-4px);border-color:var(--green-line);box-shadow:0 18px 40px rgba(0,0,0,.35)}
+.pkg-card-img{height:220px;background-size:cover;background-position:center;position:relative}
+.pkg-card-img .tier{position:absolute;top:14px;left:14px;background:rgba(11,12,14,.88);backdrop-filter:blur(8px);color:#fff;font-size:10.5px;font-weight:700;letter-spacing:.5px;padding:6px 12px;border-radius:8px;text-transform:uppercase;display:flex;align-items:center;gap:5px}
+.pkg-card-img .tier::before{content:'⭐';font-size:11px}
+.pkg-card-img .price-tag{position:absolute;bottom:14px;right:14px;background:var(--green);color:#fff;font-size:12.5px;font-weight:700;padding:8px 14px;border-radius:10px;letter-spacing:.2px}
+.pkg-card-img .price-tag b{font-family:'JetBrains Mono',monospace;margin-left:4px}
+.pkg-card-body{padding:18px 18px 20px;flex:1;display:flex;flex-direction:column}
+.pkg-card-partner{display:flex;align-items:center;gap:7px;font-size:11.5px;color:var(--muted);font-weight:500;margin-bottom:6px}
+.pkg-card-partner .av{width:20px;height:20px;border-radius:5px;background:var(--green-soft);color:var(--green);display:inline-flex;align-items:center;justify-content:center;font-family:'JetBrains Mono',monospace;font-size:9px;font-weight:700}
+.pkg-card-name{font-size:19px;font-weight:700;color:#fff;line-height:1.2;margin-bottom:14px;letter-spacing:-.3px}
+.pkg-card-cities{display:flex;flex-direction:column;gap:8px;margin-bottom:14px;padding-top:14px;border-top:1px dashed var(--line)}
+.pkg-card-city{display:flex;align-items:center;gap:10px;font-size:12.5px;flex-wrap:wrap}
+.pkg-card-city .lbl{color:var(--gold);font-weight:700;font-size:11px;text-transform:uppercase;letter-spacing:.4px;min-width:54px}
+.pkg-card-city .htl{display:inline-flex;align-items:center;gap:6px;background:var(--card-2);border:1px solid var(--line);padding:5px 11px;border-radius:14px;color:#fff;font-weight:500}
+.pkg-card-city .htl .stars{color:var(--gold);font-size:10px;letter-spacing:.3px}
+.pkg-card-city .dist{color:var(--muted);font-family:'JetBrains Mono',monospace;font-weight:500;font-size:11px;margin-left:auto}
+.pkg-card-flights{display:grid;grid-template-columns:1fr auto 1fr;gap:10px;padding:13px 0;border-top:1px dashed var(--line);border-bottom:1px dashed var(--line);margin-bottom:14px;align-items:center}
+.pkg-card-flight{display:flex;flex-direction:column;gap:3px}
+.pkg-card-flight .dt{font-family:'JetBrains Mono',monospace;color:#fff;font-weight:600;font-size:12px}
+.pkg-card-flight .air{color:var(--green);font-weight:700;font-size:10.5px;letter-spacing:.4px;text-transform:uppercase}
+.pkg-card-flights-sep{color:var(--muted);font-size:14px;text-align:center}
+.pkg-card-prices{display:grid;grid-template-columns:repeat(4,1fr);gap:5px}
+.pkg-card-price-tile{background:var(--card-2);border:1px solid var(--line);border-radius:8px;padding:7px;text-align:center}
+.pkg-card-price-tile .typ{font-size:9px;color:var(--muted);font-weight:600;text-transform:uppercase}
+.pkg-card-price-tile .v{font-family:'JetBrains Mono',monospace;font-size:12px;font-weight:700;color:var(--green);margin-top:3px}
+.pkg-card-price-tile .v small{font-family:'Inter',sans-serif;font-size:8.5px;color:var(--muted);font-weight:500;margin-left:1px}
+
+/* ═══════════ WHY ═══════════ */
+.why-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:18px}
+.why-card{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:28px 24px}
+.why-ico{width:52px;height:52px;border-radius:14px;display:flex;align-items:center;justify-content:center;margin-bottom:18px}
+.why-card.c1 .why-ico{background:rgba(242,179,66,.15);color:var(--gold)}
+.why-card.c2 .why-ico{background:rgba(232,154,58,.15);color:var(--orange)}
+.why-card.c3 .why-ico{background:var(--green-soft);color:var(--green)}
+.why-card.c4 .why-ico{background:rgba(242,179,66,.15);color:var(--gold)}
+.why-card.c5 .why-ico{background:var(--blue-soft);color:var(--blue)}
+.why-card.c6 .why-ico{background:rgba(155,107,240,.15);color:#9B6BF0}
+.why-ico svg{width:26px;height:26px}
+.why-card h4{font-size:17px;font-weight:700;color:#fff;margin-bottom:9px;letter-spacing:-.2px;line-height:1.3}
+.why-card p{font-size:13.5px;color:var(--text-2);line-height:1.55;font-weight:400}
+
+/* ═══════════ STATS BAR ═══════════ */
+.stats-bar{background:var(--card);border:1px solid var(--line);border-radius:20px;padding:36px;display:grid;grid-template-columns:repeat(4,1fr);gap:24px;text-align:center}
+/* ═══════ VIDEO BLOCK ═══════ */
+.videos-wrap{background:#2A3527;border-radius:24px;padding:36px 36px 30px;position:relative;overflow:hidden}
+.videos-wrap .crescent{position:absolute;top:30px;right:30px;width:32px;height:32px;color:rgba(255,255,255,.2);pointer-events:none}
+.videos-wrap h2{font-size:30px;font-weight:800;color:#fff;letter-spacing:-.5px;margin-bottom:22px;position:relative;z-index:2}
+.videos-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:14px}
+.video-card{cursor:pointer;transition:transform .2s}
+.video-card:hover{transform:translateY(-3px)}
+.video-img{position:relative;height:280px;border-radius:16px;background-size:cover;background-position:center;overflow:hidden;background-color:#1a1d1f}
+.video-img::after{content:'';position:absolute;inset:0;background:linear-gradient(180deg,transparent 50%,rgba(0,0,0,.35))}
+.video-play{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:56px;height:56px;border-radius:50%;background:rgba(255,255,255,.95);display:flex;align-items:center;justify-content:center;font-size:18px;color:var(--bg);z-index:2;padding-left:3px;box-shadow:0 8px 24px rgba(0,0,0,.35)}
+/* ═══════ PHOTO GALLERY ═══════ */
+.gallery-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:18px}
+.gallery-card{cursor:pointer;transition:transform .2s}
+.gallery-card:hover{transform:translateY(-3px)}
+.gallery-img{position:relative;height:240px;border-radius:16px;background-size:cover;background-position:center;background-color:#1a1d1f;overflow:hidden}
+.gallery-img::after{content:'';position:absolute;inset:0;background:linear-gradient(180deg,transparent 40%,rgba(0,0,0,.75))}
+.gallery-cnt{position:absolute;top:12px;left:12px;background:rgba(11,12,14,.78);backdrop-filter:blur(8px);color:#fff;font-size:13px;font-weight:700;padding:6px 12px 6px 6px;border-radius:16px;display:flex;align-items:center;gap:7px;z-index:2}
+.gallery-cnt .stack{display:inline-flex}
+.gallery-cnt .stack img{width:22px;height:22px;border-radius:50%;border:1.5px solid rgba(11,12,14,.85);object-fit:cover;margin-left:-7px;background:#444}
+.gallery-cnt .stack img:first-child{margin-left:0}
+.gallery-info{padding:13px 4px 0}
+.gallery-info .nm{font-size:15px;font-weight:600;color:#fff;line-height:1.25}
+.gallery-info .dt{font-family:'JetBrains Mono',monospace;font-size:12.5px;color:var(--muted);margin-top:5px;font-weight:500}
+.stat-item .v{font-family:'JetBrains Mono',monospace;font-size:42px;font-weight:700;color:var(--green);line-height:1;letter-spacing:-.5px}
+.stat-item .l{font-size:13px;color:var(--muted);margin-top:8px;font-weight:600;letter-spacing:.2px}
+
+/* ═══════════ PARTNER CTA ═══════════ */
+.partner-cta{background:linear-gradient(135deg,#1d2922 0%,#152017 100%);border:1px solid var(--green-line);border-radius:24px;padding:60px;display:grid;grid-template-columns:1fr 1fr;gap:48px;align-items:center;position:relative;overflow:hidden}
+.partner-cta::before{content:'';position:absolute;top:-100px;right:-100px;width:300px;height:300px;border-radius:50%;background:radial-gradient(circle,rgba(31,175,106,.15) 0%,transparent 70%)}
+.partner-cta h2{font-size:42px;font-weight:800;color:#fff;letter-spacing:-1px;line-height:1.05;margin-bottom:16px;position:relative;z-index:2}
+.partner-cta h2 .green{color:var(--green)}
+.partner-cta p{font-size:16px;color:var(--text-2);line-height:1.6;margin-bottom:24px;font-weight:400;position:relative;z-index:2}
+.partner-cta-actions{display:flex;gap:12px;position:relative;z-index:2}
+.partner-cta-stats{background:rgba(0,0,0,.3);border:1px solid var(--line);border-radius:16px;padding:24px;position:relative;z-index:2}
+.partner-cta-stat{display:flex;justify-content:space-between;align-items:center;padding:14px 0;border-bottom:1px dashed var(--line)}
+.partner-cta-stat:last-child{border-bottom:none}
+.partner-cta-stat .l{font-size:13.5px;color:var(--text-2);font-weight:500}
+.partner-cta-stat .v{font-family:'JetBrains Mono',monospace;font-size:18px;font-weight:700;color:var(--green)}
+
+/* ═══════════ FOOTER ═══════════ */
+.footer{background:var(--bg-2);border-top:1px solid var(--line);padding:60px 0 30px;margin-top:60px}
+.footer-grid{display:grid;grid-template-columns:1.4fr 1fr 1fr 1fr;gap:48px;margin-bottom:40px}
+.footer-brand .logo{margin-bottom:18px}
+.footer-brand p{font-size:13.5px;color:var(--text-2);line-height:1.6;font-weight:400;max-width:300px}
+.footer-col h5{font-size:13px;font-weight:700;color:#fff;margin-bottom:18px;letter-spacing:.3px;text-transform:uppercase}
+.footer-col a{display:block;font-size:13.5px;color:var(--text-2);font-weight:500;padding:5px 0}
+.footer-col a:hover{color:var(--green)}
+.footer-bottom{display:flex;justify-content:space-between;align-items:center;padding-top:24px;border-top:1px solid var(--line);flex-wrap:wrap;gap:14px}
+.footer-bottom .copy{font-size:12.5px;color:var(--muted);font-weight:500}
+.footer-bottom .badges{display:flex;gap:10px;flex-wrap:wrap}
+.footer-bottom .badge{font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--muted);font-weight:600;padding:4px 11px;background:var(--card);border:1px solid var(--line);border-radius:6px}
+
+/* ═══════════ CATALOG ═══════════ */
+.cat-page{padding:40px 0 60px}
+.cat-page-h{margin-bottom:30px}
+.cat-page-h h1{font-size:38px;font-weight:800;color:#fff;letter-spacing:-1px;margin-bottom:12px}
+.cat-page-h p{font-size:15px;color:var(--text-2)}
+.cat-filters{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:14px;display:grid;grid-template-columns:1fr 1fr 1fr 1fr 140px;gap:10px;margin-bottom:28px;align-items:center}
+.cat-filter{background:var(--card-2);border:1px solid var(--line);border-radius:9px;padding:9px 13px}
+.cat-filter label{display:block;font-size:10px;color:var(--muted);font-weight:600;letter-spacing:.3px;text-transform:uppercase;margin-bottom:3px}
+.cat-filter input,.cat-filter select{width:100%;background:transparent;border:none;color:#fff;font-size:13px;font-weight:600;outline:none;color-scheme:dark}
+.cat-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:20px}
+
+/* ═══════════ PACKAGE DETAIL ═══════════ */
+.pd-page{padding:32px 0 60px}
+.pd-back{display:inline-flex;align-items:center;gap:8px;font-size:13.5px;color:var(--text-2);font-weight:600;margin-bottom:24px;cursor:pointer;padding:8px 14px;background:var(--card);border:1px solid var(--line);border-radius:9px}
+.pd-back:hover{border-color:var(--text-2);color:#fff}
+.pd-layout{display:grid;grid-template-columns:1fr 380px;gap:36px;align-items:flex-start}
+
+.pd-gallery{border-radius:18px;overflow:hidden;background:var(--card);border:1px solid var(--line);margin-bottom:24px}
+.pd-gallery-main{height:460px;background-size:cover;background-position:center;position:relative}
+.pd-gallery-arr{position:absolute;top:50%;transform:translateY(-50%);width:46px;height:46px;border-radius:50%;background:rgba(11,12,14,.7);backdrop-filter:blur(8px);border:1px solid rgba(255,255,255,.15);color:#fff;font-size:24px;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:background .15s,transform .15s;z-index:2}
+.pd-gallery-arr:hover{background:rgba(11,12,14,.85);transform:translateY(-50%) scale(1.05)}
+.pd-gallery-arr.prev{left:16px}
+.pd-gallery-arr.next{right:16px}
+.pd-gallery-dots{position:absolute;bottom:18px;left:50%;transform:translateX(-50%);display:flex;gap:6px;z-index:2;background:rgba(11,12,14,.5);backdrop-filter:blur(8px);padding:8px 14px;border-radius:20px;border:1px solid rgba(255,255,255,.1)}
+.pd-gallery-dots .dot{width:8px;height:8px;border-radius:50%;background:rgba(255,255,255,.4);cursor:pointer;transition:background .15s,width .15s}
+.pd-gallery-dots .dot.active{background:#fff;width:24px;border-radius:4px}
+
+.pd-title-row{display:flex;justify-content:space-between;align-items:flex-start;gap:20px;margin-bottom:24px}
+.pd-title{font-size:34px;font-weight:800;color:#fff;letter-spacing:-.8px;line-height:1.1}
+.pd-tags{display:flex;gap:6px;margin-top:10px;flex-wrap:wrap}
+.pd-tag{font-size:10.5px;font-weight:700;letter-spacing:.4px;text-transform:uppercase;padding:5px 11px;border-radius:14px}
+.pd-tag.gold{background:rgba(242,179,66,.15);color:var(--gold);border:1px solid rgba(242,179,66,.3)}
+.pd-tag.green{background:var(--green-soft);color:var(--green);border:1px solid var(--green-line)}
+.pd-days{background:var(--card-2);border:1px solid var(--line-2);color:#fff;padding:14px 18px;border-radius:14px;text-align:center;flex-shrink:0}
+.pd-days b{font-family:'JetBrains Mono',monospace;font-size:24px;font-weight:700;display:block;line-height:1;margin-bottom:4px}
+.pd-days small{font-size:11px;color:var(--muted);font-weight:600;letter-spacing:.3px;text-transform:uppercase}
+
+.pd-section{margin-bottom:32px}
+.pd-section-h{font-size:20px;font-weight:700;color:#fff;margin-bottom:16px;letter-spacing:-.3px}
+
+.pd-desc{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:22px}
+.pd-desc p{font-size:14.5px;color:var(--text-2);line-height:1.65;font-weight:400}
+
+.pd-hotels{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.pd-hotel{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:16px;cursor:pointer;transition:border-color .15s}
+.pd-hotel:hover{border-color:var(--green-line)}
+.pd-hotel-h{display:flex;justify-content:space-between;align-items:center;padding-bottom:12px;margin-bottom:14px;border-bottom:1px dashed var(--line)}
+.pd-hotel-city{font-size:16px;font-weight:700;color:#fff}
+.pd-hotel-detail{font-size:12.5px;color:var(--green);font-weight:600}
+.pd-hotel-row{display:flex;gap:12px}
+.pd-hotel-img{width:120px;height:120px;border-radius:12px;background-size:cover;background-position:center;flex-shrink:0}
+.pd-hotel-info{flex:1;min-width:0}
+.pd-hotel-stars{color:var(--gold);font-size:13px;letter-spacing:1.5px}
+.pd-hotel-nm{font-weight:600;font-size:14px;color:#fff;margin-top:5px}
+.pd-hotel-nm small{display:inline-block;color:var(--muted);font-weight:500;margin-left:5px;font-family:'JetBrains Mono',monospace;font-size:11px}
+.pd-hotel-dist{font-size:12px;color:var(--text-2);margin-top:8px;display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.pd-hotel-pills{display:flex;gap:6px;margin-top:7px;flex-wrap:wrap}
+.pd-hotel-pill-gold{background:var(--gold-soft);border:1px solid rgba(242,179,66,.3);color:#D9B868;font-size:10.5px;font-weight:700;padding:3px 10px;border-radius:12px}
+.pd-hotel-pill-green{background:var(--green-soft);border:1px solid var(--green-line);color:var(--green);font-size:10.5px;font-weight:600;padding:3px 10px;border-radius:12px}
+
+.pd-route{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:18px 22px;position:relative}
+.pd-route-line{position:absolute;left:33px;top:30px;bottom:30px;width:2px;background:var(--green);opacity:.45}
+.pd-route-step{display:grid;grid-template-columns:20px 36px 1fr auto;align-items:center;gap:14px;padding:11px 0}
+.pd-route-step .marker{width:16px;height:16px;border-radius:50%;border:2px solid var(--green);background:var(--card);position:relative;z-index:2}
+.pd-route-step .ico{color:var(--green);display:flex;align-items:center;justify-content:center}
+.pd-route-step .ico svg{width:22px;height:22px}
+.pd-route-step .nm{font-weight:700;font-size:14px;color:#fff}
+.pd-route-step .sub{font-size:12px;color:var(--muted);margin-top:3px}
+.pd-route-step .days-pill{background:var(--green);color:#fff;font-size:11.5px;font-weight:600;padding:5px 12px;border-radius:14px;white-space:nowrap}
+
+.pd-incl{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:6px 18px}
+.pd-incl-row{display:flex;justify-content:space-between;align-items:center;padding:13px 0;border-bottom:1px dashed var(--line);font-size:14px}
+.pd-incl-row:last-child{border-bottom:none}
+.pd-incl-row .nm{color:var(--text-2);font-weight:500}
+.pd-incl-row .check{color:var(--green);font-size:15px;font-weight:700;letter-spacing:-3px}
+
+/* SIDEBAR BOOKING WIDGET */
+.pd-sidebar{position:sticky;top:90px}
+.pd-book-card{background:var(--card);border:1px solid var(--green-line);border-radius:18px;padding:24px;box-shadow:0 12px 40px rgba(31,175,106,.08)}
+.pd-book-title{font-size:20px;font-weight:700;color:#fff;margin-bottom:18px;padding-bottom:14px;border-bottom:1px solid var(--line);letter-spacing:-.3px}
+.pd-book-prices{display:flex;flex-direction:column;gap:8px;margin-bottom:20px}
+.pd-book-price{display:flex;justify-content:space-between;align-items:center;padding:12px 14px;background:var(--card-2);border:1px solid var(--line);border-radius:10px;font-size:13px;color:var(--text-2)}
+.pd-book-price .v{font-family:'JetBrains Mono',monospace;font-weight:700;color:var(--green);font-size:13.5px;display:flex;align-items:baseline;gap:4px}
+.pd-book-price .v small{font-family:'Inter',sans-serif;font-weight:500;color:var(--muted);font-size:10.5px;text-transform:lowercase}
+.pd-book-cta{width:100%;padding:16px;background:var(--green);color:#fff;border:none;border-radius:12px;font-weight:700;font-size:15px;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:8px;margin-bottom:12px}
+.pd-book-cta:hover{background:var(--green-2)}
+.pd-book-note{text-align:center;font-size:12px;color:var(--muted);margin-top:6px;font-weight:500}
+
+/* ═══════════ PARTNERS LANDING ═══════════ */
+.part-hero{padding:60px 0;text-align:center}
+.part-hero-eyebrow{display:inline-block;font-size:12px;font-weight:700;color:var(--gold);letter-spacing:1.5px;text-transform:uppercase;margin-bottom:18px;padding:5px 14px;background:var(--gold-soft);border:1px solid rgba(242,179,66,.3);border-radius:14px}
+.part-hero h1{font-size:54px;font-weight:800;line-height:1.05;letter-spacing:-1.5px;color:#fff;margin-bottom:18px;max-width:800px;margin-left:auto;margin-right:auto}
+.part-hero h1 .gold{color:var(--gold)}
+.part-hero p{font-size:17px;color:var(--text-2);line-height:1.6;max-width:640px;margin:0 auto 36px}
+.part-hero-cta{display:flex;gap:14px;justify-content:center;flex-wrap:wrap}
+.btn-gold{display:inline-flex;align-items:center;gap:9px;padding:16px 32px;font-size:15.5px;font-weight:700;color:var(--bg);background:var(--gold);border:none;border-radius:13px;cursor:pointer}
+.btn-gold:hover{background:#e0a232}
+
+.part-features{display:grid;grid-template-columns:repeat(4,1fr);gap:18px;margin:0 0 60px}
+.part-feature{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:24px;text-align:center}
+.part-feature .num{font-family:'JetBrains Mono',monospace;font-size:36px;font-weight:700;color:var(--gold);line-height:1;margin-bottom:8px}
+.part-feature .nm{font-size:14px;font-weight:600;color:#fff;margin-bottom:6px}
+.part-feature .desc{font-size:12.5px;color:var(--text-2);line-height:1.5}
+
+.part-steps{display:grid;grid-template-columns:repeat(4,1fr);gap:14px}
+.part-step{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:24px;position:relative}
+.part-step-num{position:absolute;top:-12px;left:24px;width:32px;height:32px;border-radius:50%;background:var(--gold);color:var(--bg);display:flex;align-items:center;justify-content:center;font-weight:800;font-size:14px}
+.part-step h4{margin-top:14px;font-size:15px;font-weight:700;color:#fff;margin-bottom:6px}
+.part-step p{font-size:12.5px;color:var(--text-2);line-height:1.5}
+
+.part-cta-final{background:linear-gradient(135deg,rgba(242,179,66,.1) 0%,rgba(242,179,66,.03) 100%);border:1px solid rgba(242,179,66,.3);border-radius:24px;padding:60px;text-align:center;margin-top:40px}
+.part-cta-final h2{font-size:36px;font-weight:800;color:#fff;letter-spacing:-.8px;margin-bottom:14px}
+.part-cta-final p{font-size:15px;color:var(--text-2);margin-bottom:28px;max-width:540px;margin-left:auto;margin-right:auto}
+.part-cta-final .actions{display:flex;gap:12px;justify-content:center;flex-wrap:wrap}
+
+/* ═══════════ BOOKING WIZARD ═══════════ */
+.bk-page{padding:32px 0 60px}
+.bk-back{display:inline-flex;align-items:center;gap:8px;font-size:13.5px;color:var(--text-2);font-weight:600;margin-bottom:24px;cursor:pointer;padding:8px 14px;background:var(--card);border:1px solid var(--line);border-radius:9px}
+.bk-back:hover{border-color:var(--text-2);color:#fff}
+.bk-stepper{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:16px 24px;display:flex;justify-content:space-between;align-items:center;margin-bottom:24px;gap:8px}
+.bk-step{display:flex;align-items:center;gap:10px;flex:1}
+.bk-step-num{width:32px;height:32px;border-radius:50%;background:var(--card-2);border:2px solid var(--line-2);color:var(--muted);display:flex;align-items:center;justify-content:center;font-weight:700;font-size:14px;flex-shrink:0;transition:all .2s}
+.bk-step.done .bk-step-num{background:var(--green);border-color:var(--green);color:#fff}
+.bk-step.active .bk-step-num{background:var(--green-soft);border-color:var(--green);color:var(--green)}
+.bk-step-text{display:flex;flex-direction:column;line-height:1.2}
+.bk-step-text .l{font-size:10.5px;color:var(--muted);font-weight:600;letter-spacing:.3px;text-transform:uppercase}
+.bk-step-text .n{font-size:13.5px;font-weight:700;color:var(--text-2);margin-top:2px}
+.bk-step.active .bk-step-text .n,.bk-step.done .bk-step-text .n{color:#fff}
+.bk-step-line{flex:1;height:2px;background:var(--line);position:relative;margin:0 -8px}
+.bk-step-line.done{background:var(--green)}
+.bk-layout{display:grid;grid-template-columns:1fr 380px;gap:32px;align-items:flex-start}
+.bk-main{min-height:400px}
+.bk-section-h{font-size:24px;font-weight:800;color:#fff;letter-spacing:-.4px;margin-bottom:8px}
+.bk-section-sub{font-size:14px;color:var(--text-2);margin-bottom:22px;font-weight:400}
+.bk-empty{background:var(--card);border:1px solid var(--line);border-radius:18px;padding:50px 30px;text-align:center}
+.bk-empty .ico{width:80px;height:80px;border-radius:50%;background:var(--green-soft);color:var(--green);display:inline-flex;align-items:center;justify-content:center;margin-bottom:18px}
+.bk-empty .ico svg{width:36px;height:36px}
+.bk-empty h3{font-size:18px;font-weight:700;color:#fff;margin-bottom:8px}
+.bk-empty p{font-size:13.5px;color:var(--text-2);line-height:1.5;max-width:380px;margin:0 auto 22px}
+.bk-add-btn{display:inline-flex;align-items:center;gap:8px;background:var(--green);color:#fff;border:none;padding:12px 22px;border-radius:11px;font-weight:700;font-size:14px;cursor:pointer;font-family:inherit}
+.bk-add-btn:hover{background:var(--green-2)}
+.bk-list{display:flex;flex-direction:column;gap:10px;margin-bottom:14px}
+.bk-pilgrim{background:var(--card);border:1px solid var(--line);border-radius:13px;padding:16px;display:flex;gap:14px;align-items:flex-start}
+.bk-pilgrim-info{flex:1}
+.bk-pilgrim-nm{font-size:15px;font-weight:700;color:#fff;margin-bottom:8px}
+.bk-pilgrim-tags{display:flex;flex-wrap:wrap;gap:6px}
+.bk-tag{font-size:10px;font-weight:700;padding:4px 10px;border-radius:6px;letter-spacing:.3px;text-transform:uppercase}
+.bk-tag.m{background:var(--blue-soft);color:var(--blue)}
+.bk-tag.f{background:var(--red-soft);color:var(--red)}
+.bk-tag.zagran{background:var(--red-soft);color:var(--red)}
+.bk-tag.idpass{background:var(--green-soft);color:var(--green)}
+.bk-tag.year{background:var(--card-2);color:var(--text-2);border:1px solid var(--line);font-family:'JetBrains Mono',monospace;letter-spacing:.2px}
+.bk-pilgrim-actions{display:flex;gap:6px}
+.bk-pilgrim-act{width:32px;height:32px;border-radius:8px;background:var(--card-2);border:none;color:var(--text-2);cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:14px}
+.bk-pilgrim-act:hover{background:var(--card-3);color:#fff}
+.bk-add-more{display:flex;align-items:center;justify-content:center;gap:8px;background:transparent;color:var(--green);border:2px dashed var(--green-line);padding:14px;border-radius:12px;font-weight:700;font-size:13.5px;cursor:pointer;font-family:inherit;width:100%}
+.bk-add-more:hover{background:var(--green-soft)}
+
+/* Departures */
+.bk-dep-card{background:var(--card);border:2px solid var(--line);border-radius:14px;padding:18px;cursor:pointer;transition:border-color .15s,transform .08s;margin-bottom:10px}
+.bk-dep-card:hover{transform:translateY(-1px);border-color:var(--green-line)}
+.bk-dep-card.selected{border-color:var(--green);background:#162018}
+.bk-dep-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:12px}
+.bk-dep-dates{font-size:17px;font-weight:700;color:#fff;display:flex;align-items:center;gap:10px}
+.bk-dep-dates .sep{color:var(--muted);font-weight:400}
+.bk-dep-days{background:var(--card-2);border:1px solid var(--line);color:#fff;font-size:11.5px;font-weight:700;padding:5px 12px;border-radius:14px}
+.bk-dep-air{display:flex;align-items:center;gap:10px;margin-bottom:13px;font-size:12.5px;color:var(--green);font-weight:600;text-transform:uppercase;letter-spacing:.4px}
+.bk-dep-air .line{flex:1;height:1px;background:repeating-linear-gradient(to right,rgba(255,255,255,.25) 0,rgba(255,255,255,.25) 4px,transparent 4px,transparent 9px);min-width:30px}
+.bk-dep-prices{display:grid;grid-template-columns:repeat(4,1fr);gap:7px}
+.bk-dep-prc{background:var(--card-2);border:1px solid var(--line);border-radius:9px;padding:9px;text-align:center}
+.bk-dep-card.selected .bk-dep-prc{background:rgba(31,175,106,.06);border-color:rgba(31,175,106,.3)}
+.bk-dep-prc .typ{font-size:11px;color:var(--text-2);font-weight:500;line-height:1.2}
+.bk-dep-prc .v{font-family:'JetBrains Mono',monospace;font-size:13.5px;font-weight:700;color:var(--green);margin-top:5px;letter-spacing:.2px}
+.bk-dep-prc .v small{font-family:'Inter',sans-serif;font-size:10px;color:var(--muted);font-weight:500;margin-left:3px;text-transform:lowercase}
+.bk-dep-prc .short{display:none}
+.bk-dep-prc .full{display:inline}
+
+/* Rooms */
+.bk-room{background:var(--card);border:2px solid var(--line);border-radius:14px;padding:18px;cursor:pointer;margin-bottom:10px;transition:border-color .15s}
+.bk-room:hover{border-color:var(--green-line)}
+.bk-room.selected{border-color:var(--green);background:#162018}
+.bk-room-head{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:12px}
+.bk-room-title{font-size:17px;font-weight:700;color:#fff;letter-spacing:-.2px}
+.bk-room-total{font-family:'JetBrains Mono',monospace;font-size:15px;font-weight:700;color:#fff}
+.bk-room-total .per{font-size:11px;color:var(--muted);font-weight:500;margin-top:3px;font-family:'Inter',sans-serif}
+.bk-room-rows{display:flex;flex-direction:column;gap:7px}
+.bk-room-row{background:var(--card-2);border:1px solid var(--line);border-radius:10px;padding:11px 14px;display:grid;grid-template-columns:1fr auto;gap:10px;align-items:center;font-size:13px}
+.bk-room-row .typ{font-size:12.5px;color:#fff;font-weight:600}
+.bk-room-row .ppl{font-size:11.5px;color:var(--blue);font-weight:600;margin-top:4px}
+.bk-room-row .math{font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--muted);font-weight:500;text-align:right}
+.bk-room-row .sum{font-family:'JetBrains Mono',monospace;font-size:13.5px;font-weight:700;color:#fff;margin-top:3px;text-align:right}
+
+/* Sidebar summary */
+.bk-summary{position:sticky;top:90px;background:var(--card);border:1px solid var(--line);border-radius:18px;padding:22px}
+.bk-summary-h{font-size:16px;font-weight:700;color:#fff;margin-bottom:14px;padding-bottom:12px;border-bottom:1px dashed var(--line);letter-spacing:-.2px}
+.bk-summary-img{width:100%;height:140px;border-radius:11px;background-size:cover;background-position:center;margin-bottom:14px}
+.bk-summary-row{display:flex;justify-content:space-between;padding:8px 0;font-size:13px}
+.bk-summary-row .l{color:var(--muted);font-weight:500}
+.bk-summary-row .v{color:#fff;font-weight:600;text-align:right}
+.bk-summary-total{background:var(--green-soft);border:1px solid var(--green-line);border-radius:12px;padding:14px 16px;margin-top:14px;display:flex;justify-content:space-between;align-items:center}
+.bk-summary-total .l{font-size:11.5px;color:var(--text-2);text-transform:uppercase;letter-spacing:.4px;font-weight:600}
+.bk-summary-total .v{font-family:'JetBrains Mono',monospace;font-size:18px;font-weight:700;color:var(--green)}
+.bk-summary-total .v small{font-family:'Inter',sans-serif;font-size:11px;color:var(--text-2);font-weight:500;margin-left:3px}
+.bk-actions-wrap{display:flex;gap:12px;justify-content:center;align-items:center;margin-top:30px;padding-top:24px;border-top:1px solid var(--line)}
+.bk-back-btn{background:transparent;color:var(--text-2);border:1px solid var(--line-2);padding:14px 24px;border-radius:11px;font-weight:600;font-size:14px;cursor:pointer;font-family:inherit}
+.bk-back-btn:hover{border-color:#fff;color:#fff}
+.bk-next-btn{background:var(--green);color:#fff;border:none;padding:14px 36px;border-radius:11px;font-weight:700;font-size:14.5px;cursor:pointer;font-family:inherit;min-width:280px}
+.bk-next-btn:disabled{background:var(--card-2);color:var(--muted);cursor:not-allowed;border:1px solid var(--line)}
+.bk-next-btn:hover:not(:disabled){background:var(--green-2)}
+
+/* Pay step */
+.bk-pay{background:var(--card);border:1px solid var(--line);border-radius:18px;padding:24px}
+.bk-pay-h{font-size:18px;font-weight:700;color:#fff;margin-bottom:16px}
+.bk-pay-block{margin-bottom:18px}
+.bk-pay-block .ttl{font-size:12px;color:var(--muted);font-weight:600;text-transform:uppercase;letter-spacing:.4px;margin-bottom:9px}
+.bk-pay-block .body{background:var(--card-2);border:1px solid var(--line);border-radius:11px;padding:14px}
+.bk-pay-row{display:flex;justify-content:space-between;padding:6px 0;font-size:13.5px}
+.bk-pay-row .l{color:var(--muted)}
+.bk-pay-row .v{color:#fff;font-weight:600}
+.bk-pay-agree{display:flex;align-items:flex-start;gap:11px;padding:14px;background:var(--card-2);border:1px solid var(--line);border-radius:11px;margin:18px 0;cursor:pointer;font-size:13px;color:var(--text-2);line-height:1.5}
+.bk-pay-agree.checked{border-color:var(--green-line);background:rgba(31,175,106,.05)}
+.bk-pay-agree .cb{width:20px;height:20px;border-radius:5px;border:2px solid var(--line-2);background:transparent;flex-shrink:0;position:relative;margin-top:1px}
+.bk-pay-agree.checked .cb{background:var(--green);border-color:var(--green)}
+.bk-pay-agree.checked .cb::after{content:'';position:absolute;top:1px;left:5px;width:5px;height:10px;border:solid #fff;border-width:0 2px 2px 0;transform:rotate(45deg)}
+.bk-pay-agree a{color:var(--green);font-weight:700}
+.bk-pay-cta{width:100%;background:var(--green);color:#fff;border:none;padding:16px;border-radius:12px;font-weight:700;font-size:15px;cursor:pointer;font-family:inherit;transition:background .15s}
+.bk-pay-cta:hover:not(:disabled){background:var(--green-2)}
+.bk-pay-cta:disabled{background:var(--card-2);color:var(--muted);cursor:not-allowed}
+
+/* New step 4 blocks */
+.bk4-block{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:18px 20px;margin-bottom:14px}
+.bk4-block-h{display:flex;align-items:center;gap:8px;padding-bottom:13px;margin-bottom:14px;border-bottom:1px dashed var(--line);font-size:15px;font-weight:700;color:#fff}
+.bk4-row{display:flex;justify-content:space-between;align-items:center;padding:9px 0;font-size:13.5px;border-bottom:1px dashed var(--line)}
+.bk4-row:last-child{border-bottom:none}
+.bk4-row .l{color:var(--muted);font-weight:500}
+.bk4-row .v{color:#fff;font-weight:600;text-align:right}
+.bk4-row .v.price{font-family:'JetBrains Mono',monospace;font-weight:700;color:var(--green);font-size:13px}
+.bk4-total{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:18px 20px;margin-bottom:14px;position:relative;text-align:center}
+.bk4-total::before{content:'';position:absolute;left:0;top:0;bottom:0;width:4px;background:linear-gradient(180deg,var(--gold),#e0b748);border-radius:14px 0 0 14px}
+.bk4-total .ttl{font-size:11px;color:var(--gold);font-weight:700;text-transform:uppercase;letter-spacing:.5px;margin-bottom:8px}
+.bk4-total .v{font-family:'JetBrains Mono',monospace;font-size:30px;font-weight:700;color:#fff;letter-spacing:.3px}
+.bk4-total .v small{font-family:'Inter',sans-serif;font-size:14px;color:var(--muted);font-weight:500;margin-left:8px}
+
+/* Payment method selection */
+.bk4-pay-methods{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:14px}
+.bk4-method{background:var(--card);border:2px solid var(--line);border-radius:14px;padding:18px 12px;cursor:pointer;text-align:center;transition:border-color .15s,background .15s;position:relative}
+.bk4-method:hover{border-color:var(--line-2)}
+.bk4-method.selected{border-color:var(--green);background:rgba(31,175,106,.06)}
+.bk4-method-logo{width:48px;height:48px;border-radius:12px;display:inline-flex;align-items:center;justify-content:center;margin-bottom:8px;font-family:'Inter',sans-serif;font-weight:800;font-size:15px;letter-spacing:.5px}
+.bk4-method-logo.click{background:#FFCC00;color:#000}
+.bk4-method-logo.payme{background:linear-gradient(135deg,#19A4DD,#0070C9);color:#fff}
+.bk4-method-logo.paynet{background:linear-gradient(135deg,#EA1F3A,#B81729);color:#fff}
+.bk4-method-logo.uzcard{background:linear-gradient(135deg,#1E40AF,#1E3A8A);color:#fff;font-size:11px}
+.bk4-method-nm{font-size:13px;font-weight:700;color:#fff}
+.bk4-method-sub{font-size:10.5px;color:var(--muted);margin-top:3px;font-weight:500}
+.bk4-method-check{position:absolute;top:10px;right:10px;width:20px;height:20px;border-radius:50%;border:2px solid var(--line-2);background:transparent}
+.bk4-method.selected .bk4-method-check{background:var(--green);border-color:var(--green)}
+.bk4-method.selected .bk4-method-check::after{content:'';position:absolute;top:3px;left:5px;width:4px;height:9px;border:solid #fff;border-width:0 2px 2px 0;transform:rotate(45deg)}
+
+/* Agreement */
+.bk4-agree{display:flex;align-items:flex-start;gap:11px;padding:14px;background:var(--card);border:1px solid var(--line);border-radius:12px;margin-bottom:14px;cursor:pointer;font-size:13px;color:var(--text-2);line-height:1.5}
+.bk4-agree.checked{border-color:var(--green-line);background:rgba(31,175,106,.05)}
+.bk4-agree .cb{width:20px;height:20px;border-radius:5px;border:2px solid var(--line-2);background:transparent;flex-shrink:0;position:relative;margin-top:1px}
+.bk4-agree.checked .cb{background:var(--green);border-color:var(--green)}
+.bk4-agree.checked .cb::after{content:'';position:absolute;top:1px;left:5px;width:5px;height:10px;border:solid #fff;border-width:0 2px 2px 0;transform:rotate(45deg)}
+.bk4-agree a{color:var(--green);font-weight:700}
+
+/* Success page */
+.bk-success{text-align:center;padding:60px 30px;background:var(--card);border:1px solid var(--line);border-radius:24px}
+.bk-success-ico{width:90px;height:90px;border-radius:50%;background:var(--green);color:#fff;display:inline-flex;align-items:center;justify-content:center;font-size:42px;margin-bottom:22px;box-shadow:0 0 0 12px var(--green-soft)}
+.bk-success h2{font-size:30px;font-weight:800;color:#fff;letter-spacing:-.5px;margin-bottom:12px}
+.bk-success p{font-size:14.5px;color:var(--text-2);line-height:1.6;max-width:480px;margin:0 auto 24px}
+.bk-success-id{display:inline-block;background:var(--card-2);border:1px solid var(--line);border-radius:12px;padding:14px 24px;font-family:'JetBrains Mono',monospace;font-weight:700;color:#fff;font-size:17px;margin-bottom:28px;letter-spacing:.5px}
+.bk-success-actions{display:flex;gap:12px;justify-content:center;flex-wrap:wrap}
+
+/* ═══════════ VIEWER (lightbox for photos/videos) ═══════════ */
+.viewer{display:none;position:fixed;inset:0;background:rgba(0,0,0,.97);backdrop-filter:blur(8px);z-index:300;align-items:center;justify-content:center;padding:24px}
+.viewer.active{display:flex;animation:viewerFade .25s ease-out}
+@keyframes viewerFade{from{opacity:0}to{opacity:1}}
+.viewer-close{position:absolute;top:24px;right:24px;width:46px;height:46px;border-radius:50%;background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.18);color:#fff;font-size:22px;cursor:pointer;display:flex;align-items:center;justify-content:center;z-index:5;backdrop-filter:blur(6px)}
+.viewer-close:hover{background:rgba(255,255,255,.15)}
+.viewer-counter{position:absolute;top:24px;left:50%;transform:translateX(-50%);font-family:'JetBrains Mono',monospace;font-size:13.5px;color:#fff;font-weight:700;padding:9px 18px;background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.18);border-radius:24px;backdrop-filter:blur(6px);letter-spacing:.5px}
+.viewer-stage{position:relative;max-width:90vw;max-height:78vh;display:flex;align-items:center;justify-content:center}
+.viewer-img{max-width:90vw;max-height:78vh;border-radius:16px;object-fit:contain;box-shadow:0 30px 80px rgba(0,0,0,.5);display:block}
+.viewer-prev,.viewer-next{position:absolute;top:50%;transform:translateY(-50%);width:54px;height:54px;border-radius:50%;background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.18);color:#fff;font-size:28px;cursor:pointer;display:flex;align-items:center;justify-content:center;backdrop-filter:blur(6px);z-index:5;transition:background .15s,transform .15s}
+.viewer-prev:hover,.viewer-next:hover{background:rgba(255,255,255,.15);transform:translateY(-50%) scale(1.05)}
+.viewer-prev{left:32px}
+.viewer-next{right:32px}
+.viewer-video-overlay{position:absolute;inset:0;display:none;align-items:center;justify-content:center;pointer-events:none}
+.viewer-video-overlay.show{display:flex}
+.viewer-video-overlay .play{width:100px;height:100px;border-radius:50%;background:rgba(255,255,255,.95);display:flex;align-items:center;justify-content:center;font-size:32px;color:var(--bg);padding-left:8px;box-shadow:0 12px 36px rgba(0,0,0,.5);animation:pulse 1.5s ease-in-out infinite}
+@keyframes pulse{0%,100%{transform:scale(1)}50%{transform:scale(1.05)}}
+.viewer-info{position:absolute;bottom:32px;left:50%;transform:translateX(-50%);text-align:center;color:#fff;background:rgba(0,0,0,.55);backdrop-filter:blur(12px);padding:14px 26px;border-radius:16px;border:1px solid rgba(255,255,255,.12);max-width:90vw}
+.viewer-info .nm{font-size:17px;font-weight:700;letter-spacing:-.2px}
+.viewer-info .dt{font-family:'JetBrains Mono',monospace;font-size:12.5px;color:rgba(255,255,255,.7);margin-top:5px;font-weight:500}
+
+/* ═══════════ CABINET PAGES ═══════════ */
+
+/* ─── Profile page (master-detail, mini-app data only) ─── */
+.prof-md{display:grid;grid-template-columns:260px 1fr;gap:24px;align-items:flex-start}
+@media(max-width:900px){.prof-md{grid-template-columns:1fr;gap:18px}}
+
+.prof-side{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:8px;position:sticky;top:90px}
+@media(max-width:900px){.prof-side{position:static;display:flex;overflow-x:auto;gap:6px}}
+.prof-side a{display:flex;align-items:center;gap:11px;padding:12px 14px;border-radius:10px;font-size:14px;font-weight:600;color:var(--text-2);cursor:pointer;transition:background .15s,color .15s;white-space:nowrap}
+.prof-side a:hover{background:var(--card-2);color:#fff}
+.prof-side a.active{background:var(--green-soft);color:var(--green);border:1px solid var(--green-line)}
+.prof-side a .ico{width:18px;height:18px;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.prof-side a .ico svg{width:18px;height:18px}
+
+.prof-pane{display:none}
+.prof-pane.active{display:block}
+
+/* Profile pane (only avatar + name + phone — like mini-app) */
+.prof-me{display:flex;flex-direction:column;align-items:center;padding:48px 24px;background:var(--card);border:1px solid var(--line);border-radius:14px}
+.prof-me .av{width:96px;height:96px;border-radius:50%;background:var(--green);color:#fff;display:flex;align-items:center;justify-content:center;font-size:34px;font-weight:700;margin-bottom:16px}
+.prof-me .nm{font-size:22px;font-weight:700;color:#fff;margin-bottom:6px}
+.prof-me .ph{font-family:'JetBrains Mono',monospace;font-size:15px;color:var(--muted)}
+
+/* ─── Orders full-width (no sidebar) ─── */
+.cab-orders-grid.orders-full{grid-template-columns:repeat(3,1fr)}
+@media(max-width:1100px){.cab-orders-grid.orders-full{grid-template-columns:repeat(2,1fr)}}
+@media(max-width:700px){.cab-orders-grid.orders-full{grid-template-columns:1fr}}
+.od-detail-wrap{max-width:980px;margin:0 auto;display:flex;flex-direction:column;gap:14px}
+
+.cab-page{padding:32px 0 60px}
+.cab-h{margin-bottom:28px;display:flex;justify-content:space-between;align-items:flex-end;gap:20px;flex-wrap:wrap}
+.cab-h-left h1{font-size:34px;font-weight:800;color:#fff;letter-spacing:-.8px;margin-bottom:8px}
+.cab-h-left p{font-size:14px;color:var(--muted)}
+
+/* Layout: sidebar nav + content */
+.cab-layout{display:grid;grid-template-columns:260px 1fr;gap:28px;align-items:flex-start}
+.cab-nav{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:8px;position:sticky;top:90px}
+.cab-nav a{display:flex;align-items:center;gap:11px;padding:11px 13px;border-radius:10px;font-size:13.5px;font-weight:600;color:var(--text-2);cursor:pointer;transition:background .15s,color .15s}
+.cab-nav a:hover{background:var(--card-2);color:#fff}
+.cab-nav a.active{background:var(--green-soft);color:var(--green);border:1px solid var(--green-line)}
+.cab-nav a .ico{width:18px;height:18px;display:flex;align-items:center;justify-content:center}
+.cab-nav a .ico svg{width:18px;height:18px}
+.cab-nav .sep{height:1px;background:var(--line);margin:6px 8px}
+
+.cab-content{min-height:400px}
+
+/* Profile hero */
+.cab-prof-hero{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:28px;display:flex;align-items:center;gap:20px;margin-bottom:24px}
+.cab-prof-av{width:80px;height:80px;border-radius:50%;background:linear-gradient(135deg,var(--green),var(--green-2));color:#fff;display:flex;align-items:center;justify-content:center;font-size:28px;font-weight:700;letter-spacing:.5px;flex-shrink:0;box-shadow:0 0 0 6px var(--green-soft)}
+.cab-prof-info h2{font-size:22px;font-weight:700;color:#fff;margin-bottom:6px}
+.cab-prof-info .phone{font-family:'JetBrains Mono',monospace;font-size:14px;color:var(--muted);font-weight:500}
+.cab-prof-info .label{font-size:11px;color:var(--green);font-weight:700;text-transform:uppercase;letter-spacing:.4px;margin-top:8px}
+.cab-prof-edit{margin-left:auto;width:40px;height:40px;border-radius:50%;background:var(--card-2);border:none;color:var(--text-2);cursor:pointer;font-size:15px}
+
+/* Orders tabs */
+.cab-tabs{display:flex;gap:8px;margin-bottom:24px;flex-wrap:wrap}
+.cab-tab{padding:9px 16px;background:var(--card-2);border:1px solid transparent;border-radius:22px;font-size:13px;font-weight:600;color:var(--text-2);cursor:pointer;display:inline-flex;align-items:center;gap:7px}
+.cab-tab.active{background:var(--green-soft);color:var(--green);border-color:var(--green-line)}
+.cab-tab .cnt{font-family:'JetBrains Mono',monospace;font-weight:700;font-size:11.5px;background:rgba(0,0,0,.25);padding:1px 7px;border-radius:8px}
+.cab-tab.active .cnt{background:var(--green);color:#fff}
+
+/* Order cards */
+.cab-orders-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.cab-order{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:18px;cursor:pointer;transition:transform .1s,border-color .15s}
+.cab-order:hover{transform:translateY(-2px);border-color:var(--green-line)}
+.cab-order-top{display:flex;justify-content:space-between;align-items:center;padding-bottom:12px;margin-bottom:14px;border-bottom:1px dashed var(--line)}
+.cab-order-id{font-family:'JetBrains Mono',monospace;font-weight:700;font-size:13.5px;color:var(--text-2);letter-spacing:.3px}
+.cab-order-status{display:inline-flex;align-items:center;gap:6px;font-size:11px;font-weight:700;padding:5px 12px;border-radius:14px}
+.cab-order-status::before{content:'';width:6px;height:6px;border-radius:50%;background:currentColor}
+.cab-order-status.done{background:var(--green-soft);color:var(--green);border:1px solid var(--green-line)}
+.cab-order-status.progress{background:rgba(201,168,76,.15);color:#D9B868;border:1px solid rgba(201,168,76,.3)}
+.cab-order-status.cancel{background:var(--red-soft);color:var(--red);border:1px solid rgba(224,82,74,.4)}
+.cab-order-main{display:flex;gap:14px;margin-bottom:14px}
+.cab-order-img{width:90px;height:90px;border-radius:11px;background-size:cover;background-position:center;flex-shrink:0;background-color:#222}
+.cab-order-name{font-size:16px;font-weight:700;color:#fff;margin-bottom:7px}
+.cab-order-pp{font-size:12px;color:var(--text-2);line-height:1.5}
+.cab-order-pp b{color:#fff;font-weight:700}
+.cab-order-flights{display:grid;grid-template-columns:1fr auto 1fr;align-items:center;gap:10px;padding:12px 0;border-top:1px dashed var(--line);border-bottom:1px dashed var(--line);margin-bottom:14px}
+.cab-order-flight .dt{font-family:'JetBrains Mono',monospace;color:#fff;font-weight:600;font-size:12px}
+.cab-order-flight .air{color:var(--green);font-weight:700;font-size:10.5px;letter-spacing:.4px;text-transform:uppercase;margin-top:3px}
+.cab-order-flights-sep{color:var(--muted);font-size:14px;text-align:center}
+.cab-order-foot{display:flex;justify-content:space-between;align-items:center}
+.cab-order-foot .l{font-size:12px;color:var(--muted);font-weight:500}
+.cab-order-foot .v{font-family:'JetBrains Mono',monospace;font-weight:700;font-size:15px;color:#fff}
+.cab-order-foot .v small{font-family:'Inter',sans-serif;font-weight:500;color:var(--text-2);font-size:11px;margin-left:3px}
+
+/* Order detail */
+.od-h-page{margin-bottom:24px;display:flex;align-items:center;gap:14px}
+.od-h-page button{background:var(--card);border:1px solid var(--line);color:#fff;padding:10px 16px;border-radius:10px;font-weight:600;font-size:13.5px;cursor:pointer}
+.od-h-page button:hover{border-color:var(--text-2)}
+.od-h-page h1{font-family:'JetBrains Mono',monospace;font-size:22px;font-weight:700;color:#fff;letter-spacing:.5px;flex:1}
+.od-h-page .status{display:inline-flex;align-items:center;gap:6px;font-size:11.5px;font-weight:700;padding:6px 14px;border-radius:14px;background:var(--green-soft);color:var(--green);border:1px solid var(--green-line)}
+.od-h-page .status::before{content:'';width:6px;height:6px;border-radius:50%;background:currentColor}
+
+.od-block-cab{background:var(--card);border:1px solid var(--line);border-radius:14px;margin-bottom:14px;overflow:hidden}
+.od-block-cab-h{display:flex;justify-content:space-between;align-items:center;padding:16px 20px;cursor:pointer;font-size:16px;font-weight:700;color:#fff;letter-spacing:-.2px;user-select:none}
+.od-block-cab-h .toggle{color:var(--green);font-size:22px;font-weight:400;transition:transform .2s;line-height:1}
+.od-block-cab.expanded .od-block-cab-h .toggle{transform:rotate(45deg)}
+.od-block-cab-body{display:none;padding:0 20px 18px;border-top:1px solid var(--line)}
+.od-block-cab.expanded .od-block-cab-body{display:block}
+
+/* Stages */
+.od-cab-stages{position:relative;padding:14px 0 4px}
+.od-cab-stages::before{content:'';position:absolute;left:11px;top:32px;bottom:32px;width:1.5px;background:rgba(31,175,106,.35)}
+.od-cab-stage{display:flex;gap:14px;padding:11px 0;align-items:flex-start;position:relative;z-index:2}
+.od-cab-stage-circle{width:24px;height:24px;border-radius:50%;background:var(--card);border:2px solid var(--line-2);flex-shrink:0;display:flex;align-items:center;justify-content:center;color:transparent;font-size:13px;font-weight:700;box-sizing:border-box}
+.od-cab-stage.done .od-cab-stage-circle{background:var(--green);border-color:var(--green);color:#fff}
+.od-cab-stage-nm{font-size:14px;color:#fff;font-weight:600;line-height:1.3}
+.od-cab-stage-meta{font-size:12px;color:var(--muted);margin-top:4px;font-weight:500}
+
+/* Vouchers */
+.od-vch{display:grid;grid-template-columns:1fr 1fr;gap:10px;padding-top:14px}
+.od-vch-it{background:var(--card-2);border:1px solid var(--line);border-radius:11px;padding:14px;display:flex;align-items:center;gap:12px}
+.od-vch-it .file-ico{width:42px;height:42px;border-radius:9px;background:var(--green-soft);color:var(--green);display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:20px}
+.od-vch-it .nm{flex:1;font-size:13.5px;color:#fff;font-weight:600}
+.od-vch-it .nm small{display:block;color:var(--muted);font-size:11px;font-weight:500;margin-top:3px;font-family:'JetBrains Mono',monospace}
+.od-vch-it .dl{background:var(--green);color:#fff;border:none;width:40px;height:40px;border-radius:9px;font-size:16px;cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+
+/* Details */
+.od-cab-detail-card{padding-top:6px}
+.od-cab-detail-row{display:flex;justify-content:space-between;align-items:center;padding:11px 0;border-bottom:1px dashed var(--line);font-size:13.5px}
+.od-cab-detail-row:last-child{border-bottom:none}
+.od-cab-detail-row .l{color:var(--muted);font-weight:500}
+.od-cab-detail-row .v{color:#fff;font-weight:600;text-align:right}
+
+.od-cab-paid{background:var(--green-soft);border:1px solid var(--green-line);border-radius:11px;padding:14px 18px;margin-top:14px;display:flex;justify-content:space-between;align-items:center}
+.od-cab-paid .l{display:flex;align-items:center;gap:10px;color:#fff;font-weight:600;font-size:14px}
+.od-cab-paid .l .ico{width:24px;height:24px;border-radius:50%;background:var(--green);color:#fff;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:700}
+.od-cab-paid .v{font-family:'JetBrains Mono',monospace;font-size:17px;font-weight:700;color:#fff}
+.od-cab-paid .v small{font-family:'Inter',sans-serif;font-size:12px;font-weight:500;color:var(--text-2);margin-left:3px}
+
+/* About page */
+.about-cab{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:30px}
+.about-cab-logo{text-align:center;padding:20px 0 30px;border-bottom:1px solid var(--line);margin-bottom:24px}
+.about-cab-logo .text{font-size:36px;font-weight:800;letter-spacing:4px;color:#fff;margin-bottom:6px}
+.about-cab-logo .sub{font-size:14px;color:var(--green);font-weight:600}
+.about-cab p{font-size:14.5px;color:var(--text-2);line-height:1.65;margin-bottom:14px}
+.about-cab-stats{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin:24px 0}
+.about-cab-stat{background:var(--card-2);border:1px solid var(--line);border-radius:13px;padding:18px;text-align:center}
+.about-cab-stat .v{font-family:'JetBrains Mono',monospace;font-size:24px;font-weight:700;color:var(--green);line-height:1}
+.about-cab-stat .l{font-size:12px;color:var(--muted);margin-top:7px;font-weight:600}
+.about-cab-meta{font-size:12.5px;color:var(--muted);text-align:center;font-family:'JetBrains Mono',monospace;margin-bottom:5px}
+
+/* FAQ */
+.faq-cab{display:flex;flex-direction:column;gap:10px}
+.faq-cab-item{background:var(--card);border:1px solid var(--line);border-radius:13px;overflow:hidden;transition:border-color .15s}
+.faq-cab-item.open{border-color:var(--green-line)}
+.faq-cab-q{display:flex;align-items:center;gap:14px;padding:18px 20px;cursor:pointer}
+.faq-cab-q .num{width:30px;height:30px;border-radius:50%;background:var(--card-2);color:var(--text-2);display:flex;align-items:center;justify-content:center;font-family:'JetBrains Mono',monospace;font-size:12px;font-weight:700;flex-shrink:0}
+.faq-cab-item.open .faq-cab-q .num{background:var(--green);color:#fff}
+.faq-cab-q-text{flex:1;font-size:14.5px;font-weight:600;color:#fff;line-height:1.35}
+.faq-cab-q-toggle{color:var(--green);font-size:22px;font-weight:400;transition:transform .2s;flex-shrink:0;line-height:1}
+.faq-cab-item.open .faq-cab-q-toggle{transform:rotate(45deg)}
+.faq-cab-a{display:none;padding:0 20px 18px 64px;font-size:13.5px;color:var(--text-2);line-height:1.65}
+.faq-cab-item.open .faq-cab-a{display:block}
+.faq-cab-a strong{color:#fff;font-weight:700}
+
+/* Support chat */
+.chat-cab{background:var(--card);border:1px solid var(--line);border-radius:16px;display:flex;flex-direction:column;height:600px;overflow:hidden}
+.chat-cab-head{display:flex;align-items:center;gap:12px;padding:16px 20px;border-bottom:1px solid var(--line);background:var(--card-2)}
+.chat-cab-av{width:42px;height:42px;border-radius:50%;background:var(--green);color:#fff;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:14px}
+.chat-cab-h-nm{font-size:15px;font-weight:700;color:#fff}
+.chat-cab-h-st{font-size:12px;color:var(--green);margin-top:2px;font-weight:500;display:flex;align-items:center;gap:5px}
+.chat-cab-h-st .dot{width:7px;height:7px;border-radius:50%;background:var(--green);box-shadow:0 0 6px rgba(31,175,106,.6)}
+.chat-cab-body{flex:1;overflow-y:auto;padding:18px 20px;display:flex;flex-direction:column;gap:12px}
+.chat-cab-day{text-align:center;font-size:12px;color:var(--muted);font-weight:600;margin:6px 0;text-transform:uppercase;letter-spacing:.4px}
+.chat-cab-msg{display:flex;align-items:flex-end;gap:9px;max-width:75%}
+.chat-cab-msg.me{flex-direction:row-reverse;align-self:flex-end}
+.chat-cab-msg.op{align-self:flex-start}
+.chat-cab-msg-av{width:30px;height:30px;border-radius:50%;background:var(--green);color:#fff;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;flex-shrink:0}
+.chat-cab-msg.me .chat-cab-msg-av{display:none}
+.chat-cab-bubble{background:var(--card-2);border:1px solid var(--line);border-radius:14px;padding:12px 16px;font-size:14px;line-height:1.5;color:#fff;font-weight:500;border-bottom-left-radius:4px}
+.chat-cab-msg.me .chat-cab-bubble{background:var(--green);border-color:var(--green);color:#fff;border-radius:14px;border-bottom-right-radius:4px}
+.chat-cab-time{font-size:11px;color:var(--muted);margin-top:5px;text-align:right;font-family:'JetBrains Mono',monospace;font-weight:500}
+.chat-cab-msg.me .chat-cab-time{color:rgba(255,255,255,.7)}
+.chat-cab-chips{display:flex;flex-direction:column;gap:8px;margin-top:11px}
+.chat-cab-chip{background:var(--card);border:1px solid var(--line);color:#fff;font-size:13px;font-weight:600;padding:10px 14px;border-radius:10px;cursor:pointer;text-align:left;font-family:inherit}
+.chat-cab-chip:hover{background:var(--card-3)}
+.chat-cab-input-row{padding:14px 20px;border-top:1px solid var(--line);display:flex;gap:10px;align-items:center;background:var(--card-2)}
+.chat-cab-input{flex:1;background:var(--card);border:1px solid var(--line);border-radius:22px;padding:11px 18px;color:#fff;font-family:inherit;font-size:14px;outline:none}
+.chat-cab-input::placeholder{color:var(--muted)}
+.chat-cab-send{width:44px;height:44px;border-radius:50%;background:var(--green);color:#fff;border:none;font-size:18px;cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+
+/* Lang */
+.lang-cab{display:flex;flex-direction:column;gap:10px}
+.lang-cab-row{background:var(--card);border:2px solid var(--line);border-radius:13px;padding:16px 18px;display:flex;align-items:center;gap:14px;cursor:pointer;transition:border-color .15s,background .15s}
+.lang-cab-row.selected{border-color:var(--green);background:rgba(31,175,106,.06)}
+.lang-cab-flag{width:40px;height:40px;border-radius:50%;flex-shrink:0;background:var(--card-2)}
+.lang-cab-flag.uz{background:linear-gradient(180deg,#0099b5 0%,#0099b5 33%,#ce1126 33%,#ce1126 36%,#fff 36%,#fff 64%,#ce1126 64%,#ce1126 67%,#1eb53a 67%)}
+.lang-cab-flag.ru{background:linear-gradient(180deg,#fff 0%,#fff 33%,#0039a6 33%,#0039a6 66%,#d52b1e 66%)}
+.lang-cab-flag.en{background:#012169;position:relative;overflow:hidden}
+.lang-cab-flag.en::before,.lang-cab-flag.en::after{content:'';position:absolute;inset:0}
+.lang-cab-flag.en::before{background:linear-gradient(135deg,transparent 44%,#fff 44%,#fff 56%,transparent 56%)}
+.lang-cab-flag.en::after{background:linear-gradient(45deg,transparent 44%,#fff 44%,#fff 56%,transparent 56%)}
+.lang-cab-info{flex:1}
+.lang-cab-nm{font-size:14.5px;font-weight:700;color:#fff}
+.lang-cab-native{font-size:12px;color:var(--muted);margin-top:3px;font-weight:500}
+.lang-cab-check{width:24px;height:24px;border-radius:50%;border:2px solid var(--line-2);position:relative;flex-shrink:0}
+.lang-cab-row.selected .lang-cab-check{background:var(--green);border-color:var(--green)}
+.lang-cab-row.selected .lang-cab-check::after{content:'';position:absolute;top:4px;left:7px;width:6px;height:11px;border:solid #fff;border-width:0 2px 2px 0;transform:rotate(45deg)}
+
+/* ═══════════ MODAL ═══════════ */
+.modal{display:none;position:fixed;inset:0;background:rgba(11,12,14,.85);backdrop-filter:blur(8px);z-index:200;align-items:flex-start;justify-content:center;padding:30px 20px;overflow-y:auto}
+.modal.active{display:flex}
+.modal-card{background:var(--card);border:1px solid var(--line);border-radius:20px;width:100%;max-width:420px;padding:32px;position:relative;animation:modalSlide .25s ease-out;max-height:calc(100vh - 40px);overflow-y:auto;margin:20px auto}
+@keyframes modalSlide{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:translateY(0)}}
+.modal-close{position:absolute;top:18px;right:18px;width:36px;height:36px;border-radius:50%;background:var(--card-2);border:none;color:#fff;font-size:18px;cursor:pointer;display:flex;align-items:center;justify-content:center}
+.modal-close:hover{background:var(--card-3)}
+.modal-h{text-align:center;margin-bottom:24px}
+.modal-h .ico{width:54px;height:54px;border-radius:14px;background:var(--green-soft);color:var(--green);display:inline-flex;align-items:center;justify-content:center;margin-bottom:14px}
+.modal-h .ico svg{width:28px;height:28px}
+.modal-h h3{font-size:22px;font-weight:700;color:#fff;margin-bottom:6px;letter-spacing:-.3px}
+.modal-h p{font-size:13.5px;color:var(--muted);line-height:1.5}
+.modal-field{margin-bottom:14px}
+.modal-field label{display:block;font-size:11.5px;color:var(--muted);font-weight:600;letter-spacing:.2px;text-transform:uppercase;margin-bottom:6px}
+.modal-field input{width:100%;padding:13px 16px;background:var(--card-2);border:1.5px solid var(--line);border-radius:11px;color:#fff;font-family:inherit;font-size:14.5px;font-weight:600;outline:none}
+.modal-field input:focus{border-color:var(--green)}
+.modal-field input.mono{font-family:'JetBrains Mono',monospace;letter-spacing:2px;text-align:center;font-size:18px}
+.ap-toggle{display:flex;justify-content:space-between;align-items:center;padding:11px 13px;background:var(--card-2);border:1.5px solid var(--line);border-radius:10px;margin-bottom:10px;cursor:pointer}
+.ap-toggle-nm{font-weight:600;font-size:12.5px;color:#fff}
+.ap-toggle-sub{font-size:10.5px;color:var(--muted);margin-top:2px;font-weight:500}
+.ap-sw{position:relative;width:40px;height:22px;background:#3a3d44;border-radius:11px;flex-shrink:0;transition:background .15s}
+.ap-sw::after{content:'';position:absolute;top:2px;left:2px;width:18px;height:18px;background:#fff;border-radius:50%;transition:left .15s;box-shadow:0 1px 3px rgba(0,0,0,.3)}
+.ap-sw.on{background:var(--green)}
+.ap-sw.on::after{left:20px}
+.ap-info{background:var(--green-soft);border:1px solid var(--green-line);color:var(--green);padding:12px 14px;border-radius:11px;font-size:12.5px;line-height:1.5;margin-bottom:14px;font-weight:500;display:flex;gap:9px;align-items:flex-start}
+.ap-info .ico{font-size:16px;flex-shrink:0;margin-top:1px}
+.ap-info strong{color:#fff;font-weight:700}
+.modal-cta{width:100%;padding:14px;background:var(--green);color:#fff;border:none;border-radius:12px;font-weight:700;font-size:14.5px;cursor:pointer;margin-top:8px}
+.modal-cta:hover{background:var(--green-2)}
+.modal-link{display:block;text-align:center;margin-top:14px;font-size:13px;color:var(--text-2);font-weight:500}
+.modal-link a{color:var(--green);font-weight:700}
+.modal-resend{text-align:center;font-size:12.5px;color:var(--muted);margin-top:12px;font-weight:500}
+.modal-resend a{color:var(--green);font-weight:700}
+.modal-step-2{display:none}
+.modal.step2 .modal-step-1{display:none}
+.modal.step2 .modal-step-2{display:block}
+
+/* ═══════════ RESPONSIVE ═══════════ */
+@media (max-width:900px){
+  .container{padding:0 18px}
+  .nav{display:none}
+  .burger{display:flex}
+  .topbar-actions .btn-ghost-sm{display:none}
+  .hero{min-height:auto;padding:30px 0}
+  .hero-content{padding:60px 0 70px;max-width:none}
+  .hero h1{font-size:32px;letter-spacing:-.8px}
+  .hero p{font-size:15px}
+  .hero-row{grid-template-columns:1fr;gap:20px}
+  .hero-cta-stack .btn-primary,.hero-cta-stack .btn-ghost{min-width:auto;width:100%}
+  .hero-bg::before{background:linear-gradient(180deg,rgba(11,12,14,.7) 0%,rgba(11,12,14,.85) 100%)}
+  .search-card{grid-template-columns:1fr 1fr;gap:10px;padding:14px}
+  .search-card .search-btn{grid-column:1/-1}
+  .section{padding:48px 0}
+  .section-h-left h2{font-size:26px}
+  .pkg-grid{grid-template-columns:1fr;gap:16px}
+  .pkg-card-img{height:200px}
+  .pkg-card-prices{grid-template-columns:repeat(2,1fr)}
+  .why-grid{grid-template-columns:1fr;gap:12px}
+  .stats-bar{grid-template-columns:repeat(2,1fr);padding:24px;gap:18px}
+  .videos-wrap{padding:22px}
+  .videos-wrap h2{font-size:22px}
+  .videos-grid{grid-template-columns:repeat(2,1fr);gap:10px}
+  .video-img{height:220px}
+  .gallery-grid{grid-template-columns:repeat(2,1fr);gap:12px}
+  .gallery-img{height:200px}
+  .gallery-info .nm{font-size:13.5px}
+  .bk-layout{grid-template-columns:1fr;gap:20px}
+  .bk-summary{position:static}
+  .bk-stepper{padding:14px;flex-direction:column;gap:14px;align-items:flex-start}
+  .bk-step-line{display:none}
+  .bk-step{width:100%}
+  .bk-dep-prices{grid-template-columns:repeat(2,1fr)}
+  .bk4-pay-methods{grid-template-columns:repeat(2,1fr)}
+  .cab-layout{grid-template-columns:1fr;gap:18px}
+  .cab-nav{position:static;display:flex;overflow-x:auto;gap:6px}
+  .cab-nav .sep{display:none}
+  .cab-orders-grid{grid-template-columns:1fr}
+  .cab-h-left h1{font-size:24px}
+  .od-vch{grid-template-columns:1fr}
+  .about-cab-stats{grid-template-columns:1fr}
+  .bk4-total .v{font-size:24px}
+  .bk-dep-prc .full{display:none}
+  .bk-dep-prc .short{display:inline}
+  .bk-actions-wrap{flex-direction:column-reverse;gap:10px}
+  .bk-next-btn,.bk-back-btn{width:100%;min-width:auto}
+  .bk-section-h{font-size:20px}
+  .viewer-close{top:14px;right:14px;width:40px;height:40px}
+  .viewer-counter{top:14px;font-size:12px;padding:7px 14px}
+  .viewer-prev,.viewer-next{width:42px;height:42px;font-size:22px}
+  .viewer-prev{left:12px}
+  .viewer-next{right:12px}
+  .viewer-info{bottom:14px;padding:10px 18px}
+  .viewer-info .nm{font-size:14px}
+  .stat-item .v{font-size:30px}
+  .partner-cta{padding:30px;grid-template-columns:1fr;gap:24px}
+  .partner-cta h2{font-size:28px}
+  .footer-grid{grid-template-columns:1fr 1fr;gap:32px}
+  .footer-bottom{flex-direction:column;text-align:center}
+  .cat-filters{grid-template-columns:1fr 1fr;gap:8px}
+  .cat-filters .search-btn{grid-column:1/-1}
+  .cat-grid{grid-template-columns:1fr}
+  .pd-layout{grid-template-columns:1fr;gap:24px}
+  .pd-sidebar{position:static}
+  .pd-gallery-main{height:280px}
+  .pd-title{font-size:24px}
+  .pd-hotels{grid-template-columns:1fr;gap:10px}
+  .part-hero h1{font-size:32px}
+  .part-features{grid-template-columns:1fr 1fr;gap:12px}
+  .part-steps{grid-template-columns:1fr;gap:12px}
+  .part-cta-final{padding:30px}
+  .part-cta-final h2{font-size:26px}
+}
+</style>
+</head>
+<body>
+
+<!-- ═══════════ TOPBAR ═══════════ -->
+<header class="topbar">
+  <div class="container">
+    <div class="topbar-row">
+      <a class="logo" onclick="goto('home')">
+        <div class="logo-mark">U</div>
+        <div class="logo-text">UMRABOR</div>
+      </a>
+      <nav class="nav">
+        <a onclick="goto('home')" id="nav-home" class="active">Бош саҳифа</a>
+        <a onclick="goto('catalog')" id="nav-catalog">Каталог</a>
+        <a onclick="goto('orders')" id="nav-orders">Буюртмалар</a>
+        <a onclick="goto('profile')" id="nav-profile">Профиль</a>
+        <a onclick="goto('partners')" id="nav-partners">Тур-операторларга</a>
+      </nav>
+      <div class="topbar-actions">
+        <button class="btn-ghost-sm" onclick="openModal('login')">Кириш</button>
+        <button class="btn-green-sm" onclick="openModal('register')">Рўйхатдан ўтиш</button>
+        <button class="burger" onclick="alert('Mobile menu')">☰</button>
+      </div>
+    </div>
+  </div>
+</header>
+
+<!-- ═══════════ HOME ═══════════ -->
+<section class="page active" id="page-home">
+
+  <section class="hero">
+    <div class="hero-bg"></div>
+    <div class="container">
+      <div class="hero-content">
+        <h1>Умра сафари — <span class="green">шаффоф</span><br>ва <span class="gold">осон</span> бронлаш</h1>
+        <p>UMRABOR — Узбекистон зиёратчилари учун умра турларини бронлаш платформаси. Лицензияланган тур-операторлар, шаффоф нархлар, Click орқали хавфсиз тўлов.</p>
+        <div class="hero-checks">
+          <div class="hero-check">Маҳрам бўйича жойлашув танлови</div>
+          <div class="hero-check">Click орқали 15 дақиқалик тўлов</div>
+          <div class="hero-check">Ҳар бир зиёратчига алоҳида ваучер</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section style="padding:0">
+    <div class="container">
+      <div class="search-widget">
+        <div class="search-card">
+          <div class="search-field">
+            <label>Қачон</label>
+            <input type="date" value="2026-06-01">
+          </div>
+          <div class="search-field">
+            <label>Қачонгача</label>
+            <input type="date" value="2026-08-31">
+          </div>
+          <div class="search-field">
+            <label>Зиёратчилар</label>
+            <select><option>2 киши</option><option>1 киши</option><option>3 киши</option><option>4 киши</option></select>
+          </div>
+          <button class="search-btn" onclick="goto('catalog')">🔍 Излаш</button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="container">
+      <div class="section-h">
+        <div class="section-h-left">
+          <h2>Тавсия қилинган турлар</h2>
+          <div class="sub">Бизнинг энг яхши лицензияланган операторлар</div>
+        </div>
+        <a class="section-h-link" onclick="goto('catalog')">Барча турлар →</a>
+      </div>
+      <div class="pkg-grid" id="featuredGrid"></div>
+    </div>
+  </section>
+
+  <section class="section" style="padding-top:0">
+    <div class="container">
+      <div class="videos-wrap">
+        <svg class="crescent" viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg"><path d="M21 14.5c-1.7.8-3.6 1.3-5.5 1.3-6.6 0-12-5.4-12-12 0-.7.1-1.4.2-2.1C1.7 3.4 0 6.5 0 10c0 5.5 4.5 10 10 10 4 0 7.5-2.3 9-5.8.4-.1.8-.4 1-.5l1-1.2z"/></svg>
+        <h2>Турлардан видеолар</h2>
+        <div class="videos-grid">
+          <div class="video-card" onclick="openViewer('video',0)"><div class="video-img" style="background-image:url('https://images.pexels.com/photos/8108061/pexels-photo-8108061.jpeg?auto=compress&cs=tinysrgb&w=600')"><div class="video-play">▶</div></div></div>
+          <div class="video-card" onclick="openViewer('video',1)"><div class="video-img" style="background-image:url('https://images.pexels.com/photos/14541478/pexels-photo-14541478.jpeg?auto=compress&cs=tinysrgb&w=600')"><div class="video-play">▶</div></div></div>
+          <div class="video-card" onclick="openViewer('video',2)"><div class="video-img" style="background-image:url('https://images.pexels.com/photos/6099936/pexels-photo-6099936.jpeg?auto=compress&cs=tinysrgb&w=600')"><div class="video-play">▶</div></div></div>
+          <div class="video-card" onclick="openViewer('video',3)"><div class="video-img" style="background-image:url('https://images.pexels.com/photos/16012748/pexels-photo-16012748.jpeg?auto=compress&cs=tinysrgb&w=600')"><div class="video-play">▶</div></div></div>
+          <div class="video-card" onclick="openViewer('video',4)"><div class="video-img" style="background-image:url('https://images.pexels.com/photos/12777419/pexels-photo-12777419.jpeg?auto=compress&cs=tinysrgb&w=600')"><div class="video-play">▶</div></div></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section" style="padding-top:0">
+    <div class="container">
+      <div class="section-h">
+        <div class="section-h-left">
+          <h2>Нега UMRABOR?</h2>
+          <div class="sub">Минглаб зиёратчилар бизга ишонишади</div>
+        </div>
+      </div>
+      <div class="why-grid">
+        <div class="why-card c1">
+          <div class="why-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><path d="M9 14l2 2 4-4"/></svg></div>
+          <h4>Лицензияланган операторлар</h4>
+          <p>Барча тур-операторлар Госкомтуризм лицензияси билан, платформа модерациясидан ўтган</p>
+        </div>
+        <div class="why-card c2">
+          <div class="why-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 14a8 8 0 0 1 16 0"/><rect x="3" y="14" width="4" height="7" rx="1.5" fill="currentColor"/><rect x="17" y="14" width="4" height="7" rx="1.5" fill="currentColor"/></svg></div>
+          <h4>24/7 қўллаб-қувватлаш</h4>
+          <p>Сафар давомида ҳар қандай саволингизга жавоб берадиган жамоа доимо боғланишда</p>
+        </div>
+        <div class="why-card c3">
+          <div class="why-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 11v9H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h3z" fill="currentColor"/><path d="M16 11h4a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-4v-9z" fill="currentColor"/><path d="M9 11V8a3 3 0 0 1 6 0v3" stroke-width="2"/></svg></div>
+          <h4>Шаффоф нархлар</h4>
+          <p>Барча тарифлар очиқ кўрсатилади. Яширин харажатлар йўқ — фақат битта нарх</p>
+        </div>
+        <div class="why-card c4">
+          <div class="why-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="9" cy="15" r="5"/><circle cx="15" cy="15" r="5"/></svg></div>
+          <h4>Маҳрам логикаси</h4>
+          <p>Тизим оила алоқаларингизни ҳисобга олиб тўғри жойлашувни таклиф этади</p>
+        </div>
+        <div class="why-card c5">
+          <div class="why-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><path d="M20 7.5A8 8 0 1 0 21 12"/></svg></div>
+          <h4>Click интеграцияси</h4>
+          <p>Узбекистон #1 тўлов тизими орқали 15 дақиқалик хавфсиз тўлов. Кешбэк 0.3%</p>
+        </div>
+        <div class="why-card c6">
+          <div class="why-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg></div>
+          <h4>Auto-генерация ваучеров</h4>
+          <p>Ҳар бир зиёратчи учун алоҳида PDF ваучер автоматик яратилади</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section" style="padding-top:0">
+    <div class="container">
+      <div class="section-h">
+        <div class="section-h-left">
+          <h2>Фотогалерея</h2>
+          <div class="sub">Зиёратчиларимизнинг сафар лаҳзалари</div>
+        </div>
+        <a class="section-h-link">Барчаси →</a>
+      </div>
+      <div class="gallery-grid">
+          <div class="gallery-card" onclick="openViewer('photo',0)">
+            <div class="gallery-img" style="background-image:url('https://images.pexels.com/photos/8108061/pexels-photo-8108061.jpeg?auto=compress&cs=tinysrgb&w=600')">
+              <div class="gallery-cnt">
+                <span class="stack"><img src="https://images.pexels.com/photos/8108061/pexels-photo-8108061.jpeg?auto=compress&cs=tinysrgb&w=80"/><img src="https://images.pexels.com/photos/14541478/pexels-photo-14541478.jpeg?auto=compress&cs=tinysrgb&w=80"/><img src="https://images.pexels.com/photos/16012748/pexels-photo-16012748.jpeg?auto=compress&cs=tinysrgb&w=80"/></span>
+                28+
+              </div>
+            </div>
+            <div class="gallery-info"><div class="nm">Рамазон люкс 2026</div><div class="dt">23/02/2026</div></div>
+          </div>
+          <div class="gallery-card" onclick="openViewer('photo',1)">
+            <div class="gallery-img" style="background-image:url('https://images.pexels.com/photos/14541478/pexels-photo-14541478.jpeg?auto=compress&cs=tinysrgb&w=600')">
+              <div class="gallery-cnt">
+                <span class="stack"><img src="https://images.pexels.com/photos/8108061/pexels-photo-8108061.jpeg?auto=compress&cs=tinysrgb&w=80"/><img src="https://images.pexels.com/photos/14541478/pexels-photo-14541478.jpeg?auto=compress&cs=tinysrgb&w=80"/><img src="https://images.pexels.com/photos/16012748/pexels-photo-16012748.jpeg?auto=compress&cs=tinysrgb&w=80"/></span>
+                8+
+              </div>
+            </div>
+            <div class="gallery-info"><div class="nm">2026 февраль сафари</div><div class="dt">23/02/2026</div></div>
+          </div>
+          <div class="gallery-card" onclick="openViewer('photo',2)">
+            <div class="gallery-img" style="background-image:url('https://images.pexels.com/photos/2403016/pexels-photo-2403016.jpeg?auto=compress&cs=tinysrgb&w=600')">
+              <div class="gallery-cnt">
+                <span class="stack"><img src="https://images.pexels.com/photos/8108061/pexels-photo-8108061.jpeg?auto=compress&cs=tinysrgb&w=80"/><img src="https://images.pexels.com/photos/14541478/pexels-photo-14541478.jpeg?auto=compress&cs=tinysrgb&w=80"/><img src="https://images.pexels.com/photos/16012748/pexels-photo-16012748.jpeg?auto=compress&cs=tinysrgb&w=80"/></span>
+                15+
+              </div>
+            </div>
+            <div class="gallery-info"><div class="nm">Премиум 3 шаҳар</div><div class="dt">10/10/2026</div></div>
+          </div>
+          <div class="gallery-card" onclick="openViewer('photo',3)">
+            <div class="gallery-img" style="background-image:url('https://images.pexels.com/photos/16012748/pexels-photo-16012748.jpeg?auto=compress&cs=tinysrgb&w=600')">
+              <div class="gallery-cnt">
+                <span class="stack"><img src="https://images.pexels.com/photos/8108061/pexels-photo-8108061.jpeg?auto=compress&cs=tinysrgb&w=80"/><img src="https://images.pexels.com/photos/14541478/pexels-photo-14541478.jpeg?auto=compress&cs=tinysrgb&w=80"/><img src="https://images.pexels.com/photos/16012748/pexels-photo-16012748.jpeg?auto=compress&cs=tinysrgb&w=80"/></span>
+                22+
+              </div>
+            </div>
+            <div class="gallery-info"><div class="nm">Эконом пакет</div><div class="dt">15/09/2026</div></div>
+          </div>
+          <div class="gallery-card" onclick="openViewer('photo',4)">
+            <div class="gallery-img" style="background-image:url('https://images.pexels.com/photos/6580226/pexels-photo-6580226.jpeg?auto=compress&cs=tinysrgb&w=600')">
+              <div class="gallery-cnt">
+                <span class="stack"><img src="https://images.pexels.com/photos/8108061/pexels-photo-8108061.jpeg?auto=compress&cs=tinysrgb&w=80"/><img src="https://images.pexels.com/photos/14541478/pexels-photo-14541478.jpeg?auto=compress&cs=tinysrgb&w=80"/><img src="https://images.pexels.com/photos/16012748/pexels-photo-16012748.jpeg?auto=compress&cs=tinysrgb&w=80"/></span>
+                12+
+              </div>
+            </div>
+            <div class="gallery-info"><div class="nm">Стандарт пакет</div><div class="dt">11/11/2026</div></div>
+          </div>
+          <div class="gallery-card" onclick="openViewer('photo',5)">
+            <div class="gallery-img" style="background-image:url('https://images.pexels.com/photos/6099936/pexels-photo-6099936.jpeg?auto=compress&cs=tinysrgb&w=600')">
+              <div class="gallery-cnt">
+                <span class="stack"><img src="https://images.pexels.com/photos/8108061/pexels-photo-8108061.jpeg?auto=compress&cs=tinysrgb&w=80"/><img src="https://images.pexels.com/photos/14541478/pexels-photo-14541478.jpeg?auto=compress&cs=tinysrgb&w=80"/><img src="https://images.pexels.com/photos/16012748/pexels-photo-16012748.jpeg?auto=compress&cs=tinysrgb&w=80"/></span>
+                18+
+              </div>
+            </div>
+            <div class="gallery-info"><div class="nm">Премиум Баҳор VIP</div><div class="dt">18/03/2026</div></div>
+          </div>
+          <div class="gallery-card" onclick="openViewer('photo',6)">
+            <div class="gallery-img" style="background-image:url('https://images.pexels.com/photos/12777419/pexels-photo-12777419.jpeg?auto=compress&cs=tinysrgb&w=600')">
+              <div class="gallery-cnt">
+                <span class="stack"><img src="https://images.pexels.com/photos/8108061/pexels-photo-8108061.jpeg?auto=compress&cs=tinysrgb&w=80"/><img src="https://images.pexels.com/photos/14541478/pexels-photo-14541478.jpeg?auto=compress&cs=tinysrgb&w=80"/><img src="https://images.pexels.com/photos/16012748/pexels-photo-16012748.jpeg?auto=compress&cs=tinysrgb&w=80"/></span>
+                24+
+              </div>
+            </div>
+            <div class="gallery-info"><div class="nm">Рамазон Люкс 2026</div><div class="dt">22/06/2026</div></div>
+          </div>
+          <div class="gallery-card" onclick="openViewer('photo',7)">
+            <div class="gallery-img" style="background-image:url('https://images.pexels.com/photos/2675268/pexels-photo-2675268.jpeg?auto=compress&cs=tinysrgb&w=600')">
+              <div class="gallery-cnt">
+                <span class="stack"><img src="https://images.pexels.com/photos/8108061/pexels-photo-8108061.jpeg?auto=compress&cs=tinysrgb&w=80"/><img src="https://images.pexels.com/photos/14541478/pexels-photo-14541478.jpeg?auto=compress&cs=tinysrgb&w=80"/><img src="https://images.pexels.com/photos/16012748/pexels-photo-16012748.jpeg?auto=compress&cs=tinysrgb&w=80"/></span>
+                9+
+              </div>
+            </div>
+            <div class="gallery-info"><div class="nm">Қурбон ҳайит люкс</div><div class="dt">05/06/2026</div></div>
+          </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section" style="padding-top:0">
+    <div class="container">
+      <div class="partner-cta">
+        <div>
+          <div class="hero-eyebrow" style="background:var(--gold-soft);color:var(--gold);border-color:rgba(242,179,66,.3)">ТУР-ОПЕРАТОРЛАР УЧУН</div>
+          <h2>Тур-операторсиз?<br><span class="green">UMRABOR</span> билан минглаб мижозларга етишинг</h2>
+          <p>Платформамизга қўшилинг ва ўз умра турпакетларингизни Click Mini App орқали Узбекистон бўйлаб 2400+ зиёратчиларга таклиф қилинг.</p>
+          <div class="partner-cta-actions">
+            <button class="btn-gold" onclick="goto('partners')">Кўпроқ маълумот</button>
+            <button class="btn-ghost" onclick="alert('Партнёр кабинет: открыть admin_v5.html')">Кабинетга кириш →</button>
+          </div>
+        </div>
+        <div class="partner-cta-stats">
+          <div class="partner-cta-stat"><span class="l">Платформа комиссияси</span><span class="v">3-5%</span></div>
+          <div class="partner-cta-stat"><span class="l">Аввалдан тўлов</span><span class="v">100%</span></div>
+          <div class="partner-cta-stat"><span class="l">Юзер базаси</span><span class="v">2400+</span></div>
+          <div class="partner-cta-stat"><span class="l">Тўлов вақти</span><span class="v">T+1</span></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+</section>
+
+<!-- ═══════════ CATALOG ═══════════ -->
+<section class="page" id="page-catalog">
+  <div class="container cat-page">
+    <div class="cat-page-h">
+      <h1>Умра пакетлари 2026</h1>
+      <p>48+ турдан мос келганини танланг</p>
+    </div>
+    <div class="cat-filters">
+      <div class="cat-filter">
+        <label>Қачондан</label>
+        <input type="date" value="2026-06-01">
+      </div>
+      <div class="cat-filter">
+        <label>Қачонгача</label>
+        <input type="date" value="2026-08-31">
+      </div>
+      <div class="cat-filter">
+        <label>Тип</label>
+        <select><option>Барча типлар</option><option>Premium</option><option>Lux</option><option>Standard</option><option>Eco</option></select>
+      </div>
+      <div class="cat-filter">
+        <label>Зиёратчилар</label>
+        <select><option>2 киши</option><option>1 киши</option><option>3 киши</option><option>4 киши</option></select>
+      </div>
+      <button class="search-btn">🔍 Фильтр</button>
+    </div>
+    <div class="cat-grid" id="catalogGrid"></div>
+  </div>
+</section>
+
+<!-- ═══════════ PACKAGE DETAIL ═══════════ -->
+<section class="page" id="page-package">
+  <div class="container pd-page">
+    <button class="pd-back" onclick="goto('catalog')">← Каталогга қайтиш</button>
+    <div class="pd-layout">
+      <div class="pd-main">
+        <div class="pd-gallery">
+          <div class="pd-gallery-main" id="pdGalleryMain" style="background-image:url('https://images.pexels.com/photos/16012748/pexels-photo-16012748.jpeg?auto=compress&cs=tinysrgb&w=1200')">
+            <button class="pd-gallery-arr prev" onclick="pdGalleryNav(-1)">‹</button>
+            <button class="pd-gallery-arr next" onclick="pdGalleryNav(1)">›</button>
+            <div class="pd-gallery-dots" id="pdGalleryDots">
+              <span class="dot active"></span>
+              <span class="dot"></span>
+              <span class="dot"></span>
+              <span class="dot"></span>
+            </div>
+          </div>
+        </div>
+
+        <div class="pd-title-row">
+          <div>
+            <h1 class="pd-title">Премиум 3 шаҳар</h1>
+            <div class="pd-tags">
+              <span class="pd-tag gold">⭐ PREMIUM</span>
+              <span class="pd-tag green">ENG YAXSHI</span>
+            </div>
+          </div>
+          <div class="pd-days"><b>12</b><small>КУН</small></div>
+        </div>
+
+        <div class="pd-section">
+          <div class="pd-section-h">Тавсиф</div>
+          <div class="pd-desc">
+            <p>Премиум пакети — 12 кунлик сафар. Movenpick ва Hilton каби яхши меҳмонхоналарда жойлашув. Хараман экспресси билан Мадина-Макка ўртасида тезкор юриш. Виза, гид-имом, суғурта ва сертификат киради.</p>
+          </div>
+        </div>
+
+        <div class="pd-section">
+          <div class="pd-section-h">Меҳмонхоналар</div>
+          <div class="pd-hotels">
+            <div class="pd-hotel">
+              <div class="pd-hotel-h">
+                <div class="pd-hotel-city">Мадина</div>
+                <a class="pd-hotel-detail">Батафсил ›</a>
+              </div>
+              <div class="pd-hotel-row">
+                <div class="pd-hotel-img" style="background-image:url('https://images.pexels.com/photos/14541478/pexels-photo-14541478.jpeg?auto=compress&cs=tinysrgb&w=300')"></div>
+                <div class="pd-hotel-info">
+                  <div class="pd-hotel-stars">★★★★★</div>
+                  <div class="pd-hotel-nm">Movenpick Madinah<small>· 4 кеча</small></div>
+                  <div class="pd-hotel-dist">Набавий масжидидан <span class="pd-hotel-pill-gold">150 м</span></div>
+                  <div class="pd-hotel-pills">
+                    <span class="pd-hotel-pill-green">Швед столи</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="pd-hotel">
+              <div class="pd-hotel-h">
+                <div class="pd-hotel-city">Макка</div>
+                <a class="pd-hotel-detail">Батафсил ›</a>
+              </div>
+              <div class="pd-hotel-row">
+                <div class="pd-hotel-img" style="background-image:url('https://images.pexels.com/photos/6580226/pexels-photo-6580226.jpeg?auto=compress&cs=tinysrgb&w=300')"></div>
+                <div class="pd-hotel-info">
+                  <div class="pd-hotel-stars">★★★★★</div>
+                  <div class="pd-hotel-nm">Hilton Suites Makkah<small>· 7 кеча</small></div>
+                  <div class="pd-hotel-dist">Ҳарам масжидидан <span class="pd-hotel-pill-gold">500 м</span></div>
+                  <div class="pd-hotel-pills">
+                    <span class="pd-hotel-pill-green">Швед столи</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="pd-section">
+          <div class="pd-section-h">Сафар йўналиши</div>
+          <div class="pd-route">
+            <div class="pd-route-line"></div>
+            <div class="pd-route-step">
+              <div class="marker"></div>
+              <div class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M17.8 19.2 16 11l3.5-3.5C21 6 21.5 4 21 3c-1-.5-3 0-4.5 1.5L13 8 4.8 6.2c-.5-.1-.9.1-1.1.5l-.3.5c-.2.5-.1 1 .3 1.3L9 12l-2 3H4l-1 1 3 2 2 3 1-1v-3l3-2 3.5 5.3c.3.4.8.5 1.3.3l.5-.2c.4-.3.6-.7.5-1.2z"/></svg></div>
+              <div><div class="nm">Тошкент → Жидда</div><div class="sub">Учиб келиш · 10.10.2026</div></div>
+              <div></div>
+            </div>
+            <div class="pd-route-step">
+              <div class="marker"></div>
+              <div class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M8 6v6M15 6v6M2 12h19.6M18 18h3s.5-1.7.8-2.8c.1-.4.2-.8.2-1.2s-.1-.8-.2-1.2L20.4 8c-.3-1-1.3-1.8-2.4-1.8H4a2 2 0 0 0-2 2v10h3"/><circle cx="7" cy="18" r="2"/><circle cx="16" cy="18" r="2"/></svg></div>
+              <div><div class="nm">Жидда → Мадина</div><div class="sub">Трансфер автобус</div></div>
+              <div></div>
+            </div>
+            <div class="pd-route-step">
+              <div class="marker"></div>
+              <div class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M12 3v3"/><circle cx="12" cy="3" r="1" fill="currentColor" stroke="none"/><path d="M4 19v-7c0-4.4 3.6-8 8-8s8 3.6 8 8v7M3 19h18"/></svg></div>
+              <div><div class="nm">Мадина</div><div class="sub">Movenpick Madinah</div></div>
+              <div class="days-pill">4 кун</div>
+            </div>
+            <div class="pd-route-step">
+              <div class="marker"></div>
+              <div class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><rect x="4" y="3" width="16" height="16" rx="2"/><path d="M4 11h16M12 3v8"/><path d="m8 19-2 3M16 22l2-3"/></svg></div>
+              <div><div class="nm">Мадина → Макка</div><div class="sub">Тезюрар поезд</div></div>
+              <div></div>
+            </div>
+            <div class="pd-route-step">
+              <div class="marker"></div>
+              <div class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M12 3v3"/><circle cx="12" cy="3" r="1" fill="currentColor" stroke="none"/><path d="M4 19v-7c0-4.4 3.6-8 8-8s8 3.6 8 8v7M3 19h18"/></svg></div>
+              <div><div class="nm">Макка</div><div class="sub">Hilton Suites Makkah</div></div>
+              <div class="days-pill">7 кун</div>
+            </div>
+            <div class="pd-route-step">
+              <div class="marker"></div>
+              <div class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" style="transform:scaleX(-1)"><path d="M17.8 19.2 16 11l3.5-3.5C21 6 21.5 4 21 3c-1-.5-3 0-4.5 1.5L13 8 4.8 6.2c-.5-.1-.9.1-1.1.5l-.3.5c-.2.5-.1 1 .3 1.3L9 12l-2 3H4l-1 1 3 2 2 3 1-1v-3l3-2 3.5 5.3c.3.4.8.5 1.3.3l.5-.2c.4-.3.6-.7.5-1.2z"/></svg></div>
+              <div><div class="nm">Жидда → Тошкент</div><div class="sub">Учиб кетиш · 21.10.2026</div></div>
+              <div></div>
+            </div>
+          </div>
+        </div>
+
+        <div class="pd-section">
+          <div class="pd-section-h">Хизматлар</div>
+          <div class="pd-incl">
+            <div class="pd-incl-row"><div class="nm">Авиабилет (Qatar Airways)</div><span class="check">✓✓</span></div>
+            <div class="pd-incl-row"><div class="nm">Виза (тур виза)</div><span class="check">✓✓</span></div>
+            <div class="pd-incl-row"><div class="nm">Трансфер (поезд + автобус)</div><span class="check">✓✓</span></div>
+            <div class="pd-incl-row"><div class="nm">Гид-имом (ўзбек тилида)</div><span class="check">✓✓</span></div>
+            <div class="pd-incl-row"><div class="nm">Зам-зам 5 л</div><span class="check">✓✓</span></div>
+            <div class="pd-incl-row"><div class="nm">Суғурта</div><span class="check">✓✓</span></div>
+          </div>
+        </div>
+
+        <div class="pd-section">
+          <div class="pd-section-h">Совғалар</div>
+          <div class="pd-incl">
+            <div class="pd-incl-row"><div class="nm">Эко-сумка</div><span class="check">✓✓</span></div>
+            <div class="pd-incl-row"><div class="nm">Наушниклар</div><span class="check">✓✓</span></div>
+            <div class="pd-incl-row"><div class="nm">Чётка тасбех</div><span class="check">✓✓</span></div>
+            <div class="pd-incl-row"><div class="nm">Қуръон жилди</div><span class="check">✓✓</span></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- SIDEBAR -->
+      <aside class="pd-sidebar">
+        <div class="pd-book-card">
+          <div class="pd-book-title">Нархлар</div>
+          <div class="pd-book-prices">
+            <div class="pd-book-price"><span>1-кишилик хона</span><span class="v">26 800 000<small>сум дан</small></span></div>
+            <div class="pd-book-price"><span>2-кишилик хона</span><span class="v">23 400 000<small>сум дан</small></span></div>
+            <div class="pd-book-price"><span>3-кишилик хона</span><span class="v">19 500 000<small>сум дан</small></span></div>
+            <div class="pd-book-price"><span>4-кишилик хона</span><span class="v">17 200 000<small>сум дан</small></span></div>
+          </div>
+          <button class="pd-book-cta" onclick="startBooking()">Сотиб олиш →</button>
+          <div class="pd-book-note">Нархлар 1 киши учун кўрсатилган</div>
+        </div>
+      </aside>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════ BOOKING WIZARD ═══════════ -->
+<section class="page" id="page-booking">
+  <div class="container bk-page">
+    <button class="bk-back" onclick="goto('package')">← Пакетга қайтиш</button>
+    
+    <div class="bk-stepper">
+      <div class="bk-step active" id="bkStep1"><div class="bk-step-num">1</div><div class="bk-step-text"><span class="l">ҚАДАМ 1</span><span class="n">Зиёратчилар</span></div></div>
+      <div class="bk-step-line" id="bkLine1"></div>
+      <div class="bk-step" id="bkStep2"><div class="bk-step-num">2</div><div class="bk-step-text"><span class="l">ҚАДАМ 2</span><span class="n">Учиш кунлари</span></div></div>
+      <div class="bk-step-line" id="bkLine2"></div>
+      <div class="bk-step" id="bkStep3"><div class="bk-step-num">3</div><div class="bk-step-text"><span class="l">ҚАДАМ 3</span><span class="n">Жойлашув</span></div></div>
+      <div class="bk-step-line" id="bkLine3"></div>
+      <div class="bk-step" id="bkStep4"><div class="bk-step-num">4</div><div class="bk-step-text"><span class="l">ҚАДАМ 4</span><span class="n">Тўлов</span></div></div>
+    </div>
+
+    <div class="bk-layout">
+      <div class="bk-main">
+        <!-- STEP 1: PILGRIMS -->
+        <div id="bkPanel1">
+          <h2 class="bk-section-h">Кимлар сафар қилади?</h2>
+          <p class="bk-section-sub">Сафарга борадиган барча зиёратчиларни киритинг. Кейинги қадамда сизга мос вылетлар кўрсатилади.</p>
+          
+          <div id="bkPilgrimsEmpty" class="bk-empty">
+            <div class="ico"><svg viewBox="0 0 24 24" fill="currentColor"><circle cx="12" cy="5" r="2.7"/><circle cx="6" cy="10.5" r="2.8"/><circle cx="18" cy="10.5" r="2.8"/><path d="M2 21c0-2.2 1.8-5 5.5-5 1 0 1.8.2 2.5.5.7-.3 1.5-.5 2.5-.5s1.8.2 2.5.5c.7-.3 1.5-.5 2.5-.5 3.7 0 5.5 2.8 5.5 5v.5H2V21z"/></svg></div>
+            <h3>Зиёратчилар рўйхати бўш</h3>
+            <p>Сафарга борадиган зиёратчиларни қўшинг — биз сизга мос вариантларни тавсия қиламиз.</p>
+            <button class="bk-add-btn" onclick="openAddPilgrimModal()">+ Зиёратчи қўшиш</button>
+          </div>
+
+          <div id="bkPilgrimsList" style="display:none">
+            <div class="bk-list" id="bkPilgrimsRows"></div>
+            <button class="bk-add-more" onclick="openAddPilgrimModal()">+ Яна зиёратчи қўшиш</button>
+          </div>
+        </div>
+
+        <!-- STEP 2: DEPARTURES -->
+        <div id="bkPanel2" style="display:none">
+          <h2 class="bk-section-h">Учиш кунини танланг</h2>
+          <p class="bk-section-sub">Гуруҳингизга мос келадиган вылетлар. Танлангандан кейин «Кейинги» тугмани босинг.</p>
+          <div class="bk-dep-card" onclick="bkSelectDep(this,1)">
+            <div class="bk-dep-head">
+              <div class="bk-dep-dates">19 март <span class="sep">—</span> 05 апрель</div>
+              <div class="bk-dep-days">10-кун</div>
+            </div>
+            <div class="bk-dep-air"><span>UZAIRWAYS</span><span class="line"></span><span>UZAIRWAYS</span></div>
+            <div class="bk-dep-prices">
+              <div class="bk-dep-prc">
+                <div class="typ"><span class="full">1 кишилик хона</span><span class="short">1 киши</span></div>
+                <div class="v"><span class="full">26 800 000<small>сум</small></span><span class="short">26,8<small>М</small></span></div>
+              </div>
+              <div class="bk-dep-prc">
+                <div class="typ"><span class="full">2 кишилик хона</span><span class="short">2 киши</span></div>
+                <div class="v"><span class="full">23 400 000<small>сум</small></span><span class="short">23,4<small>М</small></span></div>
+              </div>
+              <div class="bk-dep-prc">
+                <div class="typ"><span class="full">3 кишилик хона</span><span class="short">3 киши</span></div>
+                <div class="v"><span class="full">19 500 000<small>сум</small></span><span class="short">19,5<small>М</small></span></div>
+              </div>
+              <div class="bk-dep-prc">
+                <div class="typ"><span class="full">4 кишилик хона</span><span class="short">4 киши</span></div>
+                <div class="v"><span class="full">17 200 000<small>сум</small></span><span class="short">17,2<small>М</small></span></div>
+              </div>
+            </div>
+          </div>
+          <div class="bk-dep-card selected" onclick="bkSelectDep(this,2)">
+            <div class="bk-dep-head">
+              <div class="bk-dep-dates">02 апрель <span class="sep">—</span> 19 апрель</div>
+              <div class="bk-dep-days">10-кун</div>
+            </div>
+            <div class="bk-dep-air"><span>QATAR AIRWAYS</span><span class="line"></span><span>QATAR AIRWAYS</span></div>
+            <div class="bk-dep-prices">
+              <div class="bk-dep-prc">
+                <div class="typ"><span class="full">1 кишилик хона</span><span class="short">1 киши</span></div>
+                <div class="v"><span class="full">29 500 000<small>сум</small></span><span class="short">29,5<small>М</small></span></div>
+              </div>
+              <div class="bk-dep-prc">
+                <div class="typ"><span class="full">2 кишилик хона</span><span class="short">2 киши</span></div>
+                <div class="v"><span class="full">25 400 000<small>сум</small></span><span class="short">25,4<small>М</small></span></div>
+              </div>
+              <div class="bk-dep-prc">
+                <div class="typ"><span class="full">3 кишилик хона</span><span class="short">3 киши</span></div>
+                <div class="v"><span class="full">21 000 000<small>сум</small></span><span class="short">21,0<small>М</small></span></div>
+              </div>
+              <div class="bk-dep-prc">
+                <div class="typ"><span class="full">4 кишилик хона</span><span class="short">4 киши</span></div>
+                <div class="v"><span class="full">18 200 000<small>сум</small></span><span class="short">18,2<small>М</small></span></div>
+              </div>
+            </div>
+          </div>
+          <div class="bk-dep-card" onclick="bkSelectDep(this,3)">
+            <div class="bk-dep-head">
+              <div class="bk-dep-dates">18 апрель <span class="sep">—</span> 05 май</div>
+              <div class="bk-dep-days">10-кун</div>
+            </div>
+            <div class="bk-dep-air"><span>FLY DUBAI</span><span class="line"></span><span>FLY DUBAI</span></div>
+            <div class="bk-dep-prices">
+              <div class="bk-dep-prc">
+                <div class="typ"><span class="full">1 кишилик хона</span><span class="short">1 киши</span></div>
+                <div class="v"><span class="full">24 600 000<small>сум</small></span><span class="short">24,6<small>М</small></span></div>
+              </div>
+              <div class="bk-dep-prc">
+                <div class="typ"><span class="full">2 кишилик хона</span><span class="short">2 киши</span></div>
+                <div class="v"><span class="full">21 300 000<small>сум</small></span><span class="short">21,3<small>М</small></span></div>
+              </div>
+              <div class="bk-dep-prc">
+                <div class="typ"><span class="full">3 кишилик хона</span><span class="short">3 киши</span></div>
+                <div class="v"><span class="full">18 400 000<small>сум</small></span><span class="short">18,4<small>М</small></span></div>
+              </div>
+              <div class="bk-dep-prc">
+                <div class="typ"><span class="full">4 кишилик хона</span><span class="short">4 киши</span></div>
+                <div class="v"><span class="full">15 600 000<small>сум</small></span><span class="short">15,6<small>М</small></span></div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- STEP 3: ROOMS -->
+        <div id="bkPanel3" style="display:none">
+          <h2 class="bk-section-h">Жойлашув танланг</h2>
+          <p class="bk-section-sub">Гуруҳингиз учун мос жойлашув вариантлари. Махрам бўйича автоматик ҳисобланган.</p>
+
+          <div class="bk-room selected" onclick="bkSelectRoom(this,1)">
+            <div class="bk-room-head">
+              <div>
+                <div class="bk-room-title">Оилавий жойлашув</div>
+                <div style="font-size:12px;color:var(--muted);margin-top:4px">1 хона · Эр-хотин учун</div>
+              </div>
+              <div class="bk-room-total">46,8 млн<div class="per">23,4 млн / киши</div></div>
+            </div>
+            <div class="bk-room-rows">
+              <div class="bk-room-row">
+                <div><div class="typ">2 кишилик (DBL FM)</div><div class="ppl">Раҳимов Сардор + Раҳимова Мадина</div></div>
+                <div><div class="math">23,4 млн × 2</div><div class="sum">46,8 млн</div></div>
+              </div>
+            </div>
+          </div>
+
+          <div class="bk-room" onclick="bkSelectRoom(this,2)">
+            <div class="bk-room-head">
+              <div>
+                <div class="bk-room-title">Алоҳида хоналар</div>
+                <div style="font-size:12px;color:var(--muted);margin-top:4px">2 хона · Ҳар киши учун шахсий</div>
+              </div>
+              <div class="bk-room-total">53,6 млн<div class="per">26,8 млн / киши</div></div>
+            </div>
+            <div class="bk-room-rows">
+              <div class="bk-room-row">
+                <div><div class="typ">1 кишилик (SINGLE)</div><div class="ppl">Раҳимов Сардор</div></div>
+                <div><div class="math">26,8 млн × 1</div><div class="sum">26,8 млн</div></div>
+              </div>
+              <div class="bk-room-row">
+                <div><div class="typ">1 кишилик (SINGLE)</div><div class="ppl">Раҳимова Мадина</div></div>
+                <div><div class="math">26,8 млн × 1</div><div class="sum">26,8 млн</div></div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- STEP 4: PAYMENT -->
+        <div id="bkPanel4" style="display:none">
+          <h2 class="bk-section-h">Тўлов</h2>
+          <p class="bk-section-sub">Буюртмани текшириб, тўлов усулини танланг.</p>
+
+          <!-- Буюртма -->
+          <div class="bk4-block">
+            <div class="bk4-block-h">📋 Буюртма</div>
+            <div class="bk4-row"><span class="l">Пакет</span><span class="v">Премиум 3 шаҳар</span></div>
+            <div class="bk4-row"><span class="l">Оператор</span><span class="v">Ramaz Travel</span></div>
+            <div class="bk4-row"><span class="l">Учиш</span><span class="v">02.04.2026 · Qatar Airways</span></div>
+            <div class="bk4-row"><span class="l">Қайтиш</span><span class="v">19.04.2026 · Qatar Airways</span></div>
+            <div class="bk4-row"><span class="l">Давомийлик</span><span class="v">10 кун</span></div>
+            <div class="bk4-row"><span class="l">Зиёратчилар</span><span class="v">2 киши</span></div>
+          </div>
+
+          <!-- Жойлашув -->
+          <div class="bk4-block">
+            <div class="bk4-block-h">🏨 Жойлашув</div>
+            <div class="bk4-row"><span class="l">Раҳимов Сардор</span><span class="v">DBL FM</span></div>
+            <div class="bk4-row"><span class="l">Раҳимова Мадина</span><span class="v">DBL FM</span></div>
+          </div>
+
+          <!-- Нархлар -->
+          <div class="bk4-block">
+            <div class="bk4-block-h">💰 Нархлар</div>
+            <div class="bk4-row"><span class="l">Раҳимов Сардор · DBL FM</span><span class="v price">23 400 000</span></div>
+            <div class="bk4-row"><span class="l">Раҳимова Мадина · DBL FM</span><span class="v price">23 400 000</span></div>
+          </div>
+
+          <!-- Жами тўлов -->
+          <div class="bk4-total">
+            <div class="ttl">Жами тўлов</div>
+            <div class="v">46 800 000<small>сум</small></div>
+          </div>
+
+          <!-- Тўлов усули -->
+          <div class="bk-section-h" style="font-size:17px;margin:24px 0 14px">Тўлов усулини танланг</div>
+          <div class="bk4-pay-methods">
+            <div class="bk4-method" onclick="selectPayMethod(this,'click')">
+              <div class="bk4-method-check"></div>
+              <div class="bk4-method-logo click">CLICK</div>
+              <div class="bk4-method-nm">Click</div>
+              <div class="bk4-method-sub">Кешбэк 0.3%</div>
+            </div>
+            <div class="bk4-method" onclick="selectPayMethod(this,'payme')">
+              <div class="bk4-method-check"></div>
+              <div class="bk4-method-logo payme">P</div>
+              <div class="bk4-method-nm">Payme</div>
+              <div class="bk4-method-sub">Тез ва хавфсиз</div>
+            </div>
+            <div class="bk4-method" onclick="selectPayMethod(this,'paynet')">
+              <div class="bk4-method-check"></div>
+              <div class="bk4-method-logo paynet">PN</div>
+              <div class="bk4-method-nm">Paynet</div>
+              <div class="bk4-method-sub">Барча карталар</div>
+            </div>
+            <div class="bk4-method" onclick="selectPayMethod(this,'uzcard')">
+              <div class="bk4-method-check"></div>
+              <div class="bk4-method-logo uzcard">UZCARD<br>HUMO</div>
+              <div class="bk4-method-nm">Картадан</div>
+              <div class="bk4-method-sub">Uzcard / Humo</div>
+            </div>
+          </div>
+
+          <!-- Agreement -->
+          <div class="bk4-agree" id="bkAgree" onclick="this.classList.toggle('checked');updatePayBtn()">
+            <div class="cb"></div>
+            <div><a href="#">Фойдаланувчи келишуви</a> билан танишиб чиқдим ва унга розиман</div>
+          </div>
+
+        </div>
+
+        <!-- STEP 5: SUCCESS -->
+        <div id="bkPanel5" style="display:none">
+          <div class="bk-success">
+            <div class="bk-success-ico">✓</div>
+            <h2>Буюртмангиз қабул қилинди!</h2>
+            <p>Тез орада буюртмангиз операторларимиз томонидан кўриб чиқилади ва тасдиқланади. Сиз буюртмангиз ҳолатини «Менинг буюртмаларим» бўлимида онлайн кузатиб боришингиз мумкин.</p>
+            <div class="bk-success-id">UM-2026-0162</div>
+            <div class="bk-success-actions">
+              <button class="btn-primary" onclick="goto('home')">Бош саҳифага →</button>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- Sticky summary sidebar -->
+      <aside class="bk-summary" id="bkSummary">
+        <!-- Step 4 variant: just total + payment method -->
+        <div id="bkSummary4" style="display:none">
+          <div class="bk-summary-h">💳 Тўлов</div>
+          <div style="background:var(--card-2);border:1px solid var(--line);border-radius:12px;padding:18px;text-align:center;margin-bottom:14px;position:relative">
+            <div style="position:absolute;left:0;top:0;bottom:0;width:4px;background:linear-gradient(180deg,var(--gold),#e0b748);border-radius:12px 0 0 12px"></div>
+            <div style="font-size:11px;color:var(--gold);text-transform:uppercase;font-weight:700;letter-spacing:.5px;margin-bottom:8px">Жами тўлов</div>
+            <div style="font-family:'JetBrains Mono',monospace;font-size:26px;font-weight:700;color:#fff;letter-spacing:.3px">46 800 000<small style="font-family:'Inter',sans-serif;font-size:12px;color:var(--muted);font-weight:500;margin-left:5px">сум</small></div>
+          </div>
+          <div style="background:var(--card-2);border:1px solid var(--line);border-radius:12px;padding:14px 16px">
+            <div style="font-size:11px;color:var(--muted);text-transform:uppercase;font-weight:600;letter-spacing:.3px;margin-bottom:6px">Тўлов усули</div>
+            <div id="bkSumPayMethod" style="font-size:14px;font-weight:600;color:var(--muted);display:flex;align-items:center;gap:8px">
+              <span style="font-style:italic">Танланмаган</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Default sidebar for steps 1-3 -->
+        <div id="bkSummaryDefault">
+        <div class="bk-summary-h">📦 Сизнинг буюртмангиз</div>
+        <div class="bk-summary-img" style="background-image:url('https://images.pexels.com/photos/16012748/pexels-photo-16012748.jpeg?auto=compress&cs=tinysrgb&w=400')"></div>
+        <div style="font-size:15px;font-weight:700;color:#fff;margin-bottom:4px">Премиум 3 шаҳар</div>
+        <div style="font-size:12.5px;color:var(--muted);margin-bottom:14px;font-family:'JetBrains Mono',monospace">Ramaz Travel · 12 кун</div>
+
+        <div class="bk-summary-row">
+          <span class="l">Учиш</span>
+          <span class="v" style="display:flex;flex-direction:column;align-items:flex-end;gap:2px">10.10.2026<small style="color:var(--green);font-size:10.5px;font-weight:700;text-transform:uppercase;letter-spacing:.3px;font-family:'Inter',sans-serif">Qatar Airways</small></span>
+        </div>
+        <div class="bk-summary-row">
+          <span class="l">Қайтиш</span>
+          <span class="v" style="display:flex;flex-direction:column;align-items:flex-end;gap:2px">21.10.2026<small style="color:var(--green);font-size:10.5px;font-weight:700;text-transform:uppercase;letter-spacing:.3px;font-family:'Inter',sans-serif">Qatar Airways</small></span>
+        </div>
+        <div class="bk-summary-row">
+          <span class="l">Мадина</span>
+          <span class="v" style="display:flex;flex-direction:column;align-items:flex-end;gap:2px">Movenpick<small style="color:var(--muted);font-size:11px;font-weight:500;font-family:'JetBrains Mono',monospace">4 кеча</small></span>
+        </div>
+        <div class="bk-summary-row">
+          <span class="l">Макка</span>
+          <span class="v" style="display:flex;flex-direction:column;align-items:flex-end;gap:2px">Hilton Suites<small style="color:var(--muted);font-size:11px;font-weight:500;font-family:'JetBrains Mono',monospace">7 кеча</small></span>
+        </div>
+
+        <div class="bk-summary-total">
+          <div class="l">Жами дан</div>
+          <div class="v">17,2<small>млн сум</small></div>
+        </div>
+        </div><!-- /bkSummaryDefault -->
+      </aside>
+    </div>
+
+    <div class="bk-actions-wrap" id="bkActions">
+      <button class="bk-back-btn" onclick="bkPrev()" id="bkBackBtn" style="display:none">← Орқага</button>
+      <button class="bk-next-btn" onclick="bkNext()" id="bkNextBtn" disabled>Учиш кунларини танлаш →</button>
+      <button class="bk-next-btn" onclick="bkPay()" id="bkPayBtn" disabled style="display:none">Тўлаш →</button>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════ ORDERS PAGE ═══════════ -->
+<section class="page" id="page-orders">
+  <div class="container cab-page">
+    <div class="cab-h">
+      <div class="cab-h-left">
+        <h1>Менинг буюртмаларим</h1>
+        <p>Сизнинг сафарларингиз ва уларнинг ҳолати</p>
+      </div>
+    </div>
+
+    <div class="cab-tabs">
+      <div class="cab-tab active" onclick="setCabTab(this)">Барчаси <span class="cnt">3</span></div>
+      <div class="cab-tab" onclick="setCabTab(this)">Янги <span class="cnt">1</span></div>
+      <div class="cab-tab" onclick="setCabTab(this)">Тасдиқланди <span class="cnt">1</span></div>
+      <div class="cab-tab" onclick="setCabTab(this)">Бекор қилинди <span class="cnt">1</span></div>
+    </div>
+
+    <div class="cab-orders-grid orders-full">
+      <div class="cab-order" onclick="goto('cab-orderDetail')">
+        <div class="cab-order-top">
+          <div class="cab-order-id">#12345</div>
+          <div class="cab-order-status done">Тасдиқланди</div>
+        </div>
+        <div class="cab-order-main">
+          <div class="cab-order-img" style="background-image:url('https://images.pexels.com/photos/12777419/pexels-photo-12777419.jpeg?auto=compress&cs=tinysrgb&w=200')"></div>
+          <div>
+            <div class="cab-order-name">Рамазон люкс 2026</div>
+            <div class="cab-order-pp">Жами зиёратчилар: <b>4 киши</b><br>эркаклар: <b>2</b> · аёллар: <b>2</b></div>
+          </div>
+        </div>
+        <div class="cab-order-flights">
+          <div class="cab-order-flight"><div class="dt">23/02/2026</div><div class="air">UZAIRWAYS</div></div>
+          <span class="cab-order-flights-sep">→</span>
+          <div class="cab-order-flight"><div class="dt">05/03/2026</div><div class="air">UZAIRWAYS</div></div>
+        </div>
+        <div class="cab-order-foot"><span class="l">Умумий сумма</span><span class="v">93,6<small>млн сўм</small></span></div>
+      </div>
+
+      <div class="cab-order" onclick="goto('cab-orderDetail')">
+        <div class="cab-order-top">
+          <div class="cab-order-id">#12346</div>
+          <div class="cab-order-status progress">Жараёнда</div>
+        </div>
+        <div class="cab-order-main">
+          <div class="cab-order-img" style="background-image:url('https://images.pexels.com/photos/16012748/pexels-photo-16012748.jpeg?auto=compress&cs=tinysrgb&w=200')"></div>
+          <div>
+            <div class="cab-order-name">Премиум 3 шаҳар</div>
+            <div class="cab-order-pp">Жами зиёратчилар: <b>2 киши</b><br>эркаклар: <b>1</b> · аёллар: <b>1</b></div>
+          </div>
+        </div>
+        <div class="cab-order-flights">
+          <div class="cab-order-flight"><div class="dt">10/10/2026</div><div class="air">QATAR AIRWAYS</div></div>
+          <span class="cab-order-flights-sep">→</span>
+          <div class="cab-order-flight"><div class="dt">21/10/2026</div><div class="air">QATAR AIRWAYS</div></div>
+        </div>
+        <div class="cab-order-foot"><span class="l">Умумий сумма</span><span class="v">46,8<small>млн сўм</small></span></div>
+      </div>
+
+      <div class="cab-order" onclick="goto('cab-orderDetail')">
+        <div class="cab-order-top">
+          <div class="cab-order-id">#12340</div>
+          <div class="cab-order-status cancel">Бекор қилинди</div>
+        </div>
+        <div class="cab-order-main">
+          <div class="cab-order-img" style="background-image:url('https://images.pexels.com/photos/7408958/pexels-photo-7408958.jpeg?auto=compress&cs=tinysrgb&w=200')"></div>
+          <div>
+            <div class="cab-order-name">Эконом пакет</div>
+            <div class="cab-order-pp">Жами зиёратчилар: <b>2 киши</b><br>эркаклар: <b>1</b> · аёллар: <b>1</b></div>
+          </div>
+        </div>
+        <div class="cab-order-flights">
+          <div class="cab-order-flight"><div class="dt">15/09/2026</div><div class="air">FLY DUBAI</div></div>
+          <span class="cab-order-flights-sep">→</span>
+          <div class="cab-order-flight"><div class="dt">27/09/2026</div><div class="air">FLY DUBAI</div></div>
+        </div>
+        <div class="cab-order-foot"><span class="l">Умумий сумма</span><span class="v">23,6<small>млн сўм</small></span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════ ORDER DETAIL PAGE ═══════════ -->
+<section class="page" id="page-cab-orderDetail">
+  <div class="container cab-page">
+    <div class="od-h-page">
+      <button onclick="goto('orders')">← Орқага</button>
+      <h1>#12345</h1>
+      <div class="status">Жараёнда</div>
+    </div>
+
+    <div class="od-detail-wrap">
+      <div class="od-block-cab expanded" id="odcStatus">
+        <div class="od-block-cab-h" onclick="toggleOdcBlock('odcStatus')">Буюртма ҳолати <span class="toggle">+</span></div>
+        <div class="od-block-cab-body">
+          <div class="od-cab-stages">
+            <div class="od-cab-stage done"><div class="od-cab-stage-circle">✓</div><div><div class="od-cab-stage-nm">Буюртма яратилди</div><div class="od-cab-stage-meta">Раҳимов Сардор · 20.05.2026 · 14:32</div></div></div>
+            <div class="od-cab-stage done"><div class="od-cab-stage-circle">✓</div><div><div class="od-cab-stage-nm">Тўлов амалга оширилди</div><div class="od-cab-stage-meta">Click · 20.05.2026 · 14:35 · 93 600 000 сўм</div></div></div>
+            <div class="od-cab-stage done"><div class="od-cab-stage-circle">✓</div><div><div class="od-cab-stage-nm">Оператор тасдиқлади</div><div class="od-cab-stage-meta">Ramaz Travel · 23.05.2026 · 10:32</div></div></div>
+            <div class="od-cab-stage done"><div class="od-cab-stage-circle">✓</div><div><div class="od-cab-stage-nm">Ваучер яратилди</div><div class="od-cab-stage-meta">Ramaz Travel · 26.05.2026 · 16:48</div></div></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="od-block-cab expanded" id="odcVouchers">
+        <div class="od-block-cab-h" onclick="toggleOdcBlock('odcVouchers')">Ваучерлар <span class="toggle">+</span></div>
+        <div class="od-block-cab-body">
+          <div class="od-vch">
+            <div class="od-vch-it"><div class="file-ico">📄</div><div class="nm">Раҳимов Сардор<small>Ваучер · PDF · 1.2 МБ</small></div><button class="dl">⬇</button></div>
+            <div class="od-vch-it"><div class="file-ico">📄</div><div class="nm">Раҳимова Мадина<small>Ваучер · PDF · 1.2 МБ</small></div><button class="dl">⬇</button></div>
+            <div class="od-vch-it"><div class="file-ico">📄</div><div class="nm">Раҳимов Алиҳон<small>Ваучер · PDF · 1.2 МБ</small></div><button class="dl">⬇</button></div>
+            <div class="od-vch-it"><div class="file-ico">📄</div><div class="nm">Раҳимова Зайнаб<small>Ваучер · PDF · 1.2 МБ</small></div><button class="dl">⬇</button></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="od-block-cab" id="odcDetails">
+        <div class="od-block-cab-h" onclick="toggleOdcBlock('odcDetails')">Буюртма тавфсилоти <span class="toggle">+</span></div>
+        <div class="od-block-cab-body">
+          <div class="od-cab-detail-card">
+            <div class="od-cab-detail-row"><span class="l">Тур</span><span class="v">Рамазон люкс 2026</span></div>
+            <div class="od-cab-detail-row"><span class="l">Жами зиёратчилар</span><span class="v">4 киши</span></div>
+            <div class="od-cab-detail-row"><span class="l">Буюртма ID</span><span class="v">#3284</span></div>
+            <div class="od-cab-detail-row"><span class="l">Тип</span><span class="v">★ ЛЮКС</span></div>
+            <div class="od-cab-detail-row"><span class="l">Учиш</span><span class="v">22.06.2026 · UZAIRWAYS HY 4123</span></div>
+            <div class="od-cab-detail-row"><span class="l">Қайтиш</span><span class="v">02.07.2026 · UZAIRWAYS HY 4123</span></div>
+            <div class="od-cab-detail-row"><span class="l">Давомийлиги</span><span class="v">10 кун · 9 кеча</span></div>
+            <div class="od-cab-detail-row"><span class="l">Тўлов</span><span class="v">Click · **4343</span></div>
+          </div>
+          <div class="od-cab-paid"><div class="l"><span class="ico">✓</span>Жами тўланди</div><div class="v">92,8<small>млн</small></div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════ PROFILE PAGE ═══════════ -->
+<section class="page" id="page-profile">
+  <div class="container cab-page">
+    <div class="cab-h"><div class="cab-h-left"><h1>Профиль</h1><p>Шахсий маълумотлар ва созламалар</p></div></div>
+
+    <div class="prof-md">
+      <!-- Sidebar -->
+      <aside class="prof-side">
+        <a class="active" onclick="selectProfPane('me',this)"><span class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="4"/><path d="M4 21v-1a8 8 0 0 1 16 0v1"/></svg></span>Профиль</a>
+        <a onclick="selectProfPane('about',this)"><span class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><circle cx="12" cy="8" r="1" fill="currentColor"/></svg></span>Лойиҳа ҳақида</a>
+        <a onclick="selectProfPane('lang',this)"><span class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M2 12h20"/><path d="M12 2a15 15 0 0 1 4 10 15 15 0 0 1-4 10 15 15 0 0 1-4-10 15 15 0 0 1 4-10z"/></svg></span>Тил</a>
+        <a onclick="selectProfPane('faq',this)"><span class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/><circle cx="12" cy="17" r="1" fill="currentColor"/></svg></span>Саволлар ва жавоблар</a>
+        <a onclick="selectProfPane('support',this)"><span class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"/></svg></span>Қўллаб-қувватлаш</a>
+      </aside>
+
+      <!-- Content -->
+      <div class="prof-content">
+
+        <!-- Pane: Profile (avatar + name + phone only — like mini-app) -->
+        <div class="prof-pane active" id="prof-pane-me">
+          <div class="prof-me">
+            <div class="av">РС</div>
+            <div class="nm">Раҳимов Сардор</div>
+            <div class="ph">+998 90 123 45 67</div>
+          </div>
+        </div>
+
+        <!-- Pane: About -->
+        <div class="prof-pane" id="prof-pane-about">
+          <div class="about-cab">
+            <div class="about-cab-logo">
+              <div class="text">UMRABOR</div>
+              <div class="sub">Умра пакетлари · Тошкент</div>
+            </div>
+            <p>UMRABOR — Click Mini App платформасида ўзбек зиёратчилари учун умра турларини бронлаш тизими.</p>
+            <p>Тизим лицензияланган тур-операторлар билан ишлайди, нархлар шаффоф, тўловлар Click орқали хавфсиз амалга оширилади.</p>
+            <p>Платформа қайтариш кафолати, 24/7 қўллаб-қувватлаш ва ўзбек тилида биладиган имом-йўлбошчилар билан таъминлайди.</p>
+            <div class="about-cab-stats">
+              <div class="about-cab-stat"><div class="v">12+</div><div class="l">ТУР-ОПЕРАТОРЛАР</div></div>
+              <div class="about-cab-stat"><div class="v">48+</div><div class="l">ТУР ПАКЕТЛАРИ</div></div>
+              <div class="about-cab-stat"><div class="v">2400+</div><div class="l">ЗИЁРАТЧИЛАР</div></div>
+            </div>
+            <div class="about-cab-meta">© 2026 UMRABOR LLC</div>
+            <div class="about-cab-meta">Лицензия № UMR-001 · Тошкент ш.</div>
+            <div class="about-cab-meta">v6.0 · Build 2026.05.20</div>
+          </div>
+        </div>
+
+        <!-- Pane: Language -->
+        <div class="prof-pane" id="prof-pane-lang">
+          <p style="color:var(--muted);font-size:14px;margin:0 0 16px">Иловани қайси тилда кўришни хоҳлайсиз?</p>
+          <div class="lang-cab">
+            <div class="lang-cab-row selected" onclick="selectLangCab(this)">
+              <div class="lang-cab-flag uz"></div>
+              <div class="lang-cab-info"><div class="lang-cab-nm">Ўзбекча</div><div class="lang-cab-native">O'zbek · Кирилл</div></div>
+              <div class="lang-cab-check"></div>
+            </div>
+            <div class="lang-cab-row" onclick="selectLangCab(this)">
+              <div class="lang-cab-flag uz"></div>
+              <div class="lang-cab-info"><div class="lang-cab-nm">O'zbekcha</div><div class="lang-cab-native">O'zbek · Lotin</div></div>
+              <div class="lang-cab-check"></div>
+            </div>
+            <div class="lang-cab-row" onclick="selectLangCab(this)">
+              <div class="lang-cab-flag ru"></div>
+              <div class="lang-cab-info"><div class="lang-cab-nm">Русский</div><div class="lang-cab-native">Russian</div></div>
+              <div class="lang-cab-check"></div>
+            </div>
+            <div class="lang-cab-row" onclick="selectLangCab(this)">
+              <div class="lang-cab-flag en"></div>
+              <div class="lang-cab-info"><div class="lang-cab-nm">English</div><div class="lang-cab-native">English</div></div>
+              <div class="lang-cab-check"></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Pane: FAQ -->
+        <div class="prof-pane" id="prof-pane-faq">
+          <p style="color:var(--muted);font-size:14px;margin:0 0 16px">Энг кўп бериладиган саволлар.</p>
+          <div class="faq-cab">
+            <div class="faq-cab-item" onclick="toggleFaqCab(this)"><div class="faq-cab-q"><div class="num">1</div><div class="faq-cab-q-text">UMRABOR қандай ишлайди?</div><div class="faq-cab-q-toggle">+</div></div><div class="faq-cab-a">UMRABOR — Click Mini App платформасида ишлайдиган умра турлари бронлаш тизими. Сиз каталогдан пакет танлайсиз, зиёратчилар маълумотини киритасиз, мос вылет ва жойлашувни белгилайсиз, Click орқали тўлайсиз. <strong>Барча тур-операторлар лицензияланган.</strong></div></div>
+            <div class="faq-cab-item" onclick="toggleFaqCab(this)"><div class="faq-cab-q"><div class="num">2</div><div class="faq-cab-q-text">Маҳрам нима ва нима учун керак?</div><div class="faq-cab-q-toggle">+</div></div><div class="faq-cab-a">Маҳрам — Ислом қонунига кўра аёл сафар қилиши учун ёнида бўлиши шарт бўлган эркак қариндош (эри, отаси, акаси, ўғли ва ҳ.к.). <strong>Ёлғиз аёлга махсус жойлашув ёки бошқа аёллар билан хона</strong> танланади.</div></div>
+            <div class="faq-cab-item" onclick="toggleFaqCab(this)"><div class="faq-cab-q"><div class="num">3</div><div class="faq-cab-q-text">Загранпасортим йўқ — нима қилишим керак?</div><div class="faq-cab-q-toggle">+</div></div><div class="faq-cab-a">Агар сафарга <strong>15 кундан кўпроқ вақт қолган</strong> бўлса, биз сизга загранпасорт расмийлаштиришда ёрдам берамиз. Зиёратчи қўшиш формасида «Загранпасортим йўқ» тугмасини босинг ва ID-паспорт маълумотини киритинг.</div></div>
+            <div class="faq-cab-item" onclick="toggleFaqCab(this)"><div class="faq-cab-q"><div class="num">4</div><div class="faq-cab-q-text">Тўлов қандай амалга оширилади?</div><div class="faq-cab-q-toggle">+</div></div><div class="faq-cab-a">Барча тўловлар <strong>Click Mini App</strong> орқали хавфсиз амалга оширилади. Чек ва буюртма IDси Click дан келади.</div></div>
+            <div class="faq-cab-item" onclick="toggleFaqCab(this)"><div class="faq-cab-q"><div class="num">5</div><div class="faq-cab-q-text">Ваучер қачон тайёр бўлади?</div><div class="faq-cab-q-toggle">+</div></div><div class="faq-cab-a">Тўловдан сўнг буюртма оператор томонидан кўриб чиқилади (1-3 кун). Тасдиқлангандан кейин <strong>ҳар бир зиёратчи учун алоҳида ваучер</strong> PDF форматида яратилади.</div></div>
+            <div class="faq-cab-item" onclick="toggleFaqCab(this)"><div class="faq-cab-q"><div class="num">6</div><div class="faq-cab-q-text">Хоналарни қандай танлаш мумкин?</div><div class="faq-cab-q-toggle">+</div></div><div class="faq-cab-a">Зиёратчилар маълумотини киритгандан кейин тизим сизга <strong>мос келадиган жойлашув вариантларини</strong> кўрсатади: оилавий (DBL FM), жинс бўйича алоҳида ёки бегоналар билан (QUAD).</div></div>
+            <div class="faq-cab-item" onclick="toggleFaqCab(this)"><div class="faq-cab-q"><div class="num">7</div><div class="faq-cab-q-text">Виза муаммоси бўлса нима қилиш керак?</div><div class="faq-cab-q-toggle">+</div></div><div class="faq-cab-a">Виза муаммоси юзага келса, оператор сиз билан Telegram ёки телефон орқали боғланади. <strong>Қўллаб-қувватлаш билан боғланинг</strong> — биз ёрдам берамиз.</div></div>
+          </div>
+        </div>
+
+        <!-- Pane: Support -->
+        <div class="prof-pane" id="prof-pane-support">
+          <div class="chat-cab">
+            <div class="chat-cab-head">
+              <div class="chat-cab-av">UM</div>
+              <div>
+                <div class="chat-cab-h-nm">UMRABOR қўллаб-қувватлаш</div>
+                <div class="chat-cab-h-st"><span class="dot"></span>Онлайн · одатда 1-2 дақиқа</div>
+              </div>
+            </div>
+            <div class="chat-cab-body" id="chatCabBody">
+              <div class="chat-cab-day">Бугун</div>
+              <div class="chat-cab-msg op">
+                <div class="chat-cab-msg-av">UM</div>
+                <div class="chat-cab-bubble">Ассалому алайкум, Сардор! 👋 UMRABOR қўллаб-қувватлаш билан боғлангансиз. Сизга қандай ёрдам бера оламиз?<div class="chat-cab-time">09:24</div></div>
+              </div>
+              <div class="chat-cab-msg op">
+                <div class="chat-cab-msg-av">UM</div>
+                <div class="chat-cab-bubble">Қуйидаги мавзулардан бирини танлашингиз мумкин:
+                  <div class="chat-cab-chips">
+                    <button class="chat-cab-chip" onclick="sendChatCab('Буюртма ҳолати')">📦 Буюртма ҳолати</button>
+                    <button class="chat-cab-chip" onclick="sendChatCab('Виза саволи')">🛂 Виза саволи</button>
+                    <button class="chat-cab-chip" onclick="sendChatCab('Тўлов муаммоси')">💳 Тўлов муаммоси</button>
+                  </div>
+                  <div class="chat-cab-time">09:24</div>
+                </div>
+              </div>
+            </div>
+            <div class="chat-cab-input-row">
+              <input class="chat-cab-input" type="text" id="chatCabInput" placeholder="Хабар ёзинг..." onkeydown="if(event.key==='Enter')sendChatCabInput()">
+              <button class="chat-cab-send" onclick="sendChatCabInput()">➤</button>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+</section>
+
+
+
+
+
+<!-- ═══════════ PARTNERS LANDING ═══════════ -->
+<section class="page" id="page-partners">
+  <div class="container">
+    <section class="part-hero">
+      <div class="part-hero-eyebrow">ТУР-ОПЕРАТОРЛАР УЧУН</div>
+      <h1>Узбекистон зиёратчиларининг<br><span class="gold">энг катта базаси</span><br>сизнинг хизматингизда</h1>
+      <p>UMRABOR — Click Mini App платформаси. Бизга қўшилинг ва ўз умра турларингизни 2400+ зиёратчиларга тақдим этинг.</p>
+      <div class="part-hero-cta">
+        <button class="btn-gold" onclick="openModal('partner-apply')">Ҳамкор бўлиш</button>
+        <button class="btn-ghost" onclick="alert('Партнёр кабинет: ../umrabor_admin_v5.html')">Кабинетга кириш →</button>
+      </div>
+    </section>
+
+    <section class="section" style="padding-top:0">
+      <div class="section-h">
+        <div class="section-h-left">
+          <h2>Биз нима таклиф қиламиз</h2>
+        </div>
+      </div>
+      <div class="part-features">
+        <div class="part-feature">
+          <div class="num">2400+</div>
+          <div class="nm">Актив фойдаланувчилар</div>
+          <div class="desc">Click Mini App'дан ҳар куни юзлаб юзеры пакетларни кўради</div>
+        </div>
+        <div class="part-feature">
+          <div class="num">3-5%</div>
+          <div class="nm">Платформа комиссияси</div>
+          <div class="desc">Бошқа маркетплейсларга нисбатан энг паст комиссия</div>
+        </div>
+        <div class="part-feature">
+          <div class="num">T+1</div>
+          <div class="nm">Тўлов муддати</div>
+          <div class="desc">Сафар бошлангандан кейинги куни ҳисобингизга</div>
+        </div>
+        <div class="part-feature">
+          <div class="num">24/7</div>
+          <div class="nm">Қўллаб-қувватлаш</div>
+          <div class="desc">Интеграция, маркетинг ва мижоз муаммоларида ёрдам</div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" style="padding-top:0">
+      <div class="section-h">
+        <div class="section-h-left">
+          <h2>4 қадамда бошланг</h2>
+          <div class="sub">Ҳужжатлардан биринчи сотувгача</div>
+        </div>
+      </div>
+      <div class="part-steps">
+        <div class="part-step">
+          <div class="part-step-num">1</div>
+          <h4>Ариза қолдиринг</h4>
+          <p>«Ҳамкор бўлиш» тугмаси — компания маълумоти ва лицензияни юкланг</p>
+        </div>
+        <div class="part-step">
+          <div class="part-step-num">2</div>
+          <h4>Платформа тасдиқласин</h4>
+          <p>UMRABOR жамоаси ҳужжатларингизни кўриб чиқади (1-3 иш куни)</p>
+        </div>
+        <div class="part-step">
+          <div class="part-step-num">3</div>
+          <h4>Кабинетга кириш</h4>
+          <p>Пакетлар, инвентарь, нархлар киритинг. Модерациядан кейин публикация</p>
+        </div>
+        <div class="part-step">
+          <div class="part-step-num">4</div>
+          <h4>Биринчи сотув</h4>
+          <p>Click Mini App'да юзер пакетингизни сотиб олади — заявка келади</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" style="padding-top:0">
+      <div class="part-cta-final">
+        <h2>Бугуноқ бошлайлик</h2>
+        <p>Ҳамкор бўлинг ва биринчи мижозларингизга 7 кун ичида етишинг</p>
+        <div class="actions">
+          <button class="btn-gold" onclick="openModal('partner-apply')">Ариза юбориш</button>
+          <button class="btn-ghost" onclick="alert('Партнёр кабинет: ../umrabor_admin_v5.html')">Демо кўриш</button>
+        </div>
+      </div>
+    </section>
+  </div>
+</section>
+
+<!-- ═══════════ FOOTER ═══════════ -->
+<footer class="footer">
+  <div class="container">
+    <div class="footer-grid">
+      <div class="footer-brand">
+        <div class="logo">
+          <div class="logo-mark">U</div>
+          <div class="logo-text">UMRABOR</div>
+        </div>
+        <p>Умра турларини бронлаш платформаси. Лицензияланган тур-операторлар, Click орқали хавфсиз тўлов.</p>
+      </div>
+      <div class="footer-col">
+        <h5>Платформа</h5>
+        <a onclick="goto('home')">Бош саҳифа</a>
+        <a onclick="goto('catalog')">Каталог</a>
+        <a onclick="goto('partners')">Тур-операторларга</a>
+        <a>Биз ҳақимизда</a>
+      </div>
+      <div class="footer-col">
+        <h5>Ёрдам</h5>
+        <a>Кўп бериладиган саволлар</a>
+        <a>Қўллаб-қувватлаш</a>
+        <a>Қайтариш сиёсати</a>
+        <a>Контактлар</a>
+      </div>
+      <div class="footer-col">
+        <h5>Юридик</h5>
+        <a>Фойдаланувчи келишуви</a>
+        <a>Махфийлик сиёсати</a>
+        <a>Лицензия №UMR-001</a>
+        <a>info@umrabor.uz</a>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <div class="copy">© 2026 UMRABOR LLC · Тошкент, Узбекистон</div>
+      <div class="badges">
+        <span class="badge">CLICK MINI APP</span>
+        <span class="badge">LICENSED</span>
+        <span class="badge">v1.0</span>
+      </div>
+    </div>
+  </div>
+</footer>
+
+<!-- ═══════════ LOGIN MODAL ═══════════ -->
+<div class="modal" id="modal-login">
+  <div class="modal-card">
+    <button class="modal-close" onclick="closeModal('login')">×</button>
+    <div class="modal-step-1">
+      <div class="modal-h">
+        <div class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="2" width="14" height="20" rx="3"/><line x1="12" y1="18" x2="12.01" y2="18"/></svg></div>
+        <h3>Кириш</h3>
+        <p>Телефон рақамингизни киритинг — SMS-код юборамиз</p>
+      </div>
+      <div class="modal-field">
+        <label>Телефон рақами</label>
+        <input type="tel" placeholder="+998 90 123 45 67" id="loginPhone">
+      </div>
+      <button class="modal-cta" onclick="loginStep2()">SMS-код юбориш</button>
+      <div class="modal-link">Аккаунтингиз йўқми? <a onclick="closeModal('login');openModal('register')">Рўйхатдан ўтиш</a></div>
+    </div>
+    <div class="modal-step-2">
+      <div class="modal-h">
+        <div class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg></div>
+        <h3>SMS-код киритинг</h3>
+        <p>Биз код юбордик рақамга <strong id="loginPhoneShow"></strong></p>
+      </div>
+      <div class="modal-field">
+        <label>4-ракамли код</label>
+        <input type="text" class="mono" placeholder="0000" maxlength="4" id="loginCode">
+      </div>
+      <button class="modal-cta" onclick="loginFinish()">Тасдиқлаш</button>
+      <div class="modal-resend">Кодни олмадингизми? <a onclick="alert('Қайтадан юборилди')">Қайта юбориш</a></div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════ REGISTER MODAL ═══════════ -->
+<div class="modal" id="modal-register">
+  <div class="modal-card">
+    <button class="modal-close" onclick="closeModal('register')">×</button>
+    <div class="modal-h">
+      <div class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg></div>
+      <h3>Рўйхатдан ўтиш</h3>
+      <p>Бир неча секунд — ва сиз UMRABOR'да</p>
+    </div>
+    <div class="modal-field">
+      <label>Исм Фамилия</label>
+      <input type="text" placeholder="Раҳимов Сардор">
+    </div>
+    <div class="modal-field">
+      <label>Телефон рақами</label>
+      <input type="tel" placeholder="+998 90 123 45 67">
+    </div>
+    <button class="modal-cta" onclick="closeModal('register');openModal('login');document.querySelector('#modal-login').classList.add('step2');document.getElementById('loginPhoneShow').textContent='+998 90 123 45 67'">SMS-код юбориш</button>
+    <div class="modal-link">Аккаунтингиз борми? <a onclick="closeModal('register');openModal('login')">Кириш</a></div>
+  </div>
+</div>
+
+<!-- ═══════════ PARTNER APPLY MODAL ═══════════ -->
+<div class="modal" id="modal-partner-apply">
+  <div class="modal-card">
+    <button class="modal-close" onclick="closeModal('partner-apply')">×</button>
+    <div class="modal-h">
+      <div class="ico" style="background:var(--gold-soft);color:var(--gold)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="6" width="18" height="15" rx="2"/><path d="M3 10h18M9 21V13M15 21V13"/></svg></div>
+      <h3>Ҳамкор бўлиш</h3>
+      <p>UMRABOR командаси сиз билан 1-3 кун ичида боғланади</p>
+    </div>
+    <div class="modal-field">
+      <label>Компания номи</label>
+      <input type="text" placeholder="Ramaz Travel LLC">
+    </div>
+    <div class="modal-field">
+      <label>Алоқа учун телефон</label>
+      <input type="tel" placeholder="+998 90 123 45 67">
+    </div>
+    <div class="modal-field">
+      <label>Email</label>
+      <input type="email" placeholder="info@example.uz">
+    </div>
+    <button class="modal-cta" onclick="alert('Аризангиз қабул қилинди! Биз сиз билан тез орада боғланамиз.');closeModal('partner-apply')" style="background:var(--gold);color:var(--bg)">Ариза юбориш</button>
+  </div>
+</div>
+
+<!-- ═══════════ ADD PILGRIM MODAL ═══════════ -->
+<div class="modal" id="modal-addPilgrim">
+  <div class="modal-card" style="max-width:620px">
+    <button class="modal-close" onclick="closeModal('addPilgrim')">×</button>
+    <div class="modal-h" style="margin-bottom:18px">
+      <h3 style="text-align:left;font-size:18px">Зиёратчи қўшиш</h3>
+    </div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:10px">
+      <div>
+        <label style="display:block;font-size:10.5px;color:var(--muted);font-weight:600;letter-spacing:.2px;text-transform:uppercase;margin-bottom:4px">Исм</label>
+        <input type="text" placeholder="Сардор" id="apName" style="width:100%;padding:10px 12px;background:var(--card-2);border:1.5px solid var(--line);border-radius:9px;color:#fff;font-family:inherit;font-size:13px;font-weight:600;outline:none">
+      </div>
+      <div>
+        <label style="display:block;font-size:10.5px;color:var(--muted);font-weight:600;letter-spacing:.2px;text-transform:uppercase;margin-bottom:4px">Фамилия</label>
+        <input type="text" placeholder="Раҳимов" id="apSurname" style="width:100%;padding:10px 12px;background:var(--card-2);border:1.5px solid var(--line);border-radius:9px;color:#fff;font-family:inherit;font-size:13px;font-weight:600;outline:none">
+      </div>
+    </div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:14px">
+      <div>
+        <label style="display:block;font-size:11.5px;color:var(--muted);font-weight:600;letter-spacing:.2px;text-transform:uppercase;margin-bottom:6px">Туғилган сана</label>
+        <input type="date" id="apBirth" style="width:100%;padding:13px 16px;background:var(--card-2);border:1.5px solid var(--line);border-radius:11px;color:#fff;font-family:inherit;font-size:14.5px;font-weight:600;outline:none;color-scheme:dark">
+      </div>
+      <div>
+        <label style="display:block;font-size:11.5px;color:var(--muted);font-weight:600;letter-spacing:.2px;text-transform:uppercase;margin-bottom:6px">Жинс</label>
+        <select id="apGender" style="width:100%;padding:13px 16px;background:var(--card-2);border:1.5px solid var(--line);border-radius:11px;color:#fff;font-family:inherit;font-size:14.5px;font-weight:600;outline:none;color-scheme:dark">
+          <option value="m">👨 Эркак</option>
+          <option value="f">👩 Аёл</option>
+        </select>
+      </div>
+    </div>
+
+    <!-- No-zagran toggle -->
+    <div class="ap-toggle" onclick="toggleNoZagran()">
+      <div>
+        <div class="ap-toggle-nm">Загранпасортим йўқ</div>
+        <div class="ap-toggle-sub">ID-паспорт билан расмийлаштиришда ёрдам берамиз</div>
+      </div>
+      <div class="ap-sw" id="apNoZagranSw"></div>
+    </div>
+
+    <!-- Zagran fields (default) -->
+    <div id="apZagranFields">
+      <div style="display:grid;grid-template-columns:1.4fr 1fr;gap:12px;margin-bottom:14px">
+        <div>
+          <label style="display:block;font-size:11.5px;color:var(--muted);font-weight:600;letter-spacing:.2px;text-transform:uppercase;margin-bottom:6px">🌐 Загранпасорт серия / рақам</label>
+          <input type="text" placeholder="AA 1234567" id="apPass" style="width:100%;padding:13px 16px;background:var(--card-2);border:1.5px solid var(--line);border-radius:11px;color:#fff;font-family:'JetBrains Mono',monospace;letter-spacing:1px;font-size:14.5px;font-weight:600;outline:none">
+        </div>
+        <div>
+          <label style="display:block;font-size:11.5px;color:var(--muted);font-weight:600;letter-spacing:.2px;text-transform:uppercase;margin-bottom:6px">Амал қилиш муддати</label>
+          <input type="date" id="apExp" style="width:100%;padding:13px 16px;background:var(--card-2);border:1.5px solid var(--line);border-radius:11px;color:#fff;font-family:inherit;font-size:14.5px;font-weight:600;outline:none;color-scheme:dark">
+        </div>
+      </div>
+    </div>
+
+    <!-- ID-pass fields (shown when toggle ON) -->
+    <div id="apIdFields" style="display:none">
+      <div class="ap-info">
+        <span class="ico">💡</span>
+        <div><strong>Биз сизга ёрдам берамиз.</strong> 15 кун ичида загранпасорт расмийлаштиришда ёрдам берамиз. Ҳозир ID-паспорт маълумотларингизни киритинг.</div>
+      </div>
+      <div style="display:grid;grid-template-columns:1.4fr 1fr;gap:12px;margin-bottom:14px">
+        <div>
+          <label style="display:block;font-size:11.5px;color:var(--muted);font-weight:600;letter-spacing:.2px;text-transform:uppercase;margin-bottom:6px">🆔 ID-Паспорт серия / рақам</label>
+          <input type="text" placeholder="AA 9988776" id="apIdPass" style="width:100%;padding:13px 16px;background:var(--card-2);border:1.5px solid var(--line);border-radius:11px;color:#fff;font-family:'JetBrains Mono',monospace;letter-spacing:1px;font-size:14.5px;font-weight:600;outline:none">
+        </div>
+        <div>
+          <label style="display:block;font-size:11.5px;color:var(--muted);font-weight:600;letter-spacing:.2px;text-transform:uppercase;margin-bottom:6px">Амал қилиш муддати</label>
+          <input type="date" id="apIdExp" style="width:100%;padding:13px 16px;background:var(--card-2);border:1.5px solid var(--line);border-radius:11px;color:#fff;font-family:inherit;font-size:14.5px;font-weight:600;outline:none;color-scheme:dark">
+        </div>
+      </div>
+    </div>
+    <div id="apMahramBlock" style="display:none;background:var(--card-2);border:1px solid var(--line);border-radius:11px;padding:14px;margin-bottom:14px">
+      <div style="font-size:13px;font-weight:600;color:#fff;margin-bottom:10px">Маҳрам алоқаси <span style="font-size:11px;color:var(--muted);font-weight:500">(агар бор бўлса)</span></div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px">
+        <div>
+          <label style="display:block;font-size:10.5px;color:var(--muted);font-weight:600;letter-spacing:.2px;text-transform:uppercase;margin-bottom:5px">Кимга нисбатан?</label>
+          <select id="apMahramTo" style="width:100%;padding:11px 14px;background:var(--card);border:1.5px solid var(--line);border-radius:10px;color:#fff;font-family:inherit;font-size:13.5px;outline:none;color-scheme:dark">
+            <option value="">Танлаш...</option>
+          </select>
+        </div>
+        <div>
+          <label style="display:block;font-size:10.5px;color:var(--muted);font-weight:600;letter-spacing:.2px;text-transform:uppercase;margin-bottom:5px">Алоқа</label>
+          <select id="apMahramRel" style="width:100%;padding:11px 14px;background:var(--card);border:1.5px solid var(--line);border-radius:10px;color:#fff;font-family:inherit;font-size:13.5px;outline:none;color-scheme:dark">
+            <option value="">Танлаш...</option>
+            <option>Эри</option><option>Аёли</option><option>Отаси</option><option>Онаси</option>
+            <option>Акаси</option><option>Укаси</option><option>Опаси</option><option>Синглиси</option>
+            <option>Ўғли</option><option>Қизи</option>
+          </select>
+        </div>
+      </div>
+    </div>
+    <button class="modal-cta" onclick="submitAddPilgrim()">Қўшиш</button>
+  </div>
+</div>
+
+<!-- ═══════════ VIEWER ═══════════ -->
+<div class="viewer" id="viewer">
+  <button class="viewer-close" onclick="closeViewer()">✕</button>
+  <div class="viewer-counter"><span id="viewerCurrent">1</span> / <span id="viewerTotal">8</span></div>
+  <button class="viewer-prev" onclick="viewerNav(-1)">‹</button>
+  <div class="viewer-stage">
+    <img class="viewer-img" id="viewerImg" src="" alt="">
+    <div class="viewer-video-overlay" id="viewerOverlay">
+      <div class="play">▶</div>
+    </div>
+  </div>
+  <button class="viewer-next" onclick="viewerNav(1)">›</button>
+  <div class="viewer-info">
+    <div class="nm" id="viewerNm"></div>
+    <div class="dt" id="viewerDt"></div>
+  </div>
+</div>
+
+<script>
+// === ROUTING ===
+function goto(page){
+  // Map subsection ids to the actual page + pane to open
+  const profPaneMap = {'cab-about':'about','cab-lang':'lang','cab-faq':'faq','cab-support':'support'};
+  if(profPaneMap[page]){
+    goto('profile');
+    selectProfPaneById(profPaneMap[page]);
+    return;
+  }
+  document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
+  const target = document.getElementById('page-'+page);
+  if(!target) return;
+  target.classList.add('active');
+  document.querySelectorAll('.nav a').forEach(a=>a.classList.remove('active'));
+  const parent = {'cab-orderDetail':'orders','package':'catalog','booking':'catalog'}[page] || page;
+  const nav = document.getElementById('nav-'+parent);
+  if(nav) nav.classList.add('active');
+  window.scrollTo(0,0);
+}
+function selectProfPane(name, el){
+  document.querySelectorAll('.prof-side a').forEach(a=>a.classList.remove('active'));
+  if(el) el.classList.add('active');
+  else {
+    const sideLinks = document.querySelectorAll('.prof-side a');
+    const order = ['me','about','lang','faq','support'];
+    const i = order.indexOf(name);
+    if(i>=0 && sideLinks[i]) sideLinks[i].classList.add('active');
+  }
+  document.querySelectorAll('.prof-pane').forEach(p=>p.classList.remove('active'));
+  const pane = document.getElementById('prof-pane-'+name);
+  if(pane) pane.classList.add('active');
+}
+function selectProfPaneById(name){ selectProfPane(name, null); }
+
+// === MODALS ===
+function openModal(id){
+  document.getElementById('modal-'+id).classList.add('active');
+  document.body.style.overflow='hidden';
+}
+function closeModal(id){
+  document.getElementById('modal-'+id).classList.remove('active');
+  document.getElementById('modal-'+id).classList.remove('step2');
+  document.body.style.overflow='';
+}
+function loginStep2(){
+  const phone = document.getElementById('loginPhone').value || '+998 90 123 45 67';
+  document.getElementById('loginPhoneShow').textContent = phone;
+  document.getElementById('modal-login').classList.add('step2');
+}
+function loginFinish(){
+  closeModal('login');
+  if(window._afterLogin === 'booking'){
+    window._afterLogin = null;
+    goto('booking');
+    bkSetStep(1);
+  } else {
+    showToast('Хуш келибсиз! Сиз тизимга кирдингиз ✓');
+  }
+}
+function showToast(msg){
+  var t = document.createElement('div');
+  t.style.cssText = 'position:fixed;bottom:30px;left:50%;transform:translateX(-50%);background:#1FAF6A;color:#fff;padding:14px 24px;border-radius:12px;font-weight:600;font-size:14px;z-index:500;box-shadow:0 10px 30px rgba(31,175,106,.35)';
+  t.textContent = msg;
+  document.body.appendChild(t);
+  setTimeout(function(){t.remove()}, 2500);
+}
+function startBooking(){
+  window._afterLogin = 'booking';
+  openModal('login');
+}
+let bkCurrentStep = 1;
+const bkNextLabels = {1:'Учиш кунларини танлаш →',2:'Жойлашув танлаш →',3:'Тўловга ўтиш →'};
+function bkSetStep(step){
+  bkCurrentStep = step;
+  for(let i=1;i<=5;i++){
+    var p = document.getElementById('bkPanel'+i);
+    if(p) p.style.display = (i === step) ? 'block' : 'none';
+  }
+  for(let i=1;i<=4;i++){
+    var s = document.getElementById('bkStep'+i);
+    if(s){
+      s.classList.remove('active','done');
+      if(i < step) s.classList.add('done');
+      if(i === step) s.classList.add('active');
+    }
+    var l = document.getElementById('bkLine'+i);
+    if(l) l.classList.toggle('done', i < step);
+  }
+  var backBtn = document.getElementById('bkBackBtn');
+  var nextBtn = document.getElementById('bkNextBtn');
+  var actions = document.getElementById('bkActions');
+  if(step >= 5){
+    if(actions) actions.style.display = 'none';
+  } else {
+    if(actions) actions.style.display = 'flex';
+    if(backBtn) backBtn.style.display = step > 1 ? 'block' : 'none';
+    if(nextBtn) nextBtn.textContent = bkNextLabels[step] || 'Кейинги →';
+  }
+  var summary = document.getElementById('bkSummary');
+  if(summary) summary.style.display = step >= 5 ? 'none' : '';
+  // Toggle sidebar variant
+  var sumDefault = document.getElementById('bkSummaryDefault');
+  var sum4 = document.getElementById('bkSummary4');
+  if(step === 4){
+    if(sumDefault) sumDefault.style.display = 'none';
+    if(sum4) sum4.style.display = 'block';
+  } else {
+    if(sumDefault) sumDefault.style.display = '';
+    if(sum4) sum4.style.display = 'none';
+  }
+  // Toggle Next vs Pay button at bottom
+  var payBtn = document.getElementById('bkPayBtn');
+  if(step === 4){
+    if(nextBtn) nextBtn.style.display = 'none';
+    if(payBtn){ payBtn.style.display = 'inline-flex'; updatePayBtn(); }
+  } else {
+    if(nextBtn) nextBtn.style.display = '';
+    if(payBtn) payBtn.style.display = 'none';
+  }
+  // Enable Next button automatically on steps 2,3
+  if(nextBtn){
+    if(step === 1){
+      var filled = document.getElementById('bkPilgrimsList');
+      nextBtn.disabled = !(filled && filled.style.display === 'block');
+    } else {
+      nextBtn.disabled = false;
+    }
+  }
+  window.scrollTo(0,0);
+}
+function bkNext(){
+  if(bkCurrentStep < 5) bkSetStep(bkCurrentStep + 1);
+}
+function bkPrev(){
+  if(bkCurrentStep > 1) bkSetStep(bkCurrentStep - 1);
+}
+let bkPilgrims = [];
+function openAddPilgrimModal(){
+  // Reset form
+  document.getElementById('apName').value = '';
+  document.getElementById('apSurname').value = '';
+  document.getElementById('apBirth').value = '';
+  document.getElementById('apGender').value = 'm';
+  document.getElementById('apPass').value = '';
+  document.getElementById('apExp').value = '';
+  var apIdPassEl = document.getElementById('apIdPass'); if(apIdPassEl) apIdPassEl.value = '';
+  var apIdExpEl = document.getElementById('apIdExp'); if(apIdExpEl) apIdExpEl.value = '';
+  var sw = document.getElementById('apNoZagranSw');
+  if(sw){
+    sw.classList.remove('on');
+    document.getElementById('apZagranFields').style.display = 'block';
+    document.getElementById('apIdFields').style.display = 'none';
+  }
+  // Show/hide mahram block based on existing pilgrims
+  var mb = document.getElementById('apMahramBlock');
+  var sel = document.getElementById('apMahramTo');
+  if(bkPilgrims.length > 0){
+    mb.style.display = 'block';
+    sel.innerHTML = '<option value="">Танлаш...</option>' + bkPilgrims.map(function(p,i){return '<option value="'+i+'">'+p.full+'</option>'}).join('');
+  } else {
+    mb.style.display = 'none';
+  }
+  openModal('addPilgrim');
+}
+function toggleNoZagran(){
+  var sw = document.getElementById('apNoZagranSw');
+  sw.classList.toggle('on');
+  var on = sw.classList.contains('on');
+  document.getElementById('apZagranFields').style.display = on ? 'none' : 'block';
+  document.getElementById('apIdFields').style.display = on ? 'block' : 'none';
+}
+function submitAddPilgrim(){
+  var name = document.getElementById('apName').value.trim();
+  var surname = document.getElementById('apSurname').value.trim();
+  var birth = document.getElementById('apBirth').value;
+  var gender = document.getElementById('apGender').value;
+  var noZagran = document.getElementById('apNoZagranSw').classList.contains('on');
+  var pass = noZagran 
+    ? (document.getElementById('apIdPass').value.trim() || 'ID000000')
+    : (document.getElementById('apPass').value.trim() || 'AA0000000');
+  var passLabel = noZagran ? '🆔 ID-паспорт ' : '🌐 Загранпасорт ';
+  if(!name || !surname){
+    showToast('Исм ва фамилияни киритинг');
+    return;
+  }
+  var birthFmt = '';
+  if(birth){
+    var d = new Date(birth);
+    birthFmt = d.toLocaleDateString('ru-RU');
+  }
+  var mahramRel = document.getElementById('apMahramRel').value;
+  var mahramToIdx = document.getElementById('apMahramTo').value;
+  var mahramText = '';
+  if(mahramRel && mahramToIdx !== ''){
+    mahramText = bkPilgrims[parseInt(mahramToIdx)].full + ' нинг ' + mahramRel.toLowerCase();
+  }
+  bkPilgrims.push({
+    full: surname + ' ' + name,
+    gender: gender,
+    birth: birthFmt,
+    pass: passLabel + pass,
+    isIdPass: noZagran,
+    mahram: mahramText
+  });
+  renderPilgrims();
+  closeModal('addPilgrim');
+  showToast('Зиёратчи қўшилди ✓');
+}
+function renderPilgrims(){
+  var container = document.getElementById('bkPilgrimsRows');
+  var empty = document.getElementById('bkPilgrimsEmpty');
+  var listWrap = document.getElementById('bkPilgrimsList');
+  if(bkPilgrims.length === 0){
+    if(empty) empty.style.display = 'block';
+    if(listWrap) listWrap.style.display = 'none';
+    var btn = document.getElementById('bkNextBtn');
+    if(btn) btn.disabled = true;
+    return;
+  }
+  if(empty) empty.style.display = 'none';
+  if(listWrap) listWrap.style.display = 'block';
+  var btn = document.getElementById('bkNextBtn');
+  if(btn) btn.disabled = false;
+  container.innerHTML = bkPilgrims.map(function(p, idx){
+    var gTag = '<span class="bk-tag '+p.gender+'">'+(p.gender==='m'?'Эркак':'Аёл')+'</span>';
+    var bTag = p.birth ? '<span class="bk-tag year">'+p.birth+'</span>' : '';
+    var passClass = p.isIdPass ? 'idpass' : 'zagran';
+    var pTag = '<span class="bk-tag '+passClass+'">'+p.pass+'</span>';
+    var mTag = p.mahram ? '<div style="font-size:11.5px;color:#E89A3A;margin-top:6px;background:rgba(232,154,58,.1);padding:5px 10px;border-radius:6px;border:1px dashed rgba(232,154,58,.3);display:inline-block">↳ '+p.mahram+'</div>' : '';
+    return '<div class="bk-pilgrim"><div class="bk-pilgrim-info"><div class="bk-pilgrim-nm">'+p.full+'</div><div class="bk-pilgrim-tags">'+gTag+bTag+pTag+'</div>'+mTag+'</div><div class="bk-pilgrim-actions"><button class="bk-pilgrim-act" onclick="removePilgrim('+idx+')">✕</button></div></div>';
+  }).join('');
+}
+function removePilgrim(idx){
+  bkPilgrims.splice(idx, 1);
+  renderPilgrims();
+}
+function bkAddPilgrim(){ openAddPilgrimModal(); }
+function bkSelectDep(el, id){
+  document.querySelectorAll('.bk-dep-card').forEach(function(c){c.classList.remove('selected')});
+  el.classList.add('selected');
+}
+function bkSelectRoom(el, id){
+  document.querySelectorAll('.bk-room').forEach(function(c){c.classList.remove('selected')});
+  el.classList.add('selected');
+}
+let selectedPayMethod = null;
+function selectPayMethod(el, method){
+  document.querySelectorAll('.bk4-method').forEach(function(m){m.classList.remove('selected')});
+  el.classList.add('selected');
+  selectedPayMethod = method;
+  updatePayBtn();
+}
+function updatePayBtn(){
+  var btn = document.getElementById('bkPayBtn');
+  var ag = document.getElementById('bkAgree');
+  if(!btn) return;
+  var canPay = selectedPayMethod && ag && ag.classList.contains('checked');
+  btn.disabled = !canPay;
+  // Update sidebar payment method label
+  var sumPay = document.getElementById('bkSumPayMethod');
+  if(sumPay){
+    var brands = {click:'CLICK',payme:'Payme',paynet:'Paynet',uzcard:'Картадан (Uzcard/Humo)'};
+    var colors = {click:'#FFCC00',payme:'#19A4DD',paynet:'#EA1F3A',uzcard:'#1E40AF'};
+    if(selectedPayMethod){
+      sumPay.innerHTML = '<div style="width:30px;height:30px;border-radius:8px;background:'+colors[selectedPayMethod]+';color:'+(selectedPayMethod==='click'?'#000':'#fff')+';display:flex;align-items:center;justify-content:center;font-weight:800;font-size:10px">'+(selectedPayMethod.toUpperCase().slice(0,3))+'</div><span style="color:#fff;font-style:normal">'+brands[selectedPayMethod]+'</span>';
+    } else {
+      sumPay.innerHTML = '<span style="font-style:italic">Танланмаган</span>';
+    }
+  }
+}
+function bkPay(){
+  var ag = document.getElementById('bkAgree');
+  if(!selectedPayMethod){
+    showToast('Тўлов усулини танланг');
+    return;
+  }
+  if(!ag || !ag.classList.contains('checked')){
+    showToast('Илтимос, келишувга розилик беринг');
+    return;
+  }
+  openPaymentSim(selectedPayMethod);
+}
+function openPaymentSim(method){
+  var existing = document.getElementById('clickPayModal');
+  if(existing) existing.remove();
+  var brands = {
+    click:  {nm:'Click',   color:'#FFCC00', textColor:'#000', logo:'CLICK',     btnText:'Оплатить'},
+    payme:  {nm:'Payme',   color:'#19A4DD', textColor:'#fff', logo:'P',         btnText:'Оплатить'},
+    paynet: {nm:'Paynet',  color:'#EA1F3A', textColor:'#fff', logo:'PN',        btnText:'Оплатить'},
+    uzcard: {nm:'Uzcard/Humo', color:'#1E40AF', textColor:'#fff', logo:'CARD',  btnText:'Оплатить'}
+  };
+  var b = brands[method] || brands.click;
+  var html2 = '<div class="modal active" id="clickPayModal" style="background:rgba(0,0,0,.95);align-items:flex-start;padding-top:40px">'+
+    '<div style="background:#000;max-width:480px;width:100%;border-radius:16px;padding:24px;color:#fff">'+
+      '<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:20px;padding-bottom:16px;border-bottom:1px solid #222">'+
+        '<button onclick="closeClickPay()" style="background:transparent;border:none;color:#fff;font-size:22px;cursor:pointer">←</button>'+
+        '<div style="display:flex;align-items:center;gap:10px"><div style="width:30px;height:30px;border-radius:8px;background:'+b.color+';color:'+b.textColor+';display:flex;align-items:center;justify-content:center;font-weight:800;font-size:11px">'+b.logo+'</div><h3 style="margin:0;font-size:15px;font-weight:700;letter-spacing:.5px">'+b.nm+'</h3></div>'+
+        '<span style="width:30px"></span>'+
+      '</div>'+
+      '<div style="font-size:12px;color:#888;margin-bottom:6px">Получатель</div>'+
+      '<div style="font-size:18px;font-weight:700;margin-bottom:20px">UMRABOR</div>'+
+      '<h4 style="font-size:14px;font-weight:700;margin-bottom:10px;color:#888">Детали:</h4>'+
+      '<div style="margin-bottom:20px">'+
+        '<div style="display:flex;justify-content:space-between;padding:10px 0;border-bottom:1px dashed #222;font-size:14px"><span style="color:#888">Сумма оплаты</span><span style="font-weight:700;font-family:monospace">46 800 000</span></div>'+
+        '<div style="display:flex;justify-content:space-between;padding:10px 0;border-bottom:1px dashed #222;font-size:14px"><span style="color:#888">Номер заказа</span><span style="font-family:monospace;font-size:12px;font-weight:500">6a0db6f9a710428fee</span></div>'+
+        (method==='click'?'<div style="display:flex;justify-content:space-between;padding:10px 0;border-bottom:1px dashed #222;font-size:14px"><span style="color:#888">Кешбэк</span><span style="background:rgba(255,204,0,.15);color:#FFCC00;padding:3px 12px;border-radius:14px;font-weight:700">👑 0.3%</span></div>':'')+
+        '<div style="display:flex;justify-content:space-between;padding:10px 0;font-size:14px"><span style="color:#888">Поставщик</span><span style="font-weight:700">UMRABOR</span></div>'+
+      '</div>'+
+      '<h4 style="font-size:14px;font-weight:700;margin-bottom:12px;color:#888">Карта списания:</h4>'+
+      '<div style="background:#222;border-radius:12px;padding:14px;display:flex;align-items:center;gap:12px;margin-bottom:14px">'+
+        '<div style="width:36px;height:36px;border-radius:50%;background:radial-gradient(circle at 30% 30%,#5BA9F4,#1B4A8E)"></div>'+
+        '<div style="flex:1">'+
+          '<div style="font-family:monospace;font-weight:700;font-size:15px">90 000 000<small style="color:#888;font-size:12px;margin-left:4px">сум</small></div>'+
+          '<div style="font-size:11px;color:#888;margin-top:3px">Раҳимов Сардор</div>'+
+          '<div style="font-family:monospace;font-size:11px;color:'+b.color+';margin-top:3px">↘ * 8698</div>'+
+        '</div>'+
+      '</div>'+
+      '<button onclick="closeClickPay();bkSetStep(5)" style="width:100%;background:'+b.color+';color:'+b.textColor+';border:none;padding:15px;border-radius:8px;font-weight:700;font-size:15px;cursor:pointer">'+b.btnText+' '+method.toUpperCase()+'</button>'+
+    '</div>'+
+  '</div>';
+  document.body.insertAdjacentHTML('beforeend', html2);
+  document.body.style.overflow = 'hidden';
+}
+function openClickPayment(){
+  var existing = document.getElementById('clickPayModal');
+  if(existing) existing.remove();
+  var html2 = '<div class="modal active" id="clickPayModal" style="background:rgba(0,0,0,.95);align-items:flex-start;padding-top:60px"><div style="background:#000;max-width:480px;width:100%;border-radius:16px;padding:24px;color:#fff"><div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:24px;padding-bottom:16px;border-bottom:1px solid #222"><button onclick="closeClickPay()" style="background:transparent;border:none;color:#fff;font-size:22px;cursor:pointer">←</button><h3 style="margin:0;font-size:15px;font-weight:700;letter-spacing:.5px">UMRABOR</h3><span style="width:30px"></span></div><h4 style="font-size:16px;font-weight:700;margin-bottom:10px">Детали:</h4><div style="margin-bottom:24px"><div style="display:flex;justify-content:space-between;padding:10px 0;border-bottom:1px dashed #222;font-size:14px"><span style="color:#888">Сумма оплаты</span><span style="font-weight:700">46 800 000</span></div><div style="display:flex;justify-content:space-between;padding:10px 0;border-bottom:1px dashed #222;font-size:14px"><span style="color:#888">Номер заказа</span><span style="font-family:monospace;font-size:12px;font-weight:500">6a0db6f9a710428fee</span></div><div style="display:flex;justify-content:space-between;padding:10px 0;border-bottom:1px dashed #222;font-size:14px"><span style="color:#888">Кешбэк</span><span style="background:rgba(255,204,0,.15);color:#FFCC00;padding:3px 12px;border-radius:14px;font-weight:700">👑 0.3%</span></div><div style="display:flex;justify-content:space-between;padding:10px 0;font-size:14px"><span style="color:#888">Поставщик</span><span style="font-weight:700">UMRABOR</span></div></div><h4 style="font-size:16px;font-weight:700;margin-bottom:12px">Карта списания:</h4><div style="background:#222;border-radius:12px;padding:14px;display:flex;align-items:center;gap:12px;margin-bottom:14px"><div style="width:36px;height:36px;border-radius:50%;background:radial-gradient(circle at 30% 30%,#5BA9F4,#1B4A8E)"></div><div style="flex:1"><div style="font-family:monospace;font-weight:700;font-size:15px">90 000 000<small style="color:#888;font-size:12px;margin-left:4px">сум</small></div><div style="font-size:11px;color:#888;margin-top:3px">Раҳимов Сардор</div><div style="font-family:monospace;font-size:11px;color:#FFCC00;margin-top:3px">↘ * 8698</div></div></div><button onclick="closeClickPay();bkSetStep(5)" style="width:100%;background:#FFCC00;color:#000;border:none;padding:15px;border-radius:8px;font-weight:700;font-size:15px;cursor:pointer">Оплатить</button></div></div>';
+  document.body.insertAdjacentHTML('beforeend', html2);
+  document.body.style.overflow = 'hidden';
+}
+function closeClickPay(){
+  var m2 = document.getElementById('clickPayModal');
+  if(m2) m2.remove();
+  document.body.style.overflow = '';
+}
+
+// === PACKAGE DATA ===
+const PACKAGES = [
+  {img:'https://images.pexels.com/photos/16012748/pexels-photo-16012748.jpeg?auto=compress&cs=tinysrgb&w=800',tier:'Premium',price:'17,2 М',av:'RT',partner:'Ramaz Travel · Тошкент',name:'Премиум 3 шаҳар',h1:'Movenpick',d1:'150 м',h2:'Hilton Suites',d2:'500 м',date1:'10.10.2026',air1:'Qatar Airways',date2:'21.10.2026',air2:'Qatar Airways',prices:['26,8','23,4','19,5','17,2']},
+  {img:'https://images.pexels.com/photos/12777419/pexels-photo-12777419.jpeg?auto=compress&cs=tinysrgb&w=800',tier:'Lux',price:'19,5 М',av:'RT',partner:'Ramaz Travel · Тошкент',name:'Рамазон Люкс 2026',h1:'Movenpick',d1:'150 м',h2:'Pullman ZamZam',d2:'200 м',date1:'22.06.2026',air1:'Uzbekistan Airways',date2:'02.07.2026',air2:'Uzbekistan Airways',prices:['31,5','26,8','22,3','19,5']},
+  {img:'https://images.pexels.com/photos/7408958/pexels-photo-7408958.jpeg?auto=compress&cs=tinysrgb&w=800',tier:'Eco',price:'11,8 М',av:'RT',partner:'Ramaz Travel · Тошкент',name:'Эконом пакет',h1:'Dar Al-Iman',d1:'600 м',h2:'Ramada',d2:'800 м',date1:'15.09.2026',air1:'Fly Dubai',date2:'27.09.2026',air2:'Fly Dubai',prices:['','16,2','13,5','11,8']},
+  {img:'https://images.pexels.com/photos/13294978/pexels-photo-13294978.jpeg?auto=compress&cs=tinysrgb&w=800',tier:'Standard',price:'14,5 М',av:'SF',partner:'Safar Tours · Самарқанд',name:'Стандарт пакет',h1:'Hayah',d1:'250 м',h2:'Anjum',d2:'400 м',date1:'11.11.2026',air1:'Uzbekistan Airways',date2:'23.11.2026',air2:'Uzbekistan Airways',prices:['','19,9','16,8','14,5']},
+  {img:'https://images.pexels.com/photos/6099936/pexels-photo-6099936.jpeg?auto=compress&cs=tinysrgb&w=800',tier:'Premium+',price:'22,8 М',av:'BR',partner:'Barakah VIP · Тошкент',name:'Премиум Баҳор VIP',h1:'Movenpick',d1:'100 м',h2:'Pullman ZamZam',d2:'150 м',date1:'18.03.2026',air1:'Saudi Arabian Airlines',date2:'01.04.2026',air2:'Saudi Arabian Airlines',prices:['36,4','31,7','26,3','22,8']},
+  {img:'https://images.pexels.com/photos/2675268/pexels-photo-2675268.jpeg?auto=compress&cs=tinysrgb&w=800',tier:'Lux',price:'21,3 М',av:'AL',partner:'Al-Falah Tours · Тошкент',name:'Қурбон ҳайит люкс',h1:'Anwar Al Madinah',d1:'200 м',h2:'Conrad Makkah',d2:'400 м',date1:'05.06.2026',air1:'Qatar Airways',date2:'17.06.2026',air2:'Qatar Airways',prices:['33,8','29,2','24,1','21,3']},
+];
+
+function renderPkgCard(p){
+  const p1 = p.prices[0] ? `<div class="pkg-card-price-tile"><div class="typ">1 КИШИ</div><div class="v">${p.prices[0]}<small>М</small></div></div>` : '';
+  return `<div class="pkg-card" onclick="goto('package')">
+    <div class="pkg-card-img" style="background-image:url('${p.img}')">
+      <span class="tier">${p.tier}</span>
+      <span class="price-tag">дан <b>${p.price}</b></span>
+    </div>
+    <div class="pkg-card-body">
+      <div class="pkg-card-partner"><span class="av">${p.av}</span>${p.partner}</div>
+      <div class="pkg-card-name">${p.name}</div>
+      <div class="pkg-card-cities">
+        <div class="pkg-card-city">
+          <span class="lbl">Мадина</span>
+          <span class="htl">${p.h1} <span class="stars">★★★★★</span></span>
+          <span class="dist">${p.d1}</span>
+        </div>
+        <div class="pkg-card-city">
+          <span class="lbl">Макка</span>
+          <span class="htl">${p.h2} <span class="stars">★★★★★</span></span>
+          <span class="dist">${p.d2}</span>
+        </div>
+      </div>
+      <div class="pkg-card-flights">
+        <div class="pkg-card-flight"><span class="dt">${p.date1}</span><span class="air">${p.air1}</span></div>
+        <span class="pkg-card-flights-sep">→</span>
+        <div class="pkg-card-flight"><span class="dt">${p.date2}</span><span class="air">${p.air2}</span></div>
+      </div>
+      <div class="pkg-card-prices">
+        ${p1}
+        <div class="pkg-card-price-tile"><div class="typ">2 КИШИ</div><div class="v">${p.prices[1]}<small>М</small></div></div>
+        <div class="pkg-card-price-tile"><div class="typ">3 КИШИ</div><div class="v">${p.prices[2]}<small>М</small></div></div>
+        <div class="pkg-card-price-tile"><div class="typ">4 КИШИ</div><div class="v">${p.prices[3]}<small>М</small></div></div>
+      </div>
+    </div>
+  </div>`;
+}
+
+// Render featured (first 3) on home
+document.getElementById('featuredGrid').innerHTML = PACKAGES.slice(0,3).map(renderPkgCard).join('');
+// Render all on catalog
+document.getElementById('catalogGrid').innerHTML = PACKAGES.map(renderPkgCard).join('');
+
+// === CABINET ===
+function setCabTab(el){
+  document.querySelectorAll('.cab-tab').forEach(function(t){t.classList.remove('active')});
+  el.classList.add('active');
+}
+function toggleOdcBlock(id){
+  document.getElementById(id).classList.toggle('expanded');
+}
+function toggleFaqCab(item){
+  item.classList.toggle('open');
+}
+function selectLangCab(el){
+  document.querySelectorAll('.lang-cab-row').forEach(function(r){r.classList.remove('selected')});
+  el.classList.add('selected');
+}
+function sendChatCab(text){
+  var body = document.getElementById('chatCabBody');
+  if(!body) return;
+  var time = new Date().toLocaleTimeString('uz-UZ',{hour:'2-digit',minute:'2-digit'});
+  body.insertAdjacentHTML('beforeend','<div class="chat-cab-msg me"><div class="chat-cab-msg-av">РС</div><div class="chat-cab-bubble">'+text+'<div class="chat-cab-time">'+time+'</div></div></div>');
+  body.scrollTop = body.scrollHeight;
+  setTimeout(function(){
+    var replies = {
+      'Буюртма ҳолати':'Сизнинг охирги буюртмангиз #12346 жараёнда — оператор кўриб чиқмоқда.',
+      'Виза саволи':'Виза учун керакли ҳужжатлар тайёр. Қўшимча савол бўлса, паспорт суратини жўнатишингиз мумкин.',
+      'Тўлов муаммоси':'Тўлов муаммоси бўлса, чекни жўнатинг — биз дарҳол текширамиз.'
+    };
+    var reply = replies[text] || 'Сизнинг саволингиз операторга узатилди. Тез орада жавоб берамиз.';
+    var t2 = new Date().toLocaleTimeString('uz-UZ',{hour:'2-digit',minute:'2-digit'});
+    body.insertAdjacentHTML('beforeend','<div class="chat-cab-msg op"><div class="chat-cab-msg-av">UM</div><div class="chat-cab-bubble">'+reply+'<div class="chat-cab-time">'+t2+'</div></div></div>');
+    body.scrollTop = body.scrollHeight;
+  }, 800);
+}
+function sendChatCabInput(){
+  var inp = document.getElementById('chatCabInput');
+  if(inp.value.trim()){ sendChatCab(inp.value.trim()); inp.value=''; }
+}
+
+// === PACKAGE GALLERY ===
+const PD_IMAGES = [
+  'https://images.pexels.com/photos/16012748/pexels-photo-16012748.jpeg?auto=compress&cs=tinysrgb&w=1200',
+  'https://images.pexels.com/photos/14541478/pexels-photo-14541478.jpeg?auto=compress&cs=tinysrgb&w=1200',
+  'https://images.pexels.com/photos/6580226/pexels-photo-6580226.jpeg?auto=compress&cs=tinysrgb&w=1200',
+  'https://images.pexels.com/photos/2675268/pexels-photo-2675268.jpeg?auto=compress&cs=tinysrgb&w=1200',
+];
+let pdGalleryIdx = 0;
+function pdGalleryNav(dir){
+  pdGalleryIdx = (pdGalleryIdx + dir + PD_IMAGES.length) % PD_IMAGES.length;
+  document.getElementById('pdGalleryMain').style.backgroundImage = `url('${PD_IMAGES[pdGalleryIdx]}')`;
+  document.querySelectorAll('#pdGalleryDots .dot').forEach((d,i)=>d.classList.toggle('active', i===pdGalleryIdx));
+}
+
+// === VIEWER (lightbox) ===
+const VIEWER_VIDEOS = [
+  {img:'https://images.pexels.com/photos/8108061/pexels-photo-8108061.jpeg?auto=compress&cs=tinysrgb&w=1600',nm:'Сардор Тошпулатов · Премиум 3 шаҳар',dt:'2026.01.20'},
+  {img:'https://images.pexels.com/photos/14541478/pexels-photo-14541478.jpeg?auto=compress&cs=tinysrgb&w=1600',nm:'Малика · Рамазон Люкс',dt:'2026.01.18'},
+  {img:'https://images.pexels.com/photos/6099936/pexels-photo-6099936.jpeg?auto=compress&cs=tinysrgb&w=1600',nm:'Жасур ва оила',dt:'2025.12.18'},
+  {img:'https://images.pexels.com/photos/16012748/pexels-photo-16012748.jpeg?auto=compress&cs=tinysrgb&w=1600',nm:'Фарход Тошпулатов',dt:'2026.02.05'},
+  {img:'https://images.pexels.com/photos/12777419/pexels-photo-12777419.jpeg?auto=compress&cs=tinysrgb&w=1600',nm:'Зарина Арустамовна',dt:'2026.02.10'},
+];
+const VIEWER_PHOTOS = [
+  {img:'https://images.pexels.com/photos/8108061/pexels-photo-8108061.jpeg?auto=compress&cs=tinysrgb&w=1600',nm:'Рамазон люкс 2026',dt:'23/02/2026'},
+  {img:'https://images.pexels.com/photos/14541478/pexels-photo-14541478.jpeg?auto=compress&cs=tinysrgb&w=1600',nm:'2026 февраль сафари',dt:'23/02/2026'},
+  {img:'https://images.pexels.com/photos/2403016/pexels-photo-2403016.jpeg?auto=compress&cs=tinysrgb&w=1600',nm:'Премиум 3 шаҳар',dt:'10/10/2026'},
+  {img:'https://images.pexels.com/photos/16012748/pexels-photo-16012748.jpeg?auto=compress&cs=tinysrgb&w=1600',nm:'Эконом пакет',dt:'15/09/2026'},
+  {img:'https://images.pexels.com/photos/6580226/pexels-photo-6580226.jpeg?auto=compress&cs=tinysrgb&w=1600',nm:'Стандарт пакет',dt:'11/11/2026'},
+  {img:'https://images.pexels.com/photos/6099936/pexels-photo-6099936.jpeg?auto=compress&cs=tinysrgb&w=1600',nm:'Премиум Баҳор VIP',dt:'18/03/2026'},
+  {img:'https://images.pexels.com/photos/12777419/pexels-photo-12777419.jpeg?auto=compress&cs=tinysrgb&w=1600',nm:'Рамазон Люкс 2026',dt:'22/06/2026'},
+  {img:'https://images.pexels.com/photos/2675268/pexels-photo-2675268.jpeg?auto=compress&cs=tinysrgb&w=1600',nm:'Қурбон ҳайит люкс',dt:'05/06/2026'},
+];
+let viewerSet = [];
+let viewerIdx = 0;
+let viewerMode = 'photo';
+
+function openViewer(mode, idx){
+  viewerMode = mode;
+  viewerIdx = idx;
+  viewerSet = mode === 'video' ? VIEWER_VIDEOS : VIEWER_PHOTOS;
+  updateViewer();
+  document.getElementById('viewer').classList.add('active');
+  document.body.style.overflow = 'hidden';
+}
+function closeViewer(){
+  document.getElementById('viewer').classList.remove('active');
+  document.body.style.overflow = '';
+}
+function viewerNav(dir){
+  viewerIdx = (viewerIdx + dir + viewerSet.length) % viewerSet.length;
+  updateViewer();
+}
+function updateViewer(){
+  const item = viewerSet[viewerIdx];
+  document.getElementById('viewerImg').src = item.img;
+  document.getElementById('viewerNm').textContent = item.nm;
+  document.getElementById('viewerDt').textContent = item.dt;
+  document.getElementById('viewerCurrent').textContent = viewerIdx + 1;
+  document.getElementById('viewerTotal').textContent = viewerSet.length;
+  document.getElementById('viewerOverlay').classList.toggle('show', viewerMode === 'video');
+}
+// Click outside to close
+document.getElementById('viewer').addEventListener('click', e => {
+  if(e.target.id === 'viewer') closeViewer();
+});
+// Keyboard navigation
+document.addEventListener('keydown', e => {
+  const open = document.getElementById('viewer').classList.contains('active');
+  if(!open) return;
+  if(e.key === 'Escape') closeViewer();
+  if(e.key === 'ArrowLeft') viewerNav(-1);
+  if(e.key === 'ArrowRight') viewerNav(1);
+});
+
+// Close modal on backdrop click
+document.querySelectorAll('.modal').forEach(m=>{
+  m.addEventListener('click',e=>{if(e.target===m)closeModal(m.id.replace('modal-',''))});
+});
+</script>
+</body>
+</html>
