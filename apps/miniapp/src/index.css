@@ -1,0 +1,36 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  html, body {
+    @apply bg-[#272a2f] text-white antialiased;
+    font-family: 'Inter', system-ui, sans-serif;
+    min-height: 100vh;
+    margin: 0;
+  }
+}
+
+@layer components {
+  /* Phone shell (380×790 в шапке Click; auto на mobile-web) */
+  .phone {
+    @apply relative mx-auto flex flex-col overflow-hidden bg-bg text-white;
+    width: 380px;
+    max-width: 100vw;
+    border-radius: 36px;
+    box-shadow: 0 25px 60px rgba(0, 0, 0, 0.45), 0 0 0 8px #0d0d0d, 0 0 0 9px #2a2a2a;
+    height: 790px;
+  }
+  @media (max-width: 420px) {
+    .phone {
+      width: 100vw;
+      height: 100vh;
+      border-radius: 0;
+      box-shadow: none;
+    }
+  }
+  .scr-area {
+    @apply flex-1 overflow-y-auto pb-24;
+    -webkit-overflow-scrolling: touch;
+  }
+}
