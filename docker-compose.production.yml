@@ -1,0 +1,132 @@
+services:
+  postgres:
+    image: postgres:16-alpine
+    container_name: umrabor_pg
+    restart: always
+    environment:
+      POSTGRES_DB: ${POSTGRES_DB:-umrabor}
+      POSTGRES_USER: ${POSTGRES_USER:-umrabor}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+    volumes:
+      - pg_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER:-umrabor}"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    networks:
+      - umrabor
+
+  redis:
+    image: redis:7-alpine
+    container_name: umrabor_redis
+    restart: always
+    volumes:
+      - redis_data:/data
+    networks:
+      - umrabor
+
+  minio:
+    image: minio/minio:latest
+    container_name: umrabor_minio
+    restart: always
+    command: server /data --console-address ":9001"
+    environment:
+      MINIO_ROOT_USER: ${MINIO_ROOT_USER}
+      MINIO_ROOT_PASSWORD: ${MINIO_ROOT_PASSWORD}
+    volumes:
+      - minio_data:/data
+    networks:
+      - umrabor
+
+  api:
+    build:
+      context: ./services/api
+      dockerfile: Dockerfile
+    container_name: umrabor_api
+    restart: always
+    depends_on:
+      postgres:
+        condition: service_healthy
+    env_file:
+      - .env.production
+    ports:
+      - "127.0.0.1:8000:8000"
+    networks:
+      - umrabor
+
+  web:
+    build:
+      context: .
+      dockerfile: infra/docker/Dockerfile.next
+      args:
+        APP_NAME: web
+    container_name: umrabor_web
+    restart: always
+    depends_on:
+      - api
+    environment:
+      NEXT_PUBLIC_API_URL: https://api.umrabor.uz
+      PORT: 3000
+    ports:
+      - "127.0.0.1:3000:3000"
+    networks:
+      - umrabor
+
+  platform:
+    build:
+      context: .
+      dockerfile: infra/docker/Dockerfile.next
+      args:
+        APP_NAME: platform
+    container_name: umrabor_platform
+    restart: always
+    depends_on:
+      - api
+    environment:
+      NEXT_PUBLIC_API_URL: https://api.umrabor.uz
+      PORT: 3001
+    ports:
+      - "127.0.0.1:3001:3001"
+    networks:
+      - umrabor
+
+  partner:
+    build:
+      context: .
+      dockerfile: infra/docker/Dockerfile.next
+      args:
+        APP_NAME: partner
+    container_name: umrabor_partner
+    restart: always
+    depends_on:
+      - api
+    environment:
+      NEXT_PUBLIC_API_URL: https://api.umrabor.uz
+      PORT: 3002
+    ports:
+      - "127.0.0.1:3002:3002"
+    networks:
+      - umrabor
+
+  miniapp:
+    build:
+      context: .
+      dockerfile: infra/docker/Dockerfile.vite
+      args:
+        APP_NAME: miniapp
+        VITE_API_URL: https://api.umrabor.uz
+    container_name: umrabor_miniapp
+    restart: always
+    ports:
+      - "127.0.0.1:3003:80"
+    networks:
+      - umrabor
+
+networks:
+  umrabor:
+
+volumes:
+  pg_data:
+  redis_data:
+  minio_data:

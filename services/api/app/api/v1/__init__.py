@@ -12,6 +12,7 @@ from app.api.v1.endpoints import (
     partners,
     payments,
     pilgrims,
+    vouchers,
 )
 
 api_router = APIRouter()
@@ -24,4 +25,5 @@ api_router.include_router(bookings.router, prefix="/bookings", tags=["bookings"]
 api_router.include_router(payments.router, prefix="/payments", tags=["payments"])
 api_router.include_router(pilgrims.router, prefix="/pilgrims", tags=["pilgrims"])
 api_router.include_router(audit.router, prefix="/audit", tags=["audit"])
+api_router.include_router(vouchers.router, prefix="/vouchers", tags=["vouchers"])
 api_router.include_router(directories.router, prefix="/directories", tags=["directories"])
