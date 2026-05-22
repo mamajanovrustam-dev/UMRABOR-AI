@@ -2724,19 +2724,27 @@ body.in-onb .bnav{display:none}
   }, 2500);
 })();
 
-// ─── Educational hint modals ───
+// ─── Educational hint modals (session-based: shown once per browser session) ───
+// On first load, clear any old localStorage keys from previous logic
+(function migrateHints(){
+  try {
+    ['package','depart','rooms'].forEach(function(k){
+      localStorage.removeItem('umrabor_hint_'+k);
+    });
+  } catch(e) {}
+})();
 function showHintFor(screenName){
   var modal = document.querySelector('.hint-modal[data-hint="'+screenName+'"]');
   if(!modal) return;
   try {
-    if(localStorage.getItem('umrabor_hint_'+screenName) === 'seen') return;
+    if(sessionStorage.getItem('umrabor_hint_'+screenName) === 'seen') return;
   } catch(e) {}
   modal.classList.add('shown');
 }
 function dismissHint(name){
   var modal = document.querySelector('.hint-modal[data-hint="'+name+'"]');
   if(modal) modal.classList.remove('shown');
-  try { localStorage.setItem('umrabor_hint_'+name, 'seen'); } catch(e) {}
+  try { sessionStorage.setItem('umrabor_hint_'+name, 'seen'); } catch(e) {}
 }
 
 // ─── Partner request form (with sessionStorage persistence) ───
