@@ -24,6 +24,15 @@ class Settings(BaseSettings):
     DATABASE_URL: str
     REDIS_URL: str = "redis://localhost:6379/0"
 
+    @field_validator("DATABASE_URL", mode="before")
+    @classmethod
+    def normalize_db_url(cls, v: str) -> str:
+        if v.startswith("postgres://"):
+            v = "postgresql+asyncpg://" + v[len("postgres://"):]
+        elif v.startswith("postgresql://") and "+" not in v.split("://", 1)[0]:
+            v = "postgresql+asyncpg://" + v[len("postgresql://"):]
+        return v
+
     S3_ENDPOINT: AnyHttpUrl
     S3_ACCESS_KEY: str
     S3_SECRET_KEY: str
