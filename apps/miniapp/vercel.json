@@ -1,0 +1,9 @@
+{
+  "$schema": "https://openapi.vercel.sh/vercel.json",
+  "framework": "vite",
+  "buildCommand": "cd ../.. && pnpm install && pnpm --filter @umrabor/miniapp build",
+  "outputDirectory": "dist",
+  "installCommand": "echo 'install runs in buildCommand'",
+  "regions": ["fra1"],
+  "rewrites": [{ "source": "/(.*)", "destination": "/index.html" }]
+}
