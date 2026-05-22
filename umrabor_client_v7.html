@@ -125,7 +125,7 @@ body{display:flex;align-items:flex-start;justify-content:center;padding:18px 0}
 .sticky-cta-btn{flex:1.4}
 
 /* ═══════════ HOME ═══════════ */
-.home-hero{position:relative;height:300px;overflow:hidden;background-image:url('https://images.pexels.com/photos/2675268/pexels-photo-2675268.jpeg?auto=compress&cs=tinysrgb&w=900');background-size:cover;background-position:center}
+.home-hero{position:relative;height:300px;overflow:hidden;background-image:url('https://upload.wikimedia.org/wikipedia/commons/thumb/8/86/Kaaba_Mirror_Edit_jj.jpg/1280px-Kaaba_Mirror_Edit_jj.jpg');background-size:cover;background-position:center}
 .home-hero::after{content:'';position:absolute;inset:0;background:linear-gradient(180deg,rgba(11,12,14,.55) 0%,rgba(11,12,14,.2) 25%,rgba(11,12,14,.95) 100%)}
 .home-hero-body{position:absolute;bottom:18px;left:18px;right:18px;z-index:2;color:#fff}
 .home-hero-title{font-family:'Inter',sans-serif;font-size:28px;font-weight:800;line-height:1.05;margin-bottom:14px;letter-spacing:-.5px}
@@ -250,13 +250,13 @@ body{display:flex;align-items:flex-start;justify-content:center;padding:18px 0}
 .pkg-card-partner .av{width:18px;height:18px;border-radius:5px;background:var(--green-soft);color:var(--green);display:inline-flex;align-items:center;justify-content:center;font-family:'JetBrains Mono',monospace;font-size:10px;font-weight:700}
 .pkg-card-name{font-family:'Inter',sans-serif;font-size:16px;font-weight:700;color:#fff;line-height:1.2;margin-bottom:11px;letter-spacing:-.2px}
 .pkg-card-route{font-size:11px;color:var(--text-2);font-family:'JetBrains Mono',monospace;font-weight:500;margin-bottom:11px}
-.pkg-card-cities{display:flex;flex-direction:column;gap:8px;margin-bottom:11px;padding-top:11px;border-top:1px dashed var(--line)}
-.pkg-card-city-row{display:flex;align-items:center;gap:8px;font-size:11px;line-height:1.3;flex-wrap:wrap}
-.pkg-card-city-row .city{color:var(--gold);font-weight:700;font-size:11px;text-transform:uppercase;letter-spacing:.4px;min-width:52px}
-.pkg-card-city-row .htl{display:inline-flex;align-items:center;gap:6px;background:var(--card-2);border:1px solid var(--line);padding:5px 11px;border-radius:14px;color:#fff;font-weight:500;font-size:13px;white-space:nowrap;max-width:60%;overflow:hidden;text-overflow:ellipsis}
-.pkg-card-city-row .htl .stars{color:var(--gold);font-size:10px;letter-spacing:.3px;flex-shrink:0}
-.pkg-card-city-row .dist{color:var(--muted);font-family:'JetBrains Mono',monospace;font-weight:500;font-size:11px;white-space:nowrap;margin-left:auto}
-.pkg-card-flights{display:grid;grid-template-columns:1fr 16px 1fr;align-items:center;gap:8px;padding-top:10px;border-top:1px dashed var(--line)}
+.pkg-card-cities{display:flex;flex-direction:column;gap:6px;margin:11px 0 8px;padding:10px 12px;background:rgba(255,255,255,.025);border:1px solid rgba(255,255,255,.08);border-radius:12px}
+.pkg-card-city-row{display:flex;align-items:center;gap:7px;font-size:10px;line-height:1.3;flex-wrap:nowrap;min-width:0}
+.pkg-card-city-row .city{color:var(--gold);font-weight:700;font-size:9.5px;text-transform:uppercase;letter-spacing:.4px;min-width:42px;flex-shrink:0}
+.pkg-card-city-row .htl{display:inline-flex;align-items:center;gap:4px;background:var(--card-2);border:1px solid var(--line-2);padding:3px 9px;border-radius:12px;color:#fff;font-weight:500;font-size:11.5px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;min-width:0}
+.pkg-card-city-row .htl .stars{color:var(--gold);font-size:8.5px;letter-spacing:.3px;flex-shrink:0}
+.pkg-card-city-row .dist{color:var(--muted);font-family:'JetBrains Mono',monospace;font-weight:500;font-size:10px;white-space:nowrap;margin-left:auto;flex-shrink:0}
+.pkg-card-flights{display:grid;grid-template-columns:1fr 16px 1fr;align-items:center;gap:8px;margin-bottom:8px;padding:11px 14px;background:rgba(255,255,255,.025);border:1px solid rgba(255,255,255,.08);border-radius:12px}
 .pkg-card-flight{display:flex;flex-direction:column;gap:2px;min-width:0}
 .pkg-card-flight .dt{font-family:'JetBrains Mono',monospace;color:#fff;font-weight:600;font-size:11px;letter-spacing:.2px}
 .pkg-card-flight .air{color:var(--green);font-weight:600;font-size:11px;letter-spacing:.4px;text-transform:uppercase;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
@@ -864,6 +864,18 @@ body.in-onb .bnav{display:none}
 .onb-cta:active{transform:scale(.98)}
 .onb-cta.gold{background:var(--gold);color:var(--bg);box-shadow:0 8px 22px rgba(242,179,66,.3)}
 
+/* ═══════════ HINT MODAL (educational tooltips overlay) ═══════════ */
+.hint-modal{position:absolute;inset:0;z-index:300;background:rgba(0,0,0,.65);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);display:none;align-items:center;justify-content:center;padding:28px;animation:hintFadeIn .25s ease}
+.hint-modal.shown{display:flex}
+.hint-modal-card{background:var(--card);border:1px solid rgba(242,179,66,.4);border-radius:20px;padding:26px 22px 22px;max-width:320px;width:100%;text-align:center;box-shadow:0 22px 50px rgba(0,0,0,.6);animation:hintCardIn .3s cubic-bezier(.34,1.56,.64,1)}
+.hint-modal-ico{width:60px;height:60px;border-radius:50%;background:var(--gold);color:var(--bg);display:flex;align-items:center;justify-content:center;margin:0 auto 16px;box-shadow:0 12px 26px rgba(242,179,66,.35)}
+.hint-modal-ico svg{width:30px;height:30px}
+.hint-modal-text{font-family:'Inter',sans-serif;font-size:14px;line-height:1.55;color:#fff;margin:0 0 20px;font-weight:500}
+.hint-modal-btn{width:100%;padding:14px;background:var(--gold);color:var(--bg);border:none;border-radius:13px;font-size:14px;font-weight:700;cursor:pointer;font-family:inherit;letter-spacing:.2px;transition:transform .1s}
+.hint-modal-btn:active{transform:scale(.98)}
+@keyframes hintFadeIn{from{opacity:0}to{opacity:1}}
+@keyframes hintCardIn{from{opacity:0;transform:translateY(20px) scale(.95)}to{opacity:1;transform:translateY(0) scale(1)}}
+
 /* ═══════════ MOBILE: hide phone mockup frame on real devices ═══════════ */
 @media (max-width: 480px){
   html, body{background:var(--bg);min-height:100vh;min-height:100dvh}
@@ -916,7 +928,7 @@ body.in-onb .bnav{display:none}
       <circle cx="50" cy="44" r="9.5" fill="#0B0C0E"/>
     </svg>
     <div class="wordmark">UMRABOR</div>
-    <div class="tagline">Muqaddas safar</div>
+    <div class="tagline">UMRA SAFARI ILOVASI</div>
   </div>
   <div class="horizon"></div>
   <div class="skyline">
@@ -1156,7 +1168,6 @@ body.in-onb .bnav{display:none}
     <div class="pkg-card" onclick="go('package')">
       <div class="pkg-card-img" style="background-image:url('https://images.pexels.com/photos/16012748/pexels-photo-16012748.jpeg?auto=compress&cs=tinysrgb&w=600')">
         <span class="tier">Premium</span>
-        <span class="price-tag">дан <b>17,2 М</b></span>
       </div>
       <div class="pkg-card-body">
         <div class="pkg-card-partner"><span class="av">RT</span>Ramaz Travel · Тошкент</div>
@@ -1322,7 +1333,6 @@ body.in-onb .bnav{display:none}
     <div class="pkg-card" onclick="go('package')">
       <div class="pkg-card-img" style="background-image:url('https://images.pexels.com/photos/16012748/pexels-photo-16012748.jpeg?auto=compress&cs=tinysrgb&w=600')">
         <span class="tier">Premium</span>
-        <span class="price-tag">дан <b>17,2 М</b></span>
       </div>
       <div class="pkg-card-body">
         <div class="pkg-card-partner"><span class="av">RT</span>Ramaz Travel · Тошкент</div>
@@ -1356,7 +1366,6 @@ body.in-onb .bnav{display:none}
     <div class="pkg-card" onclick="go('package')">
       <div class="pkg-card-img" style="background-image:url('https://images.pexels.com/photos/12777419/pexels-photo-12777419.jpeg?auto=compress&cs=tinysrgb&w=600')">
         <span class="tier">Lux</span>
-        <span class="price-tag">дан <b>19,5 М</b></span>
       </div>
       <div class="pkg-card-body">
         <div class="pkg-card-partner"><span class="av">RT</span>Ramaz Travel · Тошкент</div>
@@ -1390,7 +1399,6 @@ body.in-onb .bnav{display:none}
     <div class="pkg-card" onclick="go('package')">
       <div class="pkg-card-img" style="background-image:url('https://images.pexels.com/photos/7408958/pexels-photo-7408958.jpeg?auto=compress&cs=tinysrgb&w=600')">
         <span class="tier">Eco</span>
-        <span class="price-tag">дан <b>11,8 М</b></span>
       </div>
       <div class="pkg-card-body">
         <div class="pkg-card-partner"><span class="av">RT</span>Ramaz Travel · Тошкент</div>
@@ -1423,7 +1431,6 @@ body.in-onb .bnav{display:none}
     <div class="pkg-card" onclick="go('package')">
       <div class="pkg-card-img" style="background-image:url('https://images.pexels.com/photos/13294978/pexels-photo-13294978.jpeg?auto=compress&cs=tinysrgb&w=600')">
         <span class="tier">Standard</span>
-        <span class="price-tag">дан <b>14,5 М</b></span>
       </div>
       <div class="pkg-card-body">
         <div class="pkg-card-partner"><span class="av">SF</span>Safar Tours · Самарқанд</div>
@@ -1456,7 +1463,6 @@ body.in-onb .bnav{display:none}
     <div class="pkg-card" onclick="go('package')">
       <div class="pkg-card-img" style="background-image:url('https://images.pexels.com/photos/6099936/pexels-photo-6099936.jpeg?auto=compress&cs=tinysrgb&w=600')">
         <span class="tier">Premium+</span>
-        <span class="price-tag">дан <b>22,8 М</b></span>
       </div>
       <div class="pkg-card-body">
         <div class="pkg-card-partner"><span class="av">BR</span>Barakah VIP · Тошкент</div>
@@ -1990,6 +1996,7 @@ body.in-onb .bnav{display:none}
     <div class="scr-header-pad"></div>
   </div>
 
+
   <div class="dep-summary">
     <div class="dep-summary-img" style="background-image:url('https://images.pexels.com/photos/16012748/pexels-photo-16012748.jpeg?auto=compress&cs=tinysrgb&w=200')"></div>
     <div class="dep-summary-info">
@@ -2199,7 +2206,7 @@ body.in-onb .bnav{display:none}
     <h2>Буюртмангиз қабул қилинди!</h2>
     <p>Тез орада буюртмангиз операторларимиз томонидан кўриб чиқилади ва тасдиқланади. Сиз буюртмангизнинг ҳолатини онлайн кузатиб боришингиз мумкин.</p>
     <div class="suc-id">UM-2026-0162</div>
-    <button class="btn btn-green" onclick="go('home');setActiveTab(2)" style="max-width:240px">Буюртмаларимни кўриш</button>
+    <button class="btn btn-green" onclick="go('orders');setActiveTab(2)" style="max-width:240px">Буюртмаларимни кўриш</button>
     <button class="btn-link" onclick="go('home');setActiveTab(0)" style="margin-top:10px">Бош саҳифага</button>
   </div>
 </section>
@@ -2668,9 +2675,40 @@ body.in-onb .bnav{display:none}
 <!-- Bottom nav -->
 <div class="bnav">
   <div class="bnav-it active" onclick="go('home');setActiveTab(0)"><span class="ico"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 3.2 3 11.2V21h6.5v-5.5a2.5 2.5 0 0 1 5 0V21H21v-9.8L12 3.2Z"/><rect x="11" y="13" width="2" height="3" rx=".5" fill="rgba(0,0,0,.5)"/></svg></span>Бош саҳифа</div>
-  <div class="bnav-it" onclick="go('catalog');setActiveTab(1)"><span class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7" rx="1.2"/><rect x="14" y="3" width="7" height="7" rx="1.2"/><rect x="3" y="14" width="7" height="7" rx="1.2"/><rect x="14" y="14" width="7" height="7" rx="1.2"/></svg></span>Каталог</div>
+  <div class="bnav-it" onclick="go('catalog');setActiveTab(1)"><span class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7" rx="1.2"/><rect x="14" y="3" width="7" height="7" rx="1.2"/><rect x="3" y="14" width="7" height="7" rx="1.2"/><rect x="14" y="14" width="7" height="7" rx="1.2"/></svg></span>Пакетлар</div>
   <div class="bnav-it" onclick="go('orders');setActiveTab(2)"><span class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M5 8h14l-1.4 11a2 2 0 0 1-2 1.7H8.4a2 2 0 0 1-2-1.7L5 8z"/><path d="M9 8V6.5a3 3 0 0 1 6 0V8"/><path d="M3 8h18"/></svg></span>Буюртмалар</div>
   <div class="bnav-it" onclick="go('profile');setActiveTab(3)"><span class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="4"/><path d="M4 21v-1a8 8 0 0 1 16 0v1"/></svg></span>Профиль</div>
+</div>
+
+<!-- ═══════════ HINT MODALS ═══════════ -->
+<div class="hint-modal" data-hint="package">
+  <div class="hint-modal-card">
+    <div class="hint-modal-ico">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg>
+    </div>
+    <div class="hint-modal-text">Бу ерда сиз тақдим этилган пакет бўйича тўлиқ маълумот олишингиз мумкин.</div>
+    <button class="hint-modal-btn" onclick="dismissHint('package')">✓ Тушундим</button>
+  </div>
+</div>
+
+<div class="hint-modal" data-hint="depart">
+  <div class="hint-modal-card">
+    <div class="hint-modal-ico">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg>
+    </div>
+    <div class="hint-modal-text">Бу ерда сиз танланган пакет ичидаги, зиёратчиларингизга мос бўлган учиш кунларини танлашингиз мумкин. Танланган кундан келиб чиқиб нарх ўзгариши мумкин.</div>
+    <button class="hint-modal-btn" onclick="dismissHint('depart')">✓ Тушундим</button>
+  </div>
+</div>
+
+<div class="hint-modal" data-hint="rooms">
+  <div class="hint-modal-card">
+    <div class="hint-modal-ico">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg>
+    </div>
+    <div class="hint-modal-text">Биз сизга маҳрам қоидалари асосида жойлашувларни таклиф қиламиз. Ўзингизга маъқул келганини танланг.</div>
+    <button class="hint-modal-btn" onclick="dismissHint('rooms')">✓ Тушундим</button>
+  </div>
 </div>
 
 </div><!-- /phone -->
@@ -2685,6 +2723,21 @@ body.in-onb .bnav{display:none}
     setTimeout(function(){ splash.style.display = 'none'; }, 600);
   }, 2500);
 })();
+
+// ─── Educational hint modals ───
+function showHintFor(screenName){
+  var modal = document.querySelector('.hint-modal[data-hint="'+screenName+'"]');
+  if(!modal) return;
+  try {
+    if(localStorage.getItem('umrabor_hint_'+screenName) === 'seen') return;
+  } catch(e) {}
+  modal.classList.add('shown');
+}
+function dismissHint(name){
+  var modal = document.querySelector('.hint-modal[data-hint="'+name+'"]');
+  if(modal) modal.classList.remove('shown');
+  try { localStorage.setItem('umrabor_hint_'+name, 'seen'); } catch(e) {}
+}
 
 // ─── Partner request form (with sessionStorage persistence) ───
 function showPartnerThanks(){
@@ -2739,6 +2792,8 @@ function go(screen){
   } else {
     document.body.classList.remove('in-onb');
   }
+  // Show educational hint for this screen (once per user)
+  if(typeof showHintFor === 'function') showHintFor(screen);
 }
 function finishOnboarding(){
   try { localStorage.setItem('umrabor_onb_done','1'); } catch(e) {}
