@@ -863,6 +863,15 @@ body.in-onb .bnav{display:none}
 .onb-cta{width:100%;padding:15px;background:var(--green);color:#fff;border:none;border-radius:14px;font-size:15px;font-weight:700;cursor:pointer;font-family:inherit;letter-spacing:.2px;box-shadow:0 8px 22px rgba(31,175,106,.32);transition:transform .12s}
 .onb-cta:active{transform:scale(.98)}
 .onb-cta.gold{background:var(--gold);color:var(--bg);box-shadow:0 8px 22px rgba(242,179,66,.3)}
+
+/* ═══════════ MOBILE: hide phone mockup frame on real devices ═══════════ */
+@media (max-width: 480px){
+  html, body{background:var(--bg);min-height:100vh;min-height:100dvh}
+  body{display:block;padding:0}
+  .phone{width:100%;max-width:none;height:100vh;height:100dvh;border-radius:0;box-shadow:none}
+  .notch{display:none}
+  .status-bar{display:none}
+}
 </style>
 </head>
 <body>
